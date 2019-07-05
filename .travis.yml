@@ -1,0 +1,11 @@
+language: minimal
+
+services:
+  - docker
+
+before_script:
+  - make setup
+
+script:
+  - make run_test
+  - make run_lint

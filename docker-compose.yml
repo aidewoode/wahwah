@@ -1,0 +1,10 @@
+version: '3.0'
+services:
+  app:
+    image: ruby:2.4.0
+    volumes:
+      - .:/app
+      - bundler_data:/usr/local/bundle
+    working_dir: /app
+volumes:
+  bundler_data:
