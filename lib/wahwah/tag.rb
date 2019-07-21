@@ -2,16 +2,24 @@
 
 module WahWah
   class Tag
+    include Helper
+
     attr_reader(
       :title,
       :artist,
       :album,
+      :albumartist,
+      :composer,
+      :comment,
       :track,
+      :track_total,
       :duration,
       :birtate,
       :file_size,
       :genre,
       :year,
+      :disc,
+      :disc_total,
       :cover
     )
 

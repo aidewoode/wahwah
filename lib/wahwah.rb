@@ -2,6 +2,7 @@
 
 require 'wahwah/version'
 require 'wahwah/errors'
+require 'wahwah/helper'
 require 'wahwah/tag'
 
 module WahWah
@@ -11,12 +12,17 @@ module WahWah
     WavTag: ['wav'],
     FlacTag: ['flac'],
     AsfTag: ['wma'],
-    Mp4Tag: ['mp4', 'm4a']
+    Mp4Tag: ['m4a']
   }.freeze
 
   def self.open(file_path)
+    file_path = file_path.to_path if file_path.respond_to? :to_path
+    file_path = file_path.to_str
+
     file_format = format(file_path)
 
+    raise WahWahArgumentError, 'File is not exists' unless File.exist? file_path
+    raise WahWahArgumentError, 'File is unreadable' unless File.readable? file_path
     raise WahWahArgumentError, 'No supported format found' unless support_formats.include? file_format
 
     FORMATE_MAPPING.each do |tag, formats|
