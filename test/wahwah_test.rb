@@ -36,9 +36,13 @@ class WahWahTest < Minitest::Test
   def test_id3v1_tag
     tag = WahWah.open('test/files/id3v1.mp3')
 
+    assert_equal File.size('test/files/id3v1.mp3'), tag.file_size
     assert_equal 'China Girl', tag.title
     assert_equal 'Iggy Pop', tag.artist
     assert_equal 'The Idiot', tag.album
     assert_equal '1977', tag.year
+    assert_equal 'Rock', tag.genre
+    assert_equal 5, tag.track
+    assert_equal 'Iggy Pop Rocks', tag.comment
   end
 end
