@@ -19,7 +19,6 @@ class WahWahTest < Minitest::Test
       WahWah.open('file.mp3')
     end
   ensure
-    File.chmod(770, 'file.mp3')
     FileUtils.remove_file('file.mp3')
   end
 
