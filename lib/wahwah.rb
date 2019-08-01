@@ -3,11 +3,13 @@
 require 'wahwah/version'
 require 'wahwah/errors'
 require 'wahwah/helper'
+require 'wahwah/id3/v1'
+require 'wahwah/id3/v2'
 require 'wahwah/tag'
 
 module WahWah
   FORMATE_MAPPING = {
-    Id3Tag: ['mp3'],
+    Mp3Tag: ['mp3'],
     OggTag: ['ogg', 'oga', 'opus'],
     WavTag: ['wav'],
     FlacTag: ['flac'],
