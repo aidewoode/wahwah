@@ -10,18 +10,6 @@ class WahWahTest < Minitest::Test
     end
   end
 
-  def test_unreadable_file
-    FileUtils.touch('file.mp3')
-    File.chmod(100, 'file.mp3')
-
-    assert !File.readable?('file.mp3')
-    assert_raises(WahWah::WahWahArgumentError) do
-      WahWah.open('file.mp3')
-    end
-  ensure
-    FileUtils.remove_file('file.mp3')
-  end
-
   def test_not_supported_formate
     FileUtils.touch('file.fake')
 
