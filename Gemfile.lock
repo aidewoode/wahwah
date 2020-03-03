@@ -14,7 +14,7 @@ GEM
       ast (~> 2.4.0)
     powerpack (0.1.2)
     rainbow (3.0.0)
-    rake (10.5.0)
+    rake (13.0.1)
     rubocop (0.59.2)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
@@ -32,7 +32,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.14.0)
   minitest (~> 5.0)
-  rake (~> 10.0)
+  rake (~> 13.0)
   rubocop (~> 0.59.0)
   wahwah!
 
