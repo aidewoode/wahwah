@@ -3,9 +3,9 @@
 require 'wahwah/version'
 require 'wahwah/errors'
 require 'wahwah/helper'
+require 'wahwah/tag'
 require 'wahwah/id3/v1'
 require 'wahwah/id3/v2'
-require 'wahwah/tag'
 
 module WahWah
   FORMATE_MAPPING = {

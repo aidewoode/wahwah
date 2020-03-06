@@ -25,7 +25,9 @@ module WahWah
 
     def initialize(file_path)
       @file_size = File.size(file_path)
-      parse(File.open(file_path)) if @file_size > 0
+      @file_io = File.open(file_path)
+
+      parse if @file_size > 0
     end
 
     def parse
