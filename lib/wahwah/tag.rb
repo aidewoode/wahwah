@@ -10,7 +10,7 @@ module WahWah
       :album,
       :albumartist,
       :composer,
-      :comment,
+      :comments,
       :track,
       :track_total,
       :duration,

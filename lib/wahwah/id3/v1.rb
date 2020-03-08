@@ -62,13 +62,14 @@ module WahWah
         @album = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(30).strip)
         @year = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(4).strip)
 
-        @comment = @file_io.read(30)
+        comment = @file_io.read(30)
 
-        if @comment.getbyte(-2) == 0
-          @track = @comment.getbyte(-1).to_i
-          @comment = encode_to_utf8(DEFAULT_ENCODING, @comment.byteslice(0..-3).strip)
+        if comment.getbyte(-2) == 0
+          @track = comment.getbyte(-1).to_i
+          comment = encode_to_utf8(DEFAULT_ENCODING, comment.byteslice(0..-3).strip)
         end
 
+        @comments = [comment]
         @genre = GENRES[@file_io.getbyte] || ''
       end
     end
