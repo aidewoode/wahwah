@@ -82,7 +82,7 @@ module WahWah
             # and a numeric string containing the total numer.
             count, total_count = value.split('/')
             instance_variable_set("@#{name}", count.to_i)
-            instance_variable_set("@#{name}_total", total_count.to_i)
+            instance_variable_set("@#{name}_total", total_count.to_i) unless total_count.nil?
           else
             instance_variable_set("@#{name}", value)
           end

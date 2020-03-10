@@ -33,6 +33,25 @@ class WahWahTest < Minitest::Test
     assert_equal ['Iggy Pop Rocks'], tag.comments
   end
 
+  def test_id3v22_tag
+    tag = WahWah.open('test/files/id3v22.mp3')
+
+    assert_equal File.size('test/files/id3v22.mp3'), tag.file_size
+    assert_equal 2, tag.major_version
+    assert_equal 'cosmic american', tag.title
+    assert_equal 'Anais Mitchell', tag.artist
+    assert_nil tag.albumartist
+    assert_nil tag.composer
+    assert_equal 'Hymns for the Exiled', tag.album
+    assert_equal '2004', tag.year
+    assert_nil tag.genre
+    assert_equal 3, tag.track
+    assert_equal 11, tag.track_total
+    assert_nil tag.disc
+    assert_nil tag.disc_total
+    assert_equal 'Waterbug Records, www.anaismitchell.com', tag.comments.first
+  end
+
   def test_id3v23_tag
     tag = WahWah.open('test/files/id3v23.mp3')
 
@@ -69,5 +88,13 @@ class WahWahTest < Minitest::Test
     assert_equal 1, tag.disc
     assert_equal 1, tag.disc_total
     assert_equal ['Iggy Pop Rocks'], tag.comments
+  end
+
+  def test_id3v2_with_extented_tag
+    tag = WahWah.open('test/files/id3v2_extended_header.mp3')
+
+    assert_equal File.size('test/files/id3v2_extended_header.mp3'), tag.file_size
+    assert_equal 4, tag.major_version
+    assert_equal 'title', tag.title
   end
 end

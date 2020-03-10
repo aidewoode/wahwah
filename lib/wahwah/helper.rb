@@ -3,8 +3,11 @@
 module WahWah
   module Helper
     def encode_to_utf8(source_encode, string)
+      # Remove optional zero byte on binary string
+      string = string.gsub(Regexp.new("^\x00*".b), '')
+
       return string if source_encode.downcase == 'utf-8'
-      string.encode('utf-8', source_encode)
+      string.encode('utf-8', source_encode).strip
     end
 
     # ID3 size is encoded with four bytes where may the most significant
