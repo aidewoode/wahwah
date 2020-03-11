@@ -21,7 +21,6 @@ module WahWah
       end
 
       private
-
         # The ID3v2 tag header, which should be the first information in the file,
         # is 10 bytes as follows:
 
@@ -60,8 +59,9 @@ module WahWah
           loop do
             break if end_of_tag?
 
-            frame = ID3::Frame.new(@file_io, major_version)
+            frame = ID3::FrameGenerator.generate(@file_io, major_version)
             next if frame.invalid?
+
             update_attribute(frame)
           end
         end
@@ -75,7 +75,6 @@ module WahWah
           when :comment
             # Because there may be more than one comment frame in each tag,
             # so push it into a array.
-            @comments ||= []
             @comments.push(value)
           when :track, :disc
             # Track and disc value may be extended with a "/" character

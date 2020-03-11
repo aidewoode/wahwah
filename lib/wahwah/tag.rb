@@ -20,12 +20,14 @@ module WahWah
       :year,
       :disc,
       :disc_total,
-      :cover
+      :images
     )
 
     def initialize(file_path)
       @file_size = File.size(file_path)
       @file_io = File.open(file_path)
+      @comments = []
+      @images = []
 
       parse if @file_size > 0
     end
@@ -34,10 +36,4 @@ module WahWah
       raise WahWahNotImplementedError, 'The parse method is not implemented'
     end
   end
-end
-
-# Require others tag format class from tag directory.
-Dir.glob(File.dirname(__FILE__) + '/tag/*.rb').each do |path|
-  filename = File.basename(path)
-  require "wahwah/tag/#{filename}"
 end
