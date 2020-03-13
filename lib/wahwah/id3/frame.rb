@@ -11,7 +11,14 @@ module WahWah
       # $01   UTF-16 [UTF-16] encoded Unicode [UNICODE] with BOM.
       # $02   UTF-16BE [UTF-16] encoded Unicode [UNICODE] without BOM.
       # $03   UTF-8 [UTF-8] encoded Unicode [UNICODE].
-      ENCODING_MAPPING = ['ISO-8859-1', 'UTF-16', 'UTF-16BE', 'UTF-8']
+      ENCODING_MAPPING = %w(ISO-8859-1 UTF-16 UTF-16BE UTF-8)
+
+      ENCODING_TERMINATOR_SIZE = {
+        'ISO-8859-1' => 1,
+        'UTF-16' => 2,
+        'UTF-16BE' => 2,
+        'UTF-8' => 1
+      }
 
       # ID3v2.3 frame flags field is defined as follows.
       #

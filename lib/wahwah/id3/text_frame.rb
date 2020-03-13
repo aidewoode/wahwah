@@ -8,8 +8,8 @@ module WahWah
       # Text encoding  $xx
       # Information    <text string according to encoding>
       def parse
-        frame_body_encoding = ENCODING_MAPPING[@file_io.getbyte]
-        @value = encode_to_utf8(frame_body_encoding, @file_io.read(@size - 1))
+        encoding_id, text = @file_io.read(@size).unpack('Ca*')
+        @value = encode_to_utf8(ENCODING_MAPPING[encoding_id], text)
       end
     end
   end

@@ -7,7 +7,7 @@ module WahWah
       HEADER_SIZE = 10
       HEADER_FORMAT = "A3CC#{'B8' * 5}"
 
-      attr_reader :major_version, :tag_flags, :tag_size
+      attr_reader :major_version, :flags, :size
 
       def parse
         parse_header
@@ -17,7 +17,7 @@ module WahWah
       # The second bit in flags byte indicates whether or not the header
       # is followed by an extended header.
       def has_extended_header?
-        tag_flags[1] == '1'
+        flags[1] == '1'
       end
 
       private
@@ -30,17 +30,15 @@ module WahWah
         # ID3v2 size              4 * %0xxxxxxx
         def parse_header
           @file_io.rewind
-          header = @file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
 
           # The first byte of ID3v2 version is it's major version,
           # while the second byte is its revision number, we don't need
           # revision number here, so ignore it.
-          @major_version = header[1]
-          @tag_flags = header[3]
+          _id, @major_version, _revision, @flags, *size_bytes = @file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
 
           # Tag size is the size excluding the header size,
           # so add header size back to get total size.
-          @tag_size = id3_size_caculate(header[4, 4]) + HEADER_SIZE
+          @size = id3_size_caculate(size_bytes) + HEADER_SIZE
         end
 
         def parse_body
@@ -76,6 +74,10 @@ module WahWah
             # Because there may be more than one comment frame in each tag,
             # so push it into a array.
             @comments.push(value)
+          when :image
+            # Because there may be more than one image frame in each tag,
+            # so push it into a array.
+            @images.push(value)
           when :track, :disc
             # Track and disc value may be extended with a "/" character
             # and a numeric string containing the total numer.
@@ -88,7 +90,7 @@ module WahWah
         end
 
         def end_of_tag?
-          tag_size < @file_io.pos
+          size < @file_io.pos
         end
     end
   end

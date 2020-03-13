@@ -4,20 +4,17 @@ module WahWah
   module ID3
     class CommentFrame < Frame
       # Comment frame body structure:
-      # Frame size                $xx xx xx
+      #
       # Text encoding             $xx
       # Language                  $xx xx xx
       # Short content description <textstring> $00 (00)
       # The actual text           <textstring>
       def parse
-        frame_body_encoding = ENCODING_MAPPING[@file_io.getbyte]
+        encoding_id, _language, reset_content = @file_io.read(@size).unpack('CA3a*')
+        encoding = ENCODING_MAPPING[encoding_id]
+        _description, comment_text = split_with_terminator(reset_content, ENCODING_TERMINATOR_SIZE[encoding])
 
-        # Skip language content
-        frame_body = @file_io.read(@size - 1)[3..-1]
-        # Remove optional null bytes
-        frame_body = frame_body.gsub(Regexp.new("^\xFF\xFE\x00\x00".b), '')
-
-        @value = encode_to_utf8(frame_body_encoding, frame_body)
+        @value = encode_to_utf8(encoding, comment_text)
       end
     end
   end

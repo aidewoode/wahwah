@@ -54,6 +54,8 @@ class WahWahTest < Minitest::Test
 
   def test_id3v23_tag
     tag = WahWah.open('test/files/id3v23.mp3')
+    cover_image_binary = File.read('test/files/cover.jpeg').force_encoding('BINARY').strip
+    image = tag.images.first
 
     assert_equal File.size('test/files/id3v23.mp3'), tag.file_size
     assert_equal 3, tag.major_version
@@ -69,10 +71,15 @@ class WahWahTest < Minitest::Test
     assert_equal 1, tag.disc
     assert_equal 1, tag.disc_total
     assert_equal ['Iggy Pop Rocks'], tag.comments
+    assert_equal 'image/jpeg', image[:mime_type]
+    assert_equal :cover_front, image[:type]
+    assert_equal cover_image_binary, image[:data].strip
   end
 
   def test_id3v24_tag
     tag = WahWah.open('test/files/id3v24.mp3')
+    cover_image_binary = File.read('test/files/cover.jpeg').force_encoding('BINARY').strip
+    image = tag.images.first
 
     assert_equal File.size('test/files/id3v24.mp3'), tag.file_size
     assert_equal 4, tag.major_version
@@ -88,6 +95,9 @@ class WahWahTest < Minitest::Test
     assert_equal 1, tag.disc
     assert_equal 1, tag.disc_total
     assert_equal ['Iggy Pop Rocks'], tag.comments
+    assert_equal 'image/jpeg', image[:mime_type]
+    assert_equal :cover_front, image[:type]
+    assert_equal cover_image_binary, image[:data].strip
   end
 
   def test_id3v2_with_extented_tag

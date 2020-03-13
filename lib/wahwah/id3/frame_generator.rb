@@ -15,6 +15,7 @@ module WahWah
         TPA: :disc,
         TP2: :albumartist,
         TCM: :composer,
+        PIC: :image,
 
         # ID3v2.3 and ID3v2.4 frame id
         COMM: :comment,
@@ -27,6 +28,7 @@ module WahWah
         TPOS: :disc,
         TPE2: :albumartist,
         TCOM: :composer,
+        APIC: :image,
 
         # ID3v2.4 use TDRC replace TYER
         TDRC: :year
@@ -52,11 +54,11 @@ module WahWah
           # Frame ID      $xx xx xx(tree characters)
           # Size          3 * %xxxxxxxx
           def parse_v2_frame_header(file_io)
-            frame_header = file_io.read(6).unpack("A3#{'B8' * 3}")
+            id, *size_bytes = file_io.read(6).unpack("A3#{'B8' * 3}")
 
             {}.tap do |hash|
-              hash[:id] = frame_header.first.to_sym
-              hash[:size_bytes] = frame_header[1..-1]
+              hash[:id] = id.to_sym
+              hash[:size_bytes] = size_bytes
 
               # ID3 v2.2 don't have frame flags on header
               hash[:flags_bytes] = nil
@@ -77,12 +79,12 @@ module WahWah
           # Size          4 * %0xxxxxxx
           # Flags         $xx xx
           def parse_v3_4_frame_header(file_io)
-            frame_header = file_io.read(10).unpack("A4#{'B8' * 4}B16")
+            id, *size_bytes, flags_bytes = file_io.read(10).unpack("A4#{'B8' * 4}B16")
 
             {}.tap do |hash|
-              hash[:id] = frame_header.first.to_sym
-              hash[:size_bytes] = frame_header[1, 4]
-              hash[:flags_bytes] = frame_header.last
+              hash[:id] = id.to_sym
+              hash[:size_bytes] = size_bytes
+              hash[:flags_bytes] = flags_bytes
             end
           end
 

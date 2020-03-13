@@ -20,5 +20,9 @@ module WahWah
         byte_strings.join.to_i(2)
       end
     end
+
+    def split_with_terminator(string, terminator_size)
+      string.split(Regexp.new(('\x00' * terminator_size).b), 2)
+    end
   end
 end
