@@ -10,6 +10,7 @@ require 'wahwah/tag/ogg_tag'
 require 'wahwah/tag/wav_tag'
 require 'wahwah/tag/asf_tag'
 require 'wahwah/tag/flac_tag'
+
 require 'wahwah/id3/v1'
 require 'wahwah/id3/v2'
 require 'wahwah/id3/frame_generator'
@@ -19,6 +20,8 @@ require 'wahwah/id3/genre_frame'
 require 'wahwah/id3/comment_frame'
 require 'wahwah/id3/invalid_frame'
 require 'wahwah/id3/image_frame'
+
+require 'wahwah/mp3/mpeg_frame_header'
 
 module WahWah
   FORMATE_MAPPING = {
