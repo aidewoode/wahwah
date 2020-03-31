@@ -2,6 +2,46 @@
 
 module WahWah
   module Mp3
+    # mpeg frame header structure:
+    #
+    # Position   Length    Meaning
+    # 0	         11	       Frame sync to find the header (all bits are always set)
+    #
+    # 11	       2         Audio version ID
+    #                      00 - MPEG Version 2.5 (unofficial extension of MPEG 2)
+    #                      01 - reserved
+    #                      10 - MPEG Version 2 (ISO/IEC 13818-3)
+    #                      11 - MPEG Version 1 (ISO/IEC 11172-3)
+    #
+    # 13	       2         Layer index
+    #                      00 - reserved
+    #                      01 - Layer III
+    #                      10 - Layer II
+    #                      11 - Layer I
+    #
+    # 15	       1         Protection bit
+    #
+    # 16	       4         Bitrate index, see FRAME_BITRATE_INDEX constant
+    #
+    # 20	       2         Sampling rate index, see SAMPLE_RATES_INDEX constant
+    #
+    # 22	       1         Padding bit
+    #
+    # 23	       1         Private bit
+    #
+    # 24	       2         Channel mode
+    #                      00 - Stereo
+    #                      01 - Joint Stereo (Stereo)
+    #                      10 - Dual channel (Two mono channels)
+    #                      11 - Single channel (Mono)
+    #
+    # 26	       2         Mode extension (Only used in Joint Stereo)
+    #
+    # 28	       1         Copyright bit (only informative)
+    #
+    # 29	       1         Original bit (only informative)
+    #
+    # 30	       2         Emphasis
     class MpegFrameHeader
       HEADER_SIZE = 4
 
@@ -78,8 +118,6 @@ module WahWah
       end
 
       private
-        # mpeg frame header strucue info:
-        # http://www.mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm
         def parse(file_io, offset)
           file_io.rewind
 

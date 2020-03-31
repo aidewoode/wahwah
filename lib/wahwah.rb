@@ -22,6 +22,7 @@ require 'wahwah/id3/invalid_frame'
 require 'wahwah/id3/image_frame'
 
 require 'wahwah/mp3/mpeg_frame_header'
+require 'wahwah/mp3/xing_header'
 
 module WahWah
   FORMATE_MAPPING = {

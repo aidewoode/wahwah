@@ -79,10 +79,6 @@ module WahWah
       @mpeg_frame_header.sample_rates
     end
 
-    def xing_header
-      @xing_header ||= parse_xing_hader
-    end
-
     def vbri_header
     end
 
@@ -109,9 +105,17 @@ module WahWah
       def parse_duration
         # Because id3v2 tag on the file header so skip id3v2 tag
         @mpeg_frame_header = Mp3::MpegFrameHeader.new(@file_io, id3v2? ? @id3_tag.size : 0)
+        @xing_header = Mp3::XingHeader.new(@file_io, xing_header_offset)
       end
 
-      def parse_xing_hader
+      def xing_header_offset
+        mpeg_frame_header_position = @mpeg_frame_header.position
+        mpeg_frame_header_size = Mp3::MpegFrameHeader::HEADER_SIZE
+        mpeg_frame_side_info_size = mpeg_version == 'MPEG1' ?
+          (channel_mode == 'Single Channel' ? 17 : 32) :
+          (channel_mode == 'Single Channel' ? 9 : 17)
+
+        mpeg_frame_header_position + mpeg_frame_header_size + mpeg_frame_side_info_size
       end
   end
 end
