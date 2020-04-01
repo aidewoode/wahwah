@@ -2,11 +2,11 @@
 
 module WahWah
   module ID3
-    module V1
-      ID3V1_TAG_SIZE = 128
-      ID3V1_TAG_ID = 'TAG'
-      ID3V1_DEFAULT_ENCODING = 'iso-8859-1'
-      ID3V1_GENRES = [
+    class V1 < Tag
+      TAG_SIZE = 128
+      TAG_ID = 'TAG'
+      DEFAULT_ENCODING = 'iso-8859-1'
+      GENRES = [
         # Standard Genres
         'Blues', 'Classic Rock', 'Country', 'Dance', 'Disco', 'Funk', 'Grunge',
         'Hip-Hop', 'Jazz', 'Metal', 'New Age', 'Oldies', 'Other', 'Pop',
@@ -44,29 +44,39 @@ module WahWah
         'Neue Deutsche Welle', 'Podcast', 'Indie Rock', 'G-Funk', 'Dubstep', 'Garage Rock', 'Psybient'
       ]
 
-      def parse_id3v1(file)
-        # For ID3v1 info, see here https://en.wikipedia.org/wiki/ID3#ID3v1
+      # For ID3v1 info, see here https://en.wikipedia.org/wiki/ID3#ID3v1
+      #
+      # header    3         "TAG"
+      # title     30        30 characters of the title
+      # artist    30        30 characters of the artist name
+      # album     30        30 characters of the album name
+      # year      4         A four-digit year
+      # comment   28 or 30  The comment.
+      # zero-byte 1         If a track number is stored, this byte contains a binary 0.
+      # track     1         The number of the track on the album, or 0. Invalid, if previous byte is not a binary 0.
+      # genre     1         Index in a list of genres, or 255
+      def size
+        TAG_SIZE
+      end
 
-        file.seek(-(ID3V1_TAG_SIZE - ID3V1_TAG_ID.size), IO::SEEK_END)
-        @title = encode_to_utf8(ID3V1_DEFAULT_ENCODING, file.read(30).strip)
-        @artist = encode_to_utf8(ID3V1_DEFAULT_ENCODING, file.read(30).strip)
-        @album = encode_to_utf8(ID3V1_DEFAULT_ENCODING, file.read(30).strip)
-        @year = encode_to_utf8(ID3V1_DEFAULT_ENCODING, file.read(4).strip)
+      private
+        def parse
+          @file_io.seek(-(TAG_SIZE - TAG_ID.size), IO::SEEK_END)
+          @title = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(30))
+          @artist = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(30))
+          @album = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(30))
+          @year = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(4))
 
-        comment = file.read(30)
+          comment = @file_io.read(30)
 
-        if comment.getbyte(-2) == 0
-          @track = comment.getbyte(-1).to_i
-          @comment = encode_to_utf8(ID3V1_DEFAULT_ENCODING, comment.byteslice(0..-3).strip)
+          if comment.getbyte(-2) == 0
+            @track = comment.getbyte(-1).to_i
+            comment = encode_to_utf8(DEFAULT_ENCODING, comment.byteslice(0..-3))
+          end
+
+          @comments = [comment]
+          @genre = GENRES[@file_io.getbyte] || ''
         end
-
-        @genre = ID3V1_GENRES[file.getbyte] || ''
-      end
-
-      def is_id3v1?(file)
-        file.seek(-ID3V1_TAG_SIZE, IO::SEEK_END)
-        file.read(3) == ID3V1_TAG_ID
-      end
     end
   end
 end

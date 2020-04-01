@@ -24,12 +24,88 @@ class WahWahTest < Minitest::Test
     tag = WahWah.open('test/files/id3v1.mp3')
 
     assert_equal File.size('test/files/id3v1.mp3'), tag.file_size
+    assert_equal 'v1', tag.id3_version
     assert_equal 'China Girl', tag.title
     assert_equal 'Iggy Pop', tag.artist
     assert_equal 'The Idiot', tag.album
     assert_equal '1977', tag.year
     assert_equal 'Rock', tag.genre
     assert_equal 5, tag.track
-    assert_equal 'Iggy Pop Rocks', tag.comment
+    assert_equal ['Iggy Pop Rocks'], tag.comments
+  end
+
+  def test_id3v22_tag
+    tag = WahWah.open('test/files/id3v22.mp3')
+
+    assert_equal File.size('test/files/id3v22.mp3'), tag.file_size
+    assert_equal 'v2.2', tag.id3_version
+    assert_equal 'cosmic american', tag.title
+    assert_equal 'Anais Mitchell', tag.artist
+    assert_nil tag.albumartist
+    assert_nil tag.composer
+    assert_equal 'Hymns for the Exiled', tag.album
+    assert_equal '2004', tag.year
+    assert_nil tag.genre
+    assert_equal 3, tag.track
+    assert_equal 11, tag.track_total
+    assert_nil tag.disc
+    assert_nil tag.disc_total
+    assert_equal 'Waterbug Records, www.anaismitchell.com', tag.comments.first
+  end
+
+  def test_id3v23_tag
+    tag = WahWah.open('test/files/id3v23.mp3')
+    cover_image_binary = File.read('test/files/cover.jpeg').force_encoding('BINARY').strip
+    image = tag.images.first
+
+    assert_equal File.size('test/files/id3v23.mp3'), tag.file_size
+    assert_equal 'v2.3', tag.id3_version
+    assert_equal 'China Girl', tag.title
+    assert_equal 'Iggy Pop', tag.artist
+    assert_equal 'Iggy Pop', tag.albumartist
+    assert_equal 'Iggy Pop', tag.composer
+    assert_equal 'The Idiot', tag.album
+    assert_equal '1977', tag.year
+    assert_equal 'Rock', tag.genre
+    assert_equal 5, tag.track
+    assert_equal 8, tag.track_total
+    assert_equal 1, tag.disc
+    assert_equal 1, tag.disc_total
+    assert_equal ['Iggy Pop Rocks'], tag.comments
+    assert_equal 'image/jpeg', image[:mime_type]
+    assert_equal :cover_front, image[:type]
+    assert_equal cover_image_binary, image[:data].strip
+  end
+
+  def test_id3v24_tag
+    tag = WahWah.open('test/files/id3v24.mp3')
+    cover_image_binary = File.read('test/files/cover.jpeg').force_encoding('BINARY').strip
+    image = tag.images.first
+
+    assert_equal File.size('test/files/id3v24.mp3'), tag.file_size
+    assert_equal 'v2.4', tag.id3_version
+    assert_equal 'China Girl', tag.title
+    assert_equal 'Iggy Pop', tag.artist
+    assert_equal 'Iggy Pop', tag.albumartist
+    assert_equal 'Iggy Pop', tag.composer
+    assert_equal 'The Idiot', tag.album
+    assert_equal '1977', tag.year
+    assert_equal 'Custom Genre', tag.genre
+    assert_equal 5, tag.track
+    assert_equal 8, tag.track_total
+    assert_equal 1, tag.disc
+    assert_equal 1, tag.disc_total
+    assert_equal ['Iggy Pop Rocks'], tag.comments
+    assert_equal 'image/jpeg', image[:mime_type]
+    assert_equal :cover_front, image[:type]
+    assert_equal cover_image_binary, image[:data].strip
+  end
+
+  def test_id3v2_with_extented_tag
+    tag = WahWah.open('test/files/id3v2_extended_header.mp3')
+
+    assert_equal File.size('test/files/id3v2_extended_header.mp3'), tag.file_size
+    assert_equal 'v2.4', tag.id3_version
+    assert_equal 'title', tag.title
   end
 end

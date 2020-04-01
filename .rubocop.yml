@@ -1,24 +1,28 @@
+require:
+  - rubocop-performance
+
 AllCops:
+  TargetRubyVersion: 2.5
   # RuboCop has a bunch of cops enabled by default. This setting tells RuboCop
   # to ignore them, so only the ones explicitly set in this file are enabled.
-  TargetRubyVersion: 2.4
   DisabledByDefault: true
   Exclude:
     - 'Gemfile'
     - 'bin/**/*'
 
+Performance:
+  Exclude:
+    - 'test/**/*'
+
 # Prefer &&/|| over and/or.
 Style/AndOr:
   Enabled: true
 
-# Do not use braces for hash literals when they are the last argument of a
-# method call.
-Style/BracesAroundHashParameters:
-  Enabled: true
-  EnforcedStyle: context_dependent
-
 # Align `when` with `case`.
 Layout/CaseIndentation:
+  Enabled: true
+
+Layout/ClosingHeredocIndentation:
   Enabled: true
 
 # Align comments with method definitions.
@@ -38,6 +42,13 @@ Layout/EndAlignment:
 Layout/EmptyLineAfterMagicComment:
   Enabled: true
 
+Layout/EmptyLinesAroundAccessModifier:
+  Enabled: true
+  EnforcedStyle: only_before
+
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: true
+
 # In a regular class definition, no empty lines around the body.
 Layout/EmptyLinesAroundClassBody:
   Enabled: true
@@ -50,18 +61,18 @@ Layout/EmptyLinesAroundMethodBody:
 Layout/EmptyLinesAroundModuleBody:
   Enabled: true
 
-Layout/FirstParameterIndentation:
-  Enabled: true
-
 # Use Ruby >= 1.9 syntax for hashes. Prefer { a: :b } over { :a => :b }.
 Style/HashSyntax:
+  Enabled: true
+
+Layout/FirstArgumentIndentation:
   Enabled: true
 
 # Method definitions after `private` or `protected` isolated calls need one
 # extra level of indentation.
 Layout/IndentationConsistency:
   Enabled: true
-  EnforcedStyle: rails
+  EnforcedStyle: indented_internal_methods
 
 # Two spaces, no tabs (for indentation).
 Layout/IndentationWidth:
@@ -76,20 +87,23 @@ Layout/SpaceAfterColon:
 Layout/SpaceAfterComma:
   Enabled: true
 
+Layout/SpaceAfterSemicolon:
+  Enabled: true
+
 Layout/SpaceAroundEqualsInParameterDefault:
   Enabled: true
 
 Layout/SpaceAroundKeyword:
   Enabled: true
 
-Layout/SpaceAroundOperators:
+Layout/SpaceBeforeComma:
   Enabled: true
 
-Layout/SpaceBeforeComma:
-    Enabled: true
+Layout/SpaceBeforeComment:
+  Enabled: true
 
 Layout/SpaceBeforeFirstArg:
-    Enabled: true
+  Enabled: true
 
 Style/DefWithParentheses:
   Enabled: true
@@ -102,6 +116,9 @@ Style/FrozenStringLiteralComment:
   Enabled: true
   EnforcedStyle: always
 
+Style/RedundantFreeze:
+  Enabled: true
+
 # Use `foo {}` not `foo{}`.
 Layout/SpaceBeforeBlockBraces:
   Enabled: true
@@ -109,6 +126,7 @@ Layout/SpaceBeforeBlockBraces:
 # Use `foo { bar }` not `foo {bar}`.
 Layout/SpaceInsideBlockBraces:
   Enabled: true
+  EnforcedStyleForEmptyBraces: space
 
 # Use `{ a: 1 }` not `{a:1}`.
 Layout/SpaceInsideHashLiteralBraces:
@@ -120,13 +138,14 @@ Layout/SpaceInsideParens:
 # Check quotes usage according to lint rule below.
 Style/StringLiterals:
   Enabled: true
+  EnforcedStyle: single_quotes
 
 # Detect hard tabs, no hard tabs.
 Layout/Tab:
   Enabled: true
 
-# Blank lines should not have any spaces.
-Layout/TrailingBlankLines:
+# Empty lines should not have any spaces.
+Layout/TrailingEmptyLines:
   Enabled: true
 
 # No trailing whitespace.
@@ -134,14 +153,47 @@ Layout/TrailingWhitespace:
   Enabled: true
 
 # Use quotes for string literals when they are enough.
-Style/UnneededPercentQ:
+Style/RedundantPercentQ:
+  Enabled: true
+
+Lint/AmbiguousOperator:
+  Enabled: true
+
+Lint/AmbiguousRegexpLiteral:
+  Enabled: true
+
+Lint/ErbNewArguments:
   Enabled: true
 
 # Use my_method(my_arg) not my_method( my_arg ) or my_method my_arg.
 Lint/RequireParentheses:
   Enabled: true
 
-Lint/StringConversionInInterpolation:
+Lint/ShadowingOuterLocalVariable:
+  Enabled: true
+
+Lint/RedundantStringCoercion:
+  Enabled: true
+
+Lint/UriEscapeUnescape:
+  Enabled: true
+
+Lint/UselessAssignment:
+  Enabled: true
+
+Lint/DeprecatedClassMethods:
+  Enabled: true
+
+Style/ParenthesesAroundCondition:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Style/RedundantBegin:
   Enabled: true
 
 Style/RedundantReturn:
@@ -154,4 +206,28 @@ Style/Semicolon:
 
 # Prefer Foo.method over Foo::method
 Style/ColonMethodCall:
+  Enabled: true
+
+Style/TrivialAccessors:
+  Enabled: true
+
+Performance/FlatMap:
+  Enabled: true
+
+Performance/RedundantMerge:
+  Enabled: true
+
+Performance/StartWith:
+  Enabled: true
+
+Performance/EndWith:
+  Enabled: true
+
+Performance/RegexpMatch:
+  Enabled: true
+
+Performance/ReverseEach:
+  Enabled: true
+
+Performance/UnfreezeString:
   Enabled: true

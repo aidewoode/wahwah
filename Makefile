@@ -6,6 +6,9 @@ console:
 setup:
 	@$(APP_COMMAND) bin/setup
 
+shell:
+	@$(APP_COMMAND) bash
+
 run_test:
 	@$(APP_COMMAND) rake test
 

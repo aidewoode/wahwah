@@ -1,7 +1,7 @@
 version: '3.0'
 services:
   app:
-    image: ruby:2.4.0
+    image: ruby:2.5.0
     volumes:
       - .:/app
       - bundler_data:/usr/local/bundle

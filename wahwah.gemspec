@@ -20,11 +20,12 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features)/})
   end
 
-  spec.required_ruby_version = '>= 2.4.0'
+  spec.required_ruby_version = '>= 2.5.0'
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '~> 1.14.0'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'minitest', '~> 5.0'
-  spec.add_development_dependency 'rubocop', '~> 0.59.0'
+  spec.add_development_dependency 'rubocop', '~> 0.80.1'
+  spec.add_development_dependency 'rubocop-performance', '~> 1.5.2'
 end
