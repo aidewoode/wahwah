@@ -2,10 +2,10 @@
 
 module WahWah
   module Mp3
-    # xing header structure:
+    # Xing header structure:
     #
     # Position                Length    Meaning
-    # 0                       4	        VBR header ID in 4 ASCII chars, either 'Xing' or 'Info',
+    # 0                       4         VBR header ID in 4 ASCII chars, either 'Xing' or 'Info',
     #                                   not NULL-terminated
     #
     # 4                       4         Flags which indicate what fields are present,
@@ -16,34 +16,32 @@ module WahWah
     #                                   0x0004 - TOC field is present
     #                                   0x0008 - Quality indicator field is present
     #
-    # 8	                      4	        Number of Frames as Big-Endian DWORD (optional)
+    # 8                       4         Number of Frames as Big-Endian 32-bit unsigned (optional)
     #
-    # 8 or 12	                4	        Number of Bytes in file as Big-Endian DWORD (optional)
+    # 8 or 12                 4         Number of Bytes in file as Big-Endian 32-bit unsigned (optional)
     #
-    # 8,12 or 16	            100	      100 TOC entries for seeking as integral BYTE (optional)
+    # 8,12 or 16              100       100 TOC entries for seeking as integral BYTE (optional)
     #
-    # 8,12,16,108,112 or 116	4	        Quality indicator as Big-Endian DWORD
+    # 8,12,16,108,112 or 116  4         Quality indicator as Big-Endian 32-bit unsigned
     #                                   from 0 - best quality to 100 - worst quality (optional)
     class XingHeader
-      HEADER_READ_SIZE = 12
-
-      attr_reader :frames
+      attr_reader :frames_count, :bytes_count
 
       def initialize(file_io, offset = 0)
         parse(file_io, offset)
       end
 
       def valid?
-        %w(Xing Info).include?(@id) && (@flags & 1 == 1)
+        %w(Xing Info).include? @id
       end
 
       private
         def parse(file_io, offset)
           file_io.seek(offset)
-          @id, flags_bits, frames_bits = file_io.read(HEADER_READ_SIZE).unpack('A4B32B32')
 
-          @flags = flags_bits.to_i(2)
-          @frames = frames_bits.to_i(2)
+          @id, @flags = file_io.read(8).unpack('A4N')
+          @frames_count = @flags & 1 == 1 ? file_io.read(4).unpack('N').first : 0
+          @bytes_count = @flags & 2 == 2 ? file_io.read(4).unpack('N').first : 0
         end
     end
   end

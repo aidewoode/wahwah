@@ -55,23 +55,28 @@ module WahWah
       # zero-byte 1         If a track number is stored, this byte contains a binary 0.
       # track     1         The number of the track on the album, or 0. Invalid, if previous byte is not a binary 0.
       # genre     1         Index in a list of genres, or 255
-      def parse
-        @file_io.seek(-(TAG_SIZE - TAG_ID.size), IO::SEEK_END)
-        @title = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(30))
-        @artist = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(30))
-        @album = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(30))
-        @year = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(4))
-
-        comment = @file_io.read(30)
-
-        if comment.getbyte(-2) == 0
-          @track = comment.getbyte(-1).to_i
-          comment = encode_to_utf8(DEFAULT_ENCODING, comment.byteslice(0..-3))
-        end
-
-        @comments = [comment]
-        @genre = GENRES[@file_io.getbyte] || ''
+      def size
+        TAG_SIZE
       end
+
+      private
+        def parse
+          @file_io.seek(-(TAG_SIZE - TAG_ID.size), IO::SEEK_END)
+          @title = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(30))
+          @artist = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(30))
+          @album = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(30))
+          @year = encode_to_utf8(DEFAULT_ENCODING, @file_io.read(4))
+
+          comment = @file_io.read(30)
+
+          if comment.getbyte(-2) == 0
+            @track = comment.getbyte(-1).to_i
+            comment = encode_to_utf8(DEFAULT_ENCODING, comment.byteslice(0..-3))
+          end
+
+          @comments = [comment]
+          @genre = GENRES[@file_io.getbyte] || ''
+        end
     end
   end
 end

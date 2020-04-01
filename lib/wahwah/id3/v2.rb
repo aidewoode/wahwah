@@ -9,10 +9,6 @@ module WahWah
 
       attr_reader :major_version, :flags, :size
 
-      def parse
-        parse_header
-        parse_body
-      end
 
       # The second bit in flags byte indicates whether or not the header
       # is followed by an extended header.
@@ -21,6 +17,11 @@ module WahWah
       end
 
       private
+        def parse
+          parse_header
+          parse_body
+        end
+
         # The ID3v2 tag header, which should be the first information in the file,
         # is 10 bytes as follows:
 
