@@ -32,6 +32,8 @@ class WahWahTest < Minitest::Test
     assert_equal 'Rock', tag.genre
     assert_equal 5, tag.track
     assert_equal ['Iggy Pop Rocks'], tag.comments
+    assert_equal 8, tag.duration
+    assert_equal 32, tag.birtate
   end
 
   def test_id3v22_tag
@@ -51,6 +53,8 @@ class WahWahTest < Minitest::Test
     assert_nil tag.disc
     assert_nil tag.disc_total
     assert_equal 'Waterbug Records, www.anaismitchell.com', tag.comments.first
+    assert_equal 0, tag.duration
+    assert_equal 160, tag.birtate
   end
 
   def test_id3v23_tag
@@ -75,6 +79,8 @@ class WahWahTest < Minitest::Test
     assert_equal 'image/jpeg', image[:mime_type]
     assert_equal :cover_front, image[:type]
     assert_equal cover_image_binary, image[:data].strip
+    assert_equal 8, tag.duration
+    assert_equal 32, tag.birtate
   end
 
   def test_id3v24_tag
@@ -99,6 +105,8 @@ class WahWahTest < Minitest::Test
     assert_equal 'image/jpeg', image[:mime_type]
     assert_equal :cover_front, image[:type]
     assert_equal cover_image_binary, image[:data].strip
+    assert_equal 8, tag.duration
+    assert_equal 32, tag.birtate
   end
 
   def test_id3v2_with_extented_tag
