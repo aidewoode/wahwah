@@ -50,11 +50,12 @@ module WahWah
     end
   end
 
-  def self.format(file_path)
-    File.extname(file_path).downcase.delete('.')
-  end
-
   def self.support_formats
     FORMATE_MAPPING.values.flatten
   end
+
+  private
+    def self.format(file_path)
+      File.extname(file_path).downcase.delete('.')
+    end
 end
