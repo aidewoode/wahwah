@@ -39,7 +39,7 @@ module WahWah
 
           # Tag size is the size excluding the header size,
           # so add header size back to get total size.
-          @size = id3_size_caculate(size_bytes) + HEADER_SIZE
+          @size = Helper.id3_size_caculate(size_bytes) + HEADER_SIZE
         end
 
         def parse_body
@@ -51,7 +51,7 @@ module WahWah
             # Size of padding        $xx xx xx xx
 
             # Skip extended_header
-            extended_header_size = id3_size_caculate(@file_io.read(4).unpack("#{'B8' * 4}"))
+            extended_header_size = Helper.id3_size_caculate(@file_io.read(4).unpack("#{'B8' * 4}"))
             @file_io.seek(extended_header_size - 4, IO::SEEK_CUR)
           end
 

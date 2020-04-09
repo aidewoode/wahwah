@@ -2,8 +2,6 @@
 
 module WahWah
   class Tag
-    include Helper
-
     attr_reader(
       :title,
       :artist,

@@ -50,7 +50,7 @@ module WahWah
         frame_format = @version > 2 ? 'CZ*Ca*' : 'Ca3Ca*'
         encoding_id, @mime_type, picture_id, reset_content = @file_io.read(@size).unpack(frame_format)
         encoding = ENCODING_MAPPING[encoding_id]
-        _description, data = split_with_terminator(reset_content, ENCODING_TERMINATOR_SIZE[encoding])
+        _description, data = Helper.split_with_terminator(reset_content, ENCODING_TERMINATOR_SIZE[encoding])
 
         @value = { data: data, mime_type: mime_type, type: TYPES[picture_id] }
       end
