@@ -11,19 +11,25 @@ module WahWah
       :comments,
       :track,
       :track_total,
-      :duration,
-      :birtate,
-      :file_size,
       :genre,
       :year,
       :disc,
       :disc_total,
-      :images
+      :images,
+      :duration,
+      :bitrate,
+      :file_size,
     )
 
-    def initialize(file_path)
-      @file_size = File.size(file_path)
-      @file_io = File.open(file_path)
+    def initialize(file)
+      if file.is_a?(IO) || file.is_a?(StringIO)
+        @file_size = file.size
+        @file_io = file
+      else
+        @file_size = File.size(file)
+        @file_io = File.open(file)
+      end
+
       @comments = []
       @images = []
 

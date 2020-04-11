@@ -2,8 +2,9 @@
 
 module WahWah
   module Helper
-    def self.encode_to_utf8(source_encode, string)
-      string.encode('utf-8', source_encode).strip
+    def self.encode_to_utf8(string, source_encoding: '')
+      return string.force_encoding('utf-8').strip if source_encoding.empty?
+      string.encode('utf-8', source_encoding).strip
     end
 
     # ID3 size is encoded with four bytes where may the most significant

@@ -91,7 +91,7 @@ module WahWah
         end
 
         def end_of_tag?
-          size < @file_io.pos
+          size <= @file_io.pos
         end
     end
   end

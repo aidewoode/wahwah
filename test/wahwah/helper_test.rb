@@ -10,10 +10,10 @@ class WahWah::HelperTest < Minitest::Test
     utf_16_be_string = test_string.encode('UTF-16BE').b
     utf_8_string = test_string.encode('UTF-8').b
 
-    assert_equal test_string, WahWah::Helper.encode_to_utf8('ISO-8859-1', iso_8859_1_string)
-    assert_equal test_string, WahWah::Helper.encode_to_utf8('UTF-16', utf_16_string)
-    assert_equal test_string, WahWah::Helper.encode_to_utf8('UTF-16BE', utf_16_be_string)
-    assert_equal test_string, WahWah::Helper.encode_to_utf8('UTF-8', utf_8_string)
+    assert_equal test_string, WahWah::Helper.encode_to_utf8(iso_8859_1_string, source_encoding: 'ISO-8859-1')
+    assert_equal test_string, WahWah::Helper.encode_to_utf8(utf_16_string, source_encoding: 'UTF-16')
+    assert_equal test_string, WahWah::Helper.encode_to_utf8(utf_16_be_string, source_encoding: 'UTF-16BE')
+    assert_equal test_string, WahWah::Helper.encode_to_utf8(utf_8_string)
   end
 
   def test_id3_size_caculate

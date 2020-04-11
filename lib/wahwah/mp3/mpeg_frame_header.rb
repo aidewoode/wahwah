@@ -23,7 +23,7 @@ module WahWah
     #
     # 16         4         Bitrate index, see FRAME_BITRATE_INDEX constant
     #
-    # 20         2         Sampling rate index, see SAMPLE_RATES_INDEX constant
+    # 20         2         Sampling rate index, see SAMPLE_RATE_INDEX constant
     #
     # 22         1         Padding bit
     #
@@ -63,7 +63,7 @@ module WahWah
       LAYER_INDEX = [nil, 'layer3', 'layer2', 'layer1']
       CHANNEL_MODE_INDEX = ['Stereo', 'Joint Stereo', 'Dual Channel', 'Single Channel']
 
-      SAMPLE_RATES_INDEX = {
+      SAMPLE_RATE_INDEX = {
         'MPEG1' => [44100, 48000, 32000],
         'MPEG2' => [22050, 24000, 16000],
         'MPEG2.5' => [11025, 12000, 8000]
@@ -109,8 +109,8 @@ module WahWah
         @channel_mode ||= CHANNEL_MODE_INDEX[@header[24..25].to_i(2)]
       end
 
-      def sample_rates
-        @sample_rates ||= SAMPLE_RATES_INDEX[version]&.fetch(@header[20..21].to_i(2))
+      def sample_rate
+        @sample_rate ||= SAMPLE_RATE_INDEX[version]&.fetch(@header[20..21].to_i(2))
       end
 
       def samples_per_frame
