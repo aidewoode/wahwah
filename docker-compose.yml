@@ -5,6 +5,8 @@ services:
     volumes:
       - .:/app
       - bundler_data:/usr/local/bundle
+    environment:
+      LANG: C.UTF-8
     working_dir: /app
 volumes:
   bundler_data:

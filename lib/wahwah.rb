@@ -4,12 +4,6 @@ require 'wahwah/version'
 require 'wahwah/errors'
 require 'wahwah/helper'
 require 'wahwah/tag'
-require 'wahwah/tag/mp3_tag'
-require 'wahwah/tag/mp4_tag'
-require 'wahwah/tag/ogg_tag'
-require 'wahwah/tag/wav_tag'
-require 'wahwah/tag/asf_tag'
-require 'wahwah/tag/flac_tag'
 
 require 'wahwah/id3/v1'
 require 'wahwah/id3/v2'
@@ -20,16 +14,27 @@ require 'wahwah/id3/genre_frame'
 require 'wahwah/id3/comment_frame'
 require 'wahwah/id3/invalid_frame'
 require 'wahwah/id3/image_frame'
+require 'wahwah/id3/delegate'
+
+require 'wahwah/mp3_tag'
+require 'wahwah/mp4_tag'
+require 'wahwah/ogg_tag'
+require 'wahwah/riff_tag'
+require 'wahwah/asf_tag'
+require 'wahwah/flac_tag'
+
 
 require 'wahwah/mp3/mpeg_frame_header'
 require 'wahwah/mp3/xing_header'
 require 'wahwah/mp3/vbri_header'
 
+require 'wahwah/riff/chunk'
+
 module WahWah
   FORMATE_MAPPING = {
     Mp3Tag: ['mp3'],
     OggTag: ['ogg', 'oga', 'opus'],
-    WavTag: ['wav'],
+    RiffTag: ['wav'],
     FlacTag: ['flac'],
     AsfTag: ['wma'],
     Mp4Tag: ['m4a']
@@ -50,11 +55,12 @@ module WahWah
     end
   end
 
-  def self.format(file_path)
-    File.extname(file_path).downcase.delete('.')
-  end
-
   def self.support_formats
     FORMATE_MAPPING.values.flatten
   end
+
+  private
+    def self.format(file_path)
+      File.extname(file_path).downcase.delete('.')
+    end
 end

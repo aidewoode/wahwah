@@ -3,8 +3,6 @@
 module WahWah
   module ID3
     class Frame
-      include Helper
-
       # Textual frames are marked with an encoding byte.
       #
       # $00   ISO-8859-1 [ISO-8859-1]. Terminated with $00.
@@ -71,7 +69,7 @@ module WahWah
         @version = frame_header[:version]
 
         # Notice, ID3v2.4 frame header size on the most significant is set to zero in every byte
-        @size = id3_size_caculate(frame_header[:size_bytes], has_zero_bit: @version == 4)
+        @size = Helper.id3_size_caculate(frame_header[:size_bytes], has_zero_bit: @version == 4)
         @flags = parse_flags(frame_header[:flags_bytes])
 
         # In ID3v2.3 when frame is compressed using zlib

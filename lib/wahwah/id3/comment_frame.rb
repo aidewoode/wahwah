@@ -12,9 +12,9 @@ module WahWah
       def parse
         encoding_id, _language, reset_content = @file_io.read(@size).unpack('CA3a*')
         encoding = ENCODING_MAPPING[encoding_id]
-        _description, comment_text = split_with_terminator(reset_content, ENCODING_TERMINATOR_SIZE[encoding])
+        _description, comment_text = Helper.split_with_terminator(reset_content, ENCODING_TERMINATOR_SIZE[encoding])
 
-        @value = encode_to_utf8(encoding, comment_text)
+        @value = Helper.encode_to_utf8(comment_text, source_encoding: encoding)
       end
     end
   end
