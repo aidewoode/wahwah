@@ -21,7 +21,13 @@ module WahWah
       TRCK: :track
     }
 
-    attr_reader :channel, :sample_rate
+    CHANNEL_MODE_INDEX = %w(Mono Stereo)
+
+    attr_reader :sample_rate
+
+    def channel_mode
+      CHANNEL_MODE_INDEX[@channel - 1]
+    end
 
     private
       def parse
@@ -74,7 +80,7 @@ module WahWah
       #
       # 2(little endian)   BitsPerSample 8 bits = 8, 16 bits = 16, etc.
       def parse_fmt_chunk(chunk)
-        _, @channel, @sample_rate, _, _, @bits_per_sample = @file_io.read(chunk.size).unpack('vvVVvv')
+        _, @channel, @sample_rate, _, _, @bits_per_sample = chunk.data.unpack('vvVVvv')
         @bitrate = @sample_rate * @channel * @bits_per_sample / 1000
       end
 
@@ -106,7 +112,7 @@ module WahWah
       end
 
       def parse_id3_chunk(chunk)
-        @id3_tag = ID3::V2.new(StringIO.new(@file_io.read(chunk.size)))
+        @id3_tag = ID3::V2.new(StringIO.new(chunk.data))
       end
 
       def end_of_top_chunk?
@@ -115,7 +121,7 @@ module WahWah
 
       def update_attribute(chunk)
         attribute_name = INFO_ID_MAPPING[chunk.id.to_sym]
-        chunk_data = Helper.encode_to_utf8(@file_io.read(chunk.size))
+        chunk_data = Helper.encode_to_utf8(chunk.data)
 
         case attribute_name
         when :comment

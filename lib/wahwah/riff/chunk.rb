@@ -23,7 +23,10 @@ module WahWah
       attr_reader :id, :type
 
       def initialize(file_io)
-        parse(file_io)
+        @id, @size = file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
+        @type = file_io.read(HEADER_TYPE_SIZE).unpack('A4').first if have_type?
+        @file_io = file_io
+        @position = file_io.pos
       end
 
       def size
@@ -31,12 +34,12 @@ module WahWah
         have_type? ? @size - HEADER_TYPE_SIZE : @size
       end
 
-      private
-        def parse(file_io)
-          @id, @size = file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
-          @type = file_io.read(HEADER_TYPE_SIZE).unpack('A4').first if have_type?
-        end
+      def data
+        @file_io.seek(@position)
+        @file_io.read(size)
+      end
 
+      private
         def have_type?
           %w(RIFF LIST).include? @id
         end

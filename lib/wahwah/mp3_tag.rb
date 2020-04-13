@@ -80,7 +80,7 @@ module WahWah
           @bitrate = bytes_count * 8 / @duration / 1000
         else
           @bitrate = mpeg_frame_header.frame_bitrate
-          @duration = (file_size - (@id3_tag&.size || 0)) * 8 / (@bitrate * 1000)
+          @duration = (file_size - (@id3_tag&.size || 0)) * 8 / (@bitrate * 1000) unless @bitrate.zero?
         end
       end
 

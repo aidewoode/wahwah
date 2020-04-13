@@ -30,22 +30,18 @@ module WahWah
     #                       you can calculate the length of this field.
     class VbriHeader
       HEADER_SIZE = 32
+      HEADER_FORMAT = 'A4x6NN'
 
       attr_reader :frames_count, :bytes_count
 
       def initialize(file_io, offset = 0)
-        parse(file_io, offset)
+        file_io.seek(offset)
+        @id, @frames_count, @bytes_count = file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
       end
 
       def valid?
         @id == 'VBRI'
       end
-
-      private
-        def parse(file_io, offset)
-          file_io.seek(offset)
-          @id, @frames_count, @bytes_count = file_io.read(HEADER_SIZE).unpack('A4x6NN')
-        end
     end
   end
 end
