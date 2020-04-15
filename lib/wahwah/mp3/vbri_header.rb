@@ -25,7 +25,7 @@ module WahWah
     #
     # 24          2         Frames per table entry as Big-Endian 16-bit unsigned
     #
-    # 26                  TOC entries for seeking as Big-Endian integral.
+    # 26                    TOC entries for seeking as Big-Endian integral.
     #                       From size per table entry and number of entries,
     #                       you can calculate the length of this field.
     class VbriHeader
@@ -36,7 +36,7 @@ module WahWah
 
       def initialize(file_io, offset = 0)
         file_io.seek(offset)
-        @id, @frames_count, @bytes_count = file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
+        @id, @bytes_count, @frames_count = file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
       end
 
       def valid?

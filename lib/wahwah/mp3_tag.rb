@@ -111,7 +111,7 @@ module WahWah
         mpeg_frame_header_position = mpeg_frame_header.position
         mpeg_frame_header_size = Mp3::MpegFrameHeader::HEADER_SIZE
 
-        mpeg_frame_header_position + mpeg_frame_header_size
+        mpeg_frame_header_position + mpeg_frame_header_size + 32
       end
 
       def frames_count

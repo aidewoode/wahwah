@@ -86,12 +86,11 @@ module WahWah
       attr_reader :position
 
       def initialize(file_io, offset = 0)
-        file_io.rewind
-
         # mpeg frame header start with '11111111111' sync bits,
         # So look through file until find it.
         loop do
-          header = file_io.pread(HEADER_SIZE, offset)
+          file_io.seek(offset)
+          header = file_io.read(HEADER_SIZE)
           sync_bits = header.unpack('B11').first
 
           if sync_bits == "#{'1' * 11}".b

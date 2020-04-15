@@ -130,6 +130,33 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal 22050, tag.sample_rate
   end
 
+  def test_vbri_header_file
+    tag = WahWah::Mp3Tag.new('test/files/vbri_header.mp3')
+
+    assert tag.id3v2?
+    assert tag.is_vbr?
+    assert_equal File.size('test/files/vbri_header.mp3'), tag.file_size
+    assert_equal 'v2.3', tag.id3_version
+    assert_equal 'China Girl', tag.title
+    assert_equal 'Iggy Pop', tag.artist
+    assert_equal 'Iggy Pop', tag.albumartist
+    assert_equal 'Iggy Pop', tag.composer
+    assert_equal 'The Idiot', tag.album
+    assert_equal '1977', tag.year
+    assert_equal 'Rock', tag.genre
+    assert_equal 5, tag.track
+    assert_equal 8, tag.track_total
+    assert_equal 1, tag.disc
+    assert_equal 1, tag.disc_total
+    assert_equal ['Iggy Pop Rocks'], tag.comments
+    assert_equal 222, tag.duration
+    assert_equal 233, tag.bitrate
+    assert_equal 'MPEG1', tag.mpeg_version
+    assert_equal 'layer3', tag.mpeg_layer
+    assert_equal 'Stereo', tag.channel_mode
+    assert_equal 44100, tag.sample_rate
+  end
+
   def test_invalid_id3_file
     tag = WahWah.open('test/files/invalid_id3.mp3')
     assert tag.invalid_id3?
