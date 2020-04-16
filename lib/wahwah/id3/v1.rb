@@ -48,6 +48,14 @@ module WahWah
         TAG_SIZE
       end
 
+      def version
+        'v1'
+      end
+
+      def valid?
+        @id == TAG_ID
+      end
+
       private
         # For ID3v1 info, see here https://en.wikipedia.org/wiki/ID3#ID3v1
         #
@@ -61,7 +69,11 @@ module WahWah
         # track     1         The number of the track on the album, or 0. Invalid, if previous byte is not a binary 0.
         # genre     1         Index in a list of genres, or 255
         def parse
-          @file_io.seek(-(TAG_SIZE - TAG_ID.size), IO::SEEK_END)
+          @file_io.seek(-TAG_SIZE, IO::SEEK_END)
+          @id = Helper.encode_to_utf8(@file_io.read(3), source_encoding: DEFAULT_ENCODING)
+
+          return unless valid?
+
           @title = Helper.encode_to_utf8(@file_io.read(30), source_encoding: DEFAULT_ENCODING)
           @artist = Helper.encode_to_utf8(@file_io.read(30), source_encoding: DEFAULT_ENCODING)
           @album = Helper.encode_to_utf8(@file_io.read(30), source_encoding: DEFAULT_ENCODING)
@@ -71,10 +83,10 @@ module WahWah
 
           if comment.getbyte(-2) == 0
             @track = comment.getbyte(-1).to_i
-            comment = Helper.encode_to_utf8(comment.byteslice(0..-3), source_encoding: DEFAULT_ENCODING)
+            comment = comment.byteslice(0..-3)
           end
 
-          @comments = [comment]
+          @comments.push(Helper.encode_to_utf8(comment, source_encoding: DEFAULT_ENCODING))
           @genre = GENRES[@file_io.getbyte] || ''
         end
     end

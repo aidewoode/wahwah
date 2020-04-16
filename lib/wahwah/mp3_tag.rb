@@ -4,24 +4,16 @@ module WahWah
   class Mp3Tag < Tag
     include ID3::Delegate
 
-    def id3v1?
-      @id3_version == 1
-    end
-
     def id3v2?
-      @id3_version == 2
+      @id3_tag.instance_of? ID3::V2
     end
 
     def invalid_id3?
-      @id3_version == 0
+      @id3_tag.nil?
     end
 
     def id3_version
-      if id3v1?
-        'v1'
-      elsif id3v2?
-        "v#{@id3_version}.#{@id3_tag.major_version}"
-      end
+      @id3_tag.version
     end
 
     def mpeg_version
@@ -50,28 +42,16 @@ module WahWah
 
     private
       def parse
-        parse_id3_version
-        parse_tag
+        @id3_tag = parse_id3_tag
         parse_duration
       end
 
-      def parse_id3_version
-        # Invalid id3 version
-        @id3_version = 0
+      def parse_id3_tag
+        id3_v1_tag = ID3::V1.new(@file_io)
+        id3_v2_tag = ID3::V2.new(@file_io)
 
-        @file_io.seek(-ID3::V1::TAG_SIZE, IO::SEEK_END)
-        @id3_version = 1 if @file_io.read(3) == ID3::V1::TAG_ID
-
-        @file_io.rewind
-        @id3_version = 2 if @file_io.read(3) == ID3::V2::TAG_ID
-      end
-
-      def parse_tag
-        @id3_tag = if id3v2?
-          ID3::V2.new(@file_io)
-        elsif id3v1?
-          ID3::V1.new(@file_io)
-        end
+        return id3_v2_tag if id3_v2_tag.valid?
+        id3_v1_tag if id3_v1_tag.valid?
       end
 
       def parse_duration

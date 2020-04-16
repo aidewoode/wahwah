@@ -6,7 +6,7 @@ class WahWah::Mp3TagTest < Minitest::Test
   def test_id3v1_tag_file
     tag = WahWah::Mp3Tag.new('test/files/id3v1.mp3')
 
-    assert tag.id3v1?
+    assert !tag.id3v2?
     assert tag.is_vbr?
     assert_equal File.size('test/files/id3v1.mp3'), tag.file_size
     assert_equal 'v1', tag.id3_version

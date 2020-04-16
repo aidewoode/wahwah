@@ -16,12 +16,15 @@ module WahWah
         flags[1] == '1'
       end
 
-      private
-        def parse
-          parse_header
-          parse_body
-        end
+      def version
+        "v2.#{major_version}"
+      end
 
+      def valid?
+        @id == TAG_ID
+      end
+
+      private
         # The ID3v2 tag header, which should be the first information in the file,
         # is 10 bytes as follows:
 
@@ -29,17 +32,21 @@ module WahWah
         # ID3v2 version           $03 00
         # ID3v2 flags             %abc00000
         # ID3v2 size              4 * %0xxxxxxx
-        def parse_header
+        def parse
           @file_io.rewind
 
           # The first byte of ID3v2 version is it's major version,
           # while the second byte is its revision number, we don't need
           # revision number here, so ignore it.
-          _id, @major_version, _revision, @flags, *size_bytes = @file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
+          @id, @major_version, _revision, @flags, *size_bytes = @file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
+
+          return unless valid?
 
           # Tag size is the size excluding the header size,
           # so add header size back to get total size.
           @size = Helper.id3_size_caculate(size_bytes) + HEADER_SIZE
+
+          parse_body
         end
 
         def parse_body
