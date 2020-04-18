@@ -9,6 +9,7 @@ AllCops:
   Exclude:
     - 'Gemfile'
     - 'bin/**/*'
+    - 'vendor/**/*'
 
 Performance:
   Exclude:
