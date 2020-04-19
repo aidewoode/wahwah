@@ -27,4 +27,23 @@ class WahWahTest < Minitest::Test
   def test_support_formats
     assert_equal %w(mp3 ogg oga opus wav flac wma m4a).sort, WahWah.support_formats.sort
   end
+
+  def test_return_correct_instance
+    WahWah::FORMATE_MAPPING.values.flatten.each do |format|
+      FileUtils.touch("empty.#{format}")
+    end
+
+    assert_instance_of WahWah::Mp3Tag, WahWah.open('empty.mp3')
+    assert_instance_of WahWah::OggTag, WahWah.open('empty.ogg')
+    assert_instance_of WahWah::OggTag, WahWah.open('empty.oga')
+    assert_instance_of WahWah::OggTag, WahWah.open('empty.opus')
+    assert_instance_of WahWah::RiffTag, WahWah.open('empty.wav')
+    assert_instance_of WahWah::FlacTag, WahWah.open('empty.flac')
+    assert_instance_of WahWah::AsfTag, WahWah.open('empty.wma')
+    assert_instance_of WahWah::Mp4Tag, WahWah.open('empty.m4a')
+  ensure
+    WahWah::FORMATE_MAPPING.values.flatten.each do |format|
+      FileUtils.remove_file("empty.#{format}")
+    end
+  end
 end

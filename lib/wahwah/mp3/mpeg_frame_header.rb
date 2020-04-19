@@ -86,7 +86,22 @@ module WahWah
       attr_reader :position
 
       def initialize(file_io, offset = 0)
-        parse(file_io, offset)
+        # mpeg frame header start with '11111111111' sync bits,
+        # So look through file until find it.
+        loop do
+          file_io.seek(offset)
+          header = file_io.read(HEADER_SIZE)
+          sync_bits = header.unpack('B11').first
+
+          if sync_bits == "#{'1' * 11}".b
+            @header = header.unpack('B*').first
+            @position = offset
+
+            break
+          end
+
+          offset += 1
+        end
       end
 
       def version
@@ -116,27 +131,6 @@ module WahWah
       def samples_per_frame
         SAMPLES_PER_FRAME_INDEX[kind]
       end
-
-      private
-        def parse(file_io, offset)
-          file_io.rewind
-
-          # mpeg frame header start with '11111111111' sync bits,
-          # So look through file until find it.
-          loop do
-            header = file_io.pread(HEADER_SIZE, offset)
-            sync_bits = header.unpack('B11').first
-
-            if sync_bits == "#{'1' * 11}".b
-              @header = header.unpack('B*').first
-              @position = offset
-
-              break
-            end
-
-            offset += 1
-          end
-        end
     end
   end
 end
