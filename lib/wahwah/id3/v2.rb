@@ -7,13 +7,13 @@ module WahWah
       HEADER_SIZE = 10
       HEADER_FORMAT = "A3CC#{'B8' * 5}"
 
-      attr_reader :major_version, :flags, :size
+      attr_reader :major_version, :size
 
 
       # The second bit in flags byte indicates whether or not the header
       # is followed by an extended header.
       def has_extended_header?
-        flags[1] == '1'
+        @flags[1] == '1'
       end
 
       def version
