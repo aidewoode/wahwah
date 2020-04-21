@@ -83,13 +83,15 @@ module WahWah
         'MPEG2.5 layer3' => 576
       }
 
-      attr_reader :position
-
       def initialize(file_io, offset = 0)
         # mpeg frame header start with '11111111111' sync bits,
         # So look through file until find it.
         loop do
+          file_io.rewind
           file_io.seek(offset)
+
+          break if file_io.eof?
+
           header = file_io.read(HEADER_SIZE)
           sync_bits = header.unpack('B11').first
 
@@ -104,31 +106,47 @@ module WahWah
         end
       end
 
+      def valid?
+        !@header.nil?
+      end
+
+      def position
+        return 0 unless valid?
+        @position
+      end
+
       def version
+        return unless valid?
         @version ||= VERSIONS_INDEX[@header[11..12].to_i(2)]
       end
 
       def layer
+        return unless valid?
         @layer ||= LAYER_INDEX[@header[13..14].to_i(2)]
       end
 
       def kind
+        return unless valid?
         "#{version} #{layer}"
       end
 
       def frame_bitrate
+        return unless valid?
         @frame_bitrate ||= FRAME_BITRATE_INDEX[kind]&.fetch(@header[16..19].to_i(2))
       end
 
       def channel_mode
+        return unless valid?
         @channel_mode ||= CHANNEL_MODE_INDEX[@header[24..25].to_i(2)]
       end
 
       def sample_rate
+        return unless valid?
         @sample_rate ||= SAMPLE_RATE_INDEX[version]&.fetch(@header[20..21].to_i(2))
       end
 
       def samples_per_frame
+        return unless valid?
         SAMPLES_PER_FRAME_INDEX[kind]
       end
     end

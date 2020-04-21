@@ -17,10 +17,10 @@ class WahWah::HelperTest < Minitest::Test
   end
 
   def test_id3_size_caculate
-    byte_strings = ['00000001', '00000001', '00000001', '00000001']
+    bits_string = '00000001000000010000000100000001'
 
-    assert_equal 2113665, WahWah::Helper.id3_size_caculate(byte_strings)
-    assert_equal 16843009, WahWah::Helper.id3_size_caculate(byte_strings, has_zero_bit: false)
+    assert_equal 2113665, WahWah::Helper.id3_size_caculate(bits_string)
+    assert_equal 16843009, WahWah::Helper.id3_size_caculate(bits_string, has_zero_bit: false)
   end
 
   def test_split_with_terminator

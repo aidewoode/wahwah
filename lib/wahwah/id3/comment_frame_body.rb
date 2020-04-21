@@ -2,7 +2,7 @@
 
 module WahWah
   module ID3
-    class CommentFrame < Frame
+    class CommentFrameBody < FrameBody
       # Comment frame body structure:
       #
       # Text encoding             $xx
@@ -10,7 +10,7 @@ module WahWah
       # Short content description <textstring> $00 (00)
       # The actual text           <textstring>
       def parse
-        encoding_id, _language, reset_content = @file_io.read(@size).unpack('CA3a*')
+        encoding_id, _language, reset_content = @content.unpack('CA3a*')
         encoding = ENCODING_MAPPING[encoding_id]
         _description, comment_text = Helper.split_with_terminator(reset_content, ENCODING_TERMINATOR_SIZE[encoding])
 

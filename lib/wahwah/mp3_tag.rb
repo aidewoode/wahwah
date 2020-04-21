@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
+require 'forwardable'
+
 module WahWah
   class Mp3Tag < Tag
     include ID3::Delegate
+    extend Forwardable
+
+    def_delegator :@mpeg_frame_header, :version, :mpeg_version
+    def_delegator :@mpeg_frame_header, :layer, :mpeg_layer
+    def_delegator :@mpeg_frame_header, :kind, :mpeg_kind
+    def_delegators :@mpeg_frame_header, :channel_mode, :sample_rate
 
     def id3v2?
       @id3_tag.instance_of? ID3::V2
@@ -13,27 +21,7 @@ module WahWah
     end
 
     def id3_version
-      @id3_tag.version
-    end
-
-    def mpeg_version
-      mpeg_frame_header.version
-    end
-
-    def mpeg_layer
-      mpeg_frame_header.layer
-    end
-
-    def mpeg_kind
-      mpeg_frame_header.kind
-    end
-
-    def channel_mode
-      mpeg_frame_header.channel_mode
-    end
-
-    def sample_rate
-      mpeg_frame_header.sample_rate
+      @id3_tag&.version
     end
 
     def is_vbr?
@@ -43,7 +31,7 @@ module WahWah
     private
       def parse
         @id3_tag = parse_id3_tag
-        parse_duration
+        parse_duration if mpeg_frame_header.valid?
       end
 
       def parse_id3_tag

@@ -2,7 +2,7 @@
 
 module WahWah
   module ID3
-    class ImageFrame < Frame
+    class ImageFrameBody < FrameBody
       TYPES = %i(
         other
         file_icon
@@ -48,7 +48,7 @@ module WahWah
       # Picture data  <binary data>
       def parse
         frame_format = @version > 2 ? 'CZ*Ca*' : 'Ca3Ca*'
-        encoding_id, @mime_type, picture_id, reset_content = @file_io.read(@size).unpack(frame_format)
+        encoding_id, @mime_type, picture_id, reset_content = @content.unpack(frame_format)
         encoding = ENCODING_MAPPING[encoding_id]
         _description, data = Helper.split_with_terminator(reset_content, ENCODING_TERMINATOR_SIZE[encoding])
 

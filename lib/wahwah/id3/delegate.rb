@@ -21,7 +21,7 @@ module WahWah
     def self.add_tag_attributes(attributes)
       attributes.each do |attr|
         define_method(attr) do
-          return super() unless instance_variable_defined?(:@id3_tag)
+          return super() unless instance_variable_defined?(:@id3_tag) && !@id3_tag.nil?
           @id3_tag&.send(attr)
         end
       end

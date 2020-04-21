@@ -1,21 +1,39 @@
 # frozen_string_literal: true
 
+require 'zlib'
+
 module WahWah
   module ID3
     class Frame
-      # Textual frames are marked with an encoding byte.
-      #
-      # $00   ISO-8859-1 [ISO-8859-1]. Terminated with $00.
-      # $01   UTF-16 [UTF-16] encoded Unicode [UNICODE] with BOM.
-      # $02   UTF-16BE [UTF-16] encoded Unicode [UNICODE] without BOM.
-      # $03   UTF-8 [UTF-8] encoded Unicode [UNICODE].
-      ENCODING_MAPPING = %w(ISO-8859-1 UTF-16 UTF-16BE UTF-8)
+      ID_MAPPING = {
+        # ID3v2.2 frame id
+        COM: :comment,
+        TRK: :track,
+        TYE: :year,
+        TAL: :album,
+        TP1: :artist,
+        TT2: :title,
+        TCO: :genre,
+        TPA: :disc,
+        TP2: :albumartist,
+        TCM: :composer,
+        PIC: :image,
 
-      ENCODING_TERMINATOR_SIZE = {
-        'ISO-8859-1' => 1,
-        'UTF-16' => 2,
-        'UTF-16BE' => 2,
-        'UTF-8' => 1
+        # ID3v2.3 and ID3v2.4 frame id
+        COMM: :comment,
+        TRCK: :track,
+        TYER: :year,
+        TALB: :album,
+        TPE1: :artist,
+        TIT2: :title,
+        TCON: :genre,
+        TPOS: :disc,
+        TPE2: :albumartist,
+        TCOM: :composer,
+        APIC: :image,
+
+        # ID3v2.4 use TDRC replace TYER
+        TDRC: :year
       }
 
       # ID3v2.3 frame flags field is defined as follows.
@@ -60,17 +78,13 @@ module WahWah
         array[15] = :data_length_indicator
       end
 
-      attr_reader :id, :version, :name, :value
+      attr_reader :name, :value
 
-      def initialize(file_io, frame_header)
+      def initialize(file_io, version)
         @file_io = file_io
-        @id = frame_header[:id]
-        @name = frame_header[:name]
-        @version = frame_header[:version]
+        @version = version
 
-        # Notice, ID3v2.4 frame header size on the most significant is set to zero in every byte
-        @size = Helper.id3_size_caculate(frame_header[:size_bytes], has_zero_bit: @version == 4)
-        @flags = parse_flags(frame_header[:flags_bytes])
+        parse_frame_header
 
         # In ID3v2.3 when frame is compressed using zlib
         # with 4 bytes for 'decompressed size' appended to the frame header.
@@ -85,11 +99,11 @@ module WahWah
           @size = @size - 4
         end
 
-        parse if @size > 0
+        parse_body
       end
 
-      def invalid?
-        @size <= 0
+      def valid?
+        @size > 0 && !@name.nil?
       end
 
       def compressed?
@@ -100,21 +114,66 @@ module WahWah
         @flags.include? :data_length_indicator
       end
 
-      def parse
-        raise WahWahNotImplementedError, 'The parse method is not implemented'
-      end
 
       private
-        def parse_flags(flags_bytes)
-          return [] if flags_bytes.nil?
+        # ID3v2.2 frame header structure:
+        #
+        # Frame ID      $xx xx xx(tree characters)
+        # Size          3 * %xxxxxxxx
+        #
+        # ID3v2.3 frame header structure:
+        #
+        # Frame ID      $xx xx xx xx (four characters)
+        # Size          4 * %xxxxxxxx
+        # Flags         $xx xx
+        #
+        # ID3v2.4 frame header structure:
+        #
+        # Frame ID      $xx xx xx xx (four characters)
+        # Size          4 * %0xxxxxxx
+        # Flags         $xx xx
+        def parse_frame_header
+          header_size = @version == 2 ? 6 : 10
+          header_formate = @version == 2 ? 'A3B24' : 'A4B32B16'
+          id, size_bits, flags_bits = @file_io.read(header_size).unpack(header_formate)
+
+          @name = ID_MAPPING[id.to_sym]
+          @size = Helper.id3_size_caculate(size_bits, has_zero_bit: @version == 4)
+          @flags = parse_flags(flags_bits)
+        end
+
+        def parse_flags(flags_bits)
+          return [] if flags_bits.nil?
 
           frame_flags_indications = @version == 4 ?
             V4_HEADER_FLAGS_INDICATIONS :
             V3_HEADER_FLAGS_INDICATIONS
 
-          flags_bytes.split('').map.with_index do |flag_bit, index|
+          flags_bits.split('').map.with_index do |flag_bit, index|
             frame_flags_indications[index] if flag_bit == '1'
           end.compact
+        end
+
+        def parse_body
+          return unless @size > 0
+          (@file_io.seek(@size, IO::SEEK_CUR); return) if @name.nil?
+
+          content = compressed? ? Zlib.inflate(@file_io.read(@size)) : @file_io.read(@size)
+          frame_body = frame_body_class.new(content, @version)
+          @value = frame_body.value
+        end
+
+        def frame_body_class
+          case @name
+          when :comment
+            CommentFrameBody
+          when :genre
+            GenreFrameBody
+          when :image
+            ImageFrameBody
+          else
+            TextFrameBody
+          end
         end
     end
   end

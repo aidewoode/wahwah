@@ -159,6 +159,36 @@ class WahWah::Mp3TagTest < Minitest::Test
 
   def test_invalid_id3_file
     tag = WahWah.open('test/files/invalid_id3.mp3')
+
     assert tag.invalid_id3?
+    assert !tag.id3v2?
+    assert !tag.is_vbr?
+    assert_equal File.size('test/files/invalid_id3.mp3'), tag.file_size
+    assert_nil tag.id3_version
+    assert_nil tag.title
+    assert_nil tag.artist
+    assert_nil tag.albumartist
+    assert_nil tag.composer
+    assert_nil tag.album
+    assert_nil tag.year
+    assert_nil tag.genre
+    assert_nil tag.track
+    assert_nil tag.track_total
+    assert_nil tag.disc
+    assert_nil tag.disc_total
+    assert_equal [], tag.comments
+    assert_nil tag.duration
+    assert_equal 0, tag.bitrate
+    assert_equal 'MPEG1', tag.mpeg_version
+    assert_equal 'layer1', tag.mpeg_layer
+    assert_equal 'Stereo', tag.channel_mode
+    assert_equal 44100, tag.sample_rate
+  end
+
+  def test_compressed_image_file
+    tag = WahWah.open('test/files/compressed_image.mp3')
+    image = tag.images.first
+
+    assert_equal binary_data('test/files/compressed_cover.bmp'), image[:data].strip
   end
 end
