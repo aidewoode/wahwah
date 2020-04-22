@@ -28,7 +28,8 @@ module WahWah
       )
 
       def mime_type
-        @version > 2 ? @mime_type : "image/#{@mime_type}"
+        mime_type = @mime_type.downcase.yield_self { |type| type == 'jpg' ? 'jpeg' : type }
+        @version > 2 ? mime_type : "image/#{mime_type}"
       end
 
       # ID3v2.2 image frame structure:

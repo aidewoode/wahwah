@@ -83,6 +83,8 @@ module WahWah
         'MPEG2.5 layer3' => 576
       }
 
+      attr_reader :version, :layer, :frame_bitrate, :channel_mode, :sample_rate
+
       def initialize(file_io, offset = 0)
         # mpeg frame header start with '11111111111' sync bits,
         # So look through file until find it.
@@ -99,7 +101,7 @@ module WahWah
             @header = header.unpack('B*').first
             @position = offset
 
-            break
+            parse; break
           end
 
           offset += 1
@@ -115,40 +117,25 @@ module WahWah
         @position
       end
 
-      def version
-        return unless valid?
-        @version ||= VERSIONS_INDEX[@header[11..12].to_i(2)]
-      end
-
-      def layer
-        return unless valid?
-        @layer ||= LAYER_INDEX[@header[13..14].to_i(2)]
-      end
-
       def kind
-        return unless valid?
-        "#{version} #{layer}"
-      end
-
-      def frame_bitrate
-        return unless valid?
-        @frame_bitrate ||= FRAME_BITRATE_INDEX[kind]&.fetch(@header[16..19].to_i(2))
-      end
-
-      def channel_mode
-        return unless valid?
-        @channel_mode ||= CHANNEL_MODE_INDEX[@header[24..25].to_i(2)]
-      end
-
-      def sample_rate
-        return unless valid?
-        @sample_rate ||= SAMPLE_RATE_INDEX[version]&.fetch(@header[20..21].to_i(2))
+        return if @version.nil? && @layer.nil?
+        "#{@version} #{@layer}"
       end
 
       def samples_per_frame
-        return unless valid?
         SAMPLES_PER_FRAME_INDEX[kind]
       end
+
+      private
+        def parse
+          return unless valid?
+
+          @version = VERSIONS_INDEX[@header[11..12].to_i(2)]
+          @layer = LAYER_INDEX[@header[13..14].to_i(2)]
+          @frame_bitrate = FRAME_BITRATE_INDEX[kind]&.fetch(@header[16..19].to_i(2))
+          @channel_mode = CHANNEL_MODE_INDEX[@header[24..25].to_i(2)]
+          @sample_rate = SAMPLE_RATE_INDEX[@version]&.fetch(@header[20..21].to_i(2))
+        end
     end
   end
 end

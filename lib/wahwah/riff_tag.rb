@@ -6,7 +6,7 @@ module WahWah
   # https://docs.microsoft.com/en-us/windows/win32/multimedia/resource-interchange-file-format-services
   # http://soundfile.sapp.org/doc/WaveFormat/
   class RiffTag < Tag
-    include ID3::Delegate
+    extend ID3::Delegate
 
     # see https://exiftool.org/TagNames/RIFF.html#Info for more info
     INFO_ID_MAPPING = {

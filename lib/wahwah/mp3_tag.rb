@@ -4,7 +4,7 @@ require 'forwardable'
 
 module WahWah
   class Mp3Tag < Tag
-    include ID3::Delegate
+    extend ID3::Delegate
     extend Forwardable
 
     def_delegator :@mpeg_frame_header, :version, :mpeg_version
