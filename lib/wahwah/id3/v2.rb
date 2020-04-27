@@ -5,7 +5,7 @@ module WahWah
     class V2 < Tag
       TAG_ID = 'ID3'
       HEADER_SIZE = 10
-      HEADER_FORMAT = "A3CC#{'B8' * 5}"
+      HEADER_FORMAT = 'A3CCB8B*'
 
       attr_reader :major_version, :size
 
@@ -38,13 +38,13 @@ module WahWah
           # The first byte of ID3v2 version is it's major version,
           # while the second byte is its revision number, we don't need
           # revision number here, so ignore it.
-          @id, @major_version, _revision, @flags, *size_bytes = @file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
+          @id, @major_version, _revision, @flags, size_bits = @file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
 
           return unless valid?
 
           # Tag size is the size excluding the header size,
           # so add header size back to get total size.
-          @size = Helper.id3_size_caculate(size_bytes) + HEADER_SIZE
+          @size = Helper.id3_size_caculate(size_bits) + HEADER_SIZE
 
           parse_body
         end
@@ -58,15 +58,15 @@ module WahWah
             # Size of padding        $xx xx xx xx
 
             # Skip extended_header
-            extended_header_size = Helper.id3_size_caculate(@file_io.read(4).unpack("#{'B8' * 4}"))
+            extended_header_size = Helper.id3_size_caculate(@file_io.read(4).unpack('B32').first)
             @file_io.seek(extended_header_size - 4, IO::SEEK_CUR)
           end
 
           loop do
             break if end_of_tag?
 
-            frame = ID3::FrameGenerator.generate(@file_io, major_version)
-            next if frame.invalid?
+            frame = ID3::Frame.new(@file_io, major_version)
+            next unless frame.valid?
 
             update_attribute(frame)
           end
@@ -98,7 +98,7 @@ module WahWah
         end
 
         def end_of_tag?
-          size <= @file_io.pos
+          size <= @file_io.pos || file_size <= @file_io.pos
         end
     end
   end

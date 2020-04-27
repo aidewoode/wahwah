@@ -2,7 +2,7 @@
 
 module WahWah
   module ID3
-    class ImageFrame < Frame
+    class ImageFrameBody < FrameBody
       TYPES = %i(
         other
         file_icon
@@ -28,7 +28,8 @@ module WahWah
       )
 
       def mime_type
-        @version > 2 ? @mime_type : "image/#{@mime_type}"
+        mime_type = @mime_type.downcase.yield_self { |type| type == 'jpg' ? 'jpeg' : type }
+        @version > 2 ? mime_type : "image/#{mime_type}"
       end
 
       # ID3v2.2 image frame structure:
@@ -48,7 +49,7 @@ module WahWah
       # Picture data  <binary data>
       def parse
         frame_format = @version > 2 ? 'CZ*Ca*' : 'Ca3Ca*'
-        encoding_id, @mime_type, picture_id, reset_content = @file_io.read(@size).unpack(frame_format)
+        encoding_id, @mime_type, picture_id, reset_content = @content.unpack(frame_format)
         encoding = ENCODING_MAPPING[encoding_id]
         _description, data = Helper.split_with_terminator(reset_content, ENCODING_TERMINATOR_SIZE[encoding])
 

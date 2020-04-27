@@ -27,28 +27,32 @@ class WahWah::Mp3TagTest < Minitest::Test
 
   def test_id3v22_tag_file
     tag = WahWah::Mp3Tag.new('test/files/id3v22.mp3')
+    image = tag.images.first
 
     assert tag.id3v2?
     assert !tag.is_vbr?
     assert_equal File.size('test/files/id3v22.mp3'), tag.file_size
     assert_equal 'v2.2', tag.id3_version
-    assert_equal 'cosmic american', tag.title
-    assert_equal 'Anais Mitchell', tag.artist
+    assert_equal 'You Are The One', tag.title
+    assert_equal 'Shiny Toy Guns', tag.artist
     assert_nil tag.albumartist
     assert_nil tag.composer
-    assert_equal 'Hymns for the Exiled', tag.album
-    assert_equal '2004', tag.year
-    assert_nil tag.genre
-    assert_equal 3, tag.track
+    assert_equal 'We Are Pilots', tag.album
+    assert_equal '2006', tag.year
+    assert_equal 'Alternative', tag.genre
+    assert_equal 1, tag.track
     assert_equal 11, tag.track_total
     assert_nil tag.disc
     assert_nil tag.disc_total
-    assert_equal 'Waterbug Records, www.anaismitchell.com', tag.comments.first
+    assert_equal '0', tag.comments.first
+    assert_equal 'image/jpeg', image[:mime_type]
+    assert_equal :other, image[:type]
+    assert_equal binary_data('test/files/id3v22_cover.jpeg'), image[:data].strip
     assert_equal 0, tag.duration
-    assert_equal 160, tag.bitrate
+    assert_equal 192, tag.bitrate
     assert_equal 'MPEG1', tag.mpeg_version
     assert_equal 'layer3', tag.mpeg_layer
-    assert_equal 'Joint Stereo', tag.channel_mode
+    assert_equal 'Stereo', tag.channel_mode
     assert_equal 44100, tag.sample_rate
   end
 
@@ -159,6 +163,36 @@ class WahWah::Mp3TagTest < Minitest::Test
 
   def test_invalid_id3_file
     tag = WahWah.open('test/files/invalid_id3.mp3')
+
     assert tag.invalid_id3?
+    assert !tag.id3v2?
+    assert !tag.is_vbr?
+    assert_equal File.size('test/files/invalid_id3.mp3'), tag.file_size
+    assert_nil tag.id3_version
+    assert_nil tag.title
+    assert_nil tag.artist
+    assert_nil tag.albumartist
+    assert_nil tag.composer
+    assert_nil tag.album
+    assert_nil tag.year
+    assert_nil tag.genre
+    assert_nil tag.track
+    assert_nil tag.track_total
+    assert_nil tag.disc
+    assert_nil tag.disc_total
+    assert_equal [], tag.comments
+    assert_nil tag.duration
+    assert_equal 0, tag.bitrate
+    assert_equal 'MPEG1', tag.mpeg_version
+    assert_equal 'layer1', tag.mpeg_layer
+    assert_equal 'Stereo', tag.channel_mode
+    assert_equal 44100, tag.sample_rate
+  end
+
+  def test_compressed_image_file
+    tag = WahWah.open('test/files/compressed_image.mp3')
+    image = tag.images.first
+
+    assert_equal binary_data('test/files/compressed_cover.bmp'), image[:data].strip
   end
 end

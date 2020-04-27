@@ -2,7 +2,7 @@
 
 module WahWah
   module ID3
-    class GenreFrame < TextFrame
+    class GenreFrameBody < TextFrameBody
       def parse
         super
 

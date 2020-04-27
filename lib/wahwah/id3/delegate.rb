@@ -18,17 +18,17 @@ module WahWah
       images
     )
 
-    def self.add_tag_attributes(attributes)
+    def add_tag_attributes(attributes)
       attributes.each do |attr|
         define_method(attr) do
-          return super() unless instance_variable_defined?(:@id3_tag)
-          @id3_tag&.send(attr)
+          return super() if @id3_tag.nil?
+          @id3_tag.send(attr)
         end
       end
     end
 
-    def self.included(_mod)
-      add_tag_attributes TAG_ATTRIBUTES
+    def self.extended(mod)
+      mod.add_tag_attributes TAG_ATTRIBUTES
     end
   end
 end
