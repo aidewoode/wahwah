@@ -29,6 +29,9 @@ require 'wahwah/mp3/vbri_header'
 
 require 'wahwah/riff/chunk'
 
+require 'wahwah/ogg/page'
+require 'wahwah/ogg/packets'
+
 module WahWah
   FORMATE_MAPPING = {
     Mp3Tag: ['mp3'],
@@ -43,7 +46,7 @@ module WahWah
     file_path = file_path.to_path if file_path.respond_to? :to_path
     file_path = file_path.to_str
 
-    file_format = format(file_path)
+    file_format = Helper.file_format(file_path)
 
     raise WahWahArgumentError, 'File is not exists' unless File.exist? file_path
     raise WahWahArgumentError, 'File is unreadable' unless File.readable? file_path
@@ -57,9 +60,4 @@ module WahWah
   def self.support_formats
     FORMATE_MAPPING.values.flatten
   end
-
-  private
-    def self.format(file_path)
-      File.extname(file_path).downcase.delete('.')
-    end
 end

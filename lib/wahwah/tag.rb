@@ -18,7 +18,7 @@ module WahWah
       :images,
       :duration,
       :bitrate,
-      :file_size,
+      :file_size
     )
 
     def initialize(file)

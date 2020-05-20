@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 module WahWah
-  # http://soundfile.sapp.org/doc/WaveFormat/
-  # https://en.wikipedia.org/wiki/Resource_Interchange_File_Format
-  # https://docs.microsoft.com/en-us/windows/win32/multimedia/resource-interchange-file-format-services
-  # http://soundfile.sapp.org/doc/WaveFormat/
   class RiffTag < Tag
     extend ID3::Delegate
 
