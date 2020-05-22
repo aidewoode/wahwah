@@ -2,7 +2,7 @@
 
 module WahWah
   class RiffTag < Tag
-    extend ID3::Delegate
+    extend TagDelegate
 
     # see https://exiftool.org/TagNames/RIFF.html#Info for more info
     INFO_ID_MAPPING = {
@@ -20,6 +20,21 @@ module WahWah
     CHANNEL_MODE_INDEX = %w(Mono Stereo)
 
     attr_reader :sample_rate
+
+    tag_delegate :@id3_tag,
+      :title,
+      :artist,
+      :album,
+      :albumartist,
+      :composer,
+      :comments,
+      :track,
+      :track_total,
+      :genre,
+      :year,
+      :disc,
+      :disc_total,
+      :images
 
     def channel_mode
       CHANNEL_MODE_INDEX[@channel - 1]

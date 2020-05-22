@@ -21,11 +21,9 @@ module WahWah
         @file_io.rewind
 
         packet = +''
+        pages = Ogg::Pages.new(@file_io)
 
-        until @file_io.eof?
-          page = Ogg::Page.new(@file_io)
-          break unless page.valid?
-
+        pages.each do |page|
           page.segments.each do |segment|
             packet << segment
 

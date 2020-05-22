@@ -89,7 +89,7 @@ module WahWah
           when :track, :disc
             # Track and disc value may be extended with a "/" character
             # and a numeric string containing the total numer.
-            count, total_count = value.split('/')
+            count, total_count = value.split('/', 2)
             instance_variable_set("@#{name}", count.to_i)
             instance_variable_set("@#{name}_total", total_count.to_i) unless total_count.nil?
           else
