@@ -4,7 +4,6 @@ module WahWah
   module Ogg
     # Vorbis comment structure:
     #
-    # 0) "\x03vorbis"
     # 1) [vendor\_length] = read an unsigned integer of 32 bits
     # 2) [vendor\_string] = read a UTF-8 vector as [vendor\_length] octets
     # 3) [user\_comment\_list\_length] = read an unsigned integer of 32 bits
@@ -30,9 +29,6 @@ module WahWah
 
       def parse_vorbis_comment(comment_packet)
         comment_packet = StringIO.new(comment_packet)
-
-        id = comment_packet.read(7)
-        return unless id == "\x03vorbis"
 
         vendor_length = comment_packet.read(4).unpack('V').first
         comment_packet.seek(vendor_length, IO::SEEK_CUR) # Skip vendor_string
