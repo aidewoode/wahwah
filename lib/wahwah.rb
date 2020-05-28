@@ -8,20 +8,13 @@ require 'wahwah/tag'
 
 require 'wahwah/id3/v1'
 require 'wahwah/id3/v2'
+require 'wahwah/id3/v2_header'
 require 'wahwah/id3/frame'
 require 'wahwah/id3/frame_body'
 require 'wahwah/id3/text_frame_body'
 require 'wahwah/id3/genre_frame_body'
 require 'wahwah/id3/comment_frame_body'
 require 'wahwah/id3/image_frame_body'
-
-require 'wahwah/mp3_tag'
-require 'wahwah/mp4_tag'
-require 'wahwah/ogg_tag'
-require 'wahwah/riff_tag'
-require 'wahwah/asf_tag'
-require 'wahwah/flac_tag'
-
 
 require 'wahwah/mp3/mpeg_frame_header'
 require 'wahwah/mp3/xing_header'
@@ -36,6 +29,15 @@ require 'wahwah/ogg/vorbis_comment'
 require 'wahwah/ogg/vorbis_tag'
 require 'wahwah/ogg/opus_tag'
 require 'wahwah/ogg/flac_tag'
+
+require 'wahwah/flac/block'
+
+require 'wahwah/mp3_tag'
+require 'wahwah/mp4_tag'
+require 'wahwah/ogg_tag'
+require 'wahwah/riff_tag'
+require 'wahwah/asf_tag'
+require 'wahwah/flac_tag'
 
 module WahWah
   FORMATE_MAPPING = {

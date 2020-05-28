@@ -49,11 +49,11 @@ module WahWah
       # Picture data  <binary data>
       def parse
         frame_format = @version > 2 ? 'CZ*Ca*' : 'Ca3Ca*'
-        encoding_id, @mime_type, picture_id, reset_content = @content.unpack(frame_format)
+        encoding_id, @mime_type, type_index, reset_content = @content.unpack(frame_format)
         encoding = ENCODING_MAPPING[encoding_id]
         _description, data = Helper.split_with_terminator(reset_content, ENCODING_TERMINATOR_SIZE[encoding])
 
-        @value = { data: data, mime_type: mime_type, type: TYPES[picture_id] }
+        @value = { data: data, mime_type: mime_type, type: TYPES[type_index] }
       end
     end
   end

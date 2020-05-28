@@ -68,6 +68,8 @@ module WahWah
             parse_list_chunk(sub_chunk)
           when 'id3', 'ID3'
             parse_id3_chunk(sub_chunk)
+          else
+            @file_io.seek(sub_chunk.size, IO::SEEK_CUR)
           end
         end
       end
