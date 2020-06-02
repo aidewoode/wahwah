@@ -42,12 +42,14 @@ module WahWah
                  Ogg::VorbisTag.new(identification_packet, comment_packet)
                when identification_packet.start_with?('OpusHead')
                  Ogg::OpusTag.new(identification_packet, comment_packet)
-               when identification_packet.start_with?('0x7FFLAC')
+               when identification_packet.start_with?("\x7FFLAC")
                  Ogg::FlacTag.new(identification_packet, comment_packet)
         end
       end
 
       def parse_duration
+        return @tag.duration if @tag.respond_to? :duration
+
         last_page = pages.to_a.last
         pre_skip = @tag.respond_to?(:pre_skip) ? @tag.pre_skip : 0
 

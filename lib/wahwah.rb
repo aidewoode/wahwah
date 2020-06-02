@@ -22,6 +22,9 @@ require 'wahwah/mp3/vbri_header'
 
 require 'wahwah/riff/chunk'
 
+require 'wahwah/flac/block'
+require 'wahwah/flac/streaminfo_block'
+
 require 'wahwah/ogg/page'
 require 'wahwah/ogg/pages'
 require 'wahwah/ogg/packets'
@@ -29,8 +32,6 @@ require 'wahwah/ogg/vorbis_comment'
 require 'wahwah/ogg/vorbis_tag'
 require 'wahwah/ogg/opus_tag'
 require 'wahwah/ogg/flac_tag'
-
-require 'wahwah/flac/block'
 
 require 'wahwah/mp3_tag'
 require 'wahwah/mp4_tag'

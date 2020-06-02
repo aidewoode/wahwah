@@ -3,6 +3,7 @@
 module WahWah
   class FlacTag < Tag
     include Ogg::VorbisComment
+    include Flac::StreaminfoBlock
 
     TAG_ID = 'fLaC'
 
@@ -29,61 +30,17 @@ module WahWah
 
           case block.type
           when 'STREAMINFO'
-            parse_stresminfo_block(block)
+            parse_streaminfo_block(block.data)
           when 'VORBIS_COMMENT'
-            parse_vorbis_comment_block(block)
+            parse_vorbis_comment(block.data)
           when 'PICTURE'
-            parse_picture_block(block)
+            parse_picture_block(block.data)
           else
             @file_io.seek(block.size, IO::SEEK_CUR)
           end
 
           break if block.is_last?
         end
-      end
-
-      # STREAMINFO block data structure:
-      #
-      # Length(bit)  Meaning
-      #
-      # 16           The minimum block size (in samples) used in the stream.
-      #
-      # 16           The maximum block size (in samples) used in the stream.
-      #              (Minimum blocksize == maximum blocksize) implies a fixed-blocksize stream.
-      #
-      # 24           The minimum frame size (in bytes) used in the stream.
-      #              May be 0 to imply the value is not known.
-      #
-      # 24          The maximum frame size (in bytes) used in the stream.
-      #              May be 0 to imply the value is not known.
-      #
-      # 20           Sample rate in Hz. Though 20 bits are available,
-      #              the maximum sample rate is limited by the structure of frame headers to 655350Hz.
-      #              Also, a value of 0 is invalid.
-      #
-      # 3            (number of channels)-1. FLAC supports from 1 to 8 channels
-      #
-      # 5            (bits per sample)-1. FLAC supports from 4 to 32 bits per sample.
-      #              Currently the reference encoder and decoders only support up to 24 bits per sample.
-      #
-      # 36           Total samples in stream. 'Samples' means inter-channel sample,
-      #              i.e. one second of 44.1Khz audio will have 44100 samples regardless of the number of channels.
-      #              A value of zero here means the number of total samples is unknown.
-      #
-      # 128          MD5 signature of the unencoded audio data.
-      def parse_stresminfo_block(block)
-        info_bits = block.data.unpack('x10B64').first
-
-        sample_rate = info_bits[0..19].to_i(2)
-        bits_per_sample = info_bits[23..27].to_i(2) + 1
-        total_samples = info_bits[28..-1].to_i(2)
-
-        @duration = (total_samples.to_f / sample_rate).round if sample_rate > 0
-        @bitrate =  sample_rate * bits_per_sample / 1000
-      end
-
-      def parse_vorbis_comment_block(block)
-        parse_vorbis_comment(block.data)
       end
 
       # PICTURE block data structure:
@@ -111,8 +68,8 @@ module WahWah
       # 32           The length of the picture data in bytes.
       #
       # n*8          The binary picture data.
-      def parse_picture_block(block)
-        block_content = StringIO.new(block.data)
+      def parse_picture_block(block_data)
+        block_content = StringIO.new(block_data)
 
         type_index, mime_type_length = block_content.read(8).unpack('NN')
         mime_type = Helper.encode_to_utf8(block_content.read(mime_type_length))

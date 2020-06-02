@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'forwardable'
+
 module WahWah
   module ID3
     class V2 < Tag

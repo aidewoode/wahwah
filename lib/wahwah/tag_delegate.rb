@@ -7,7 +7,7 @@ module WahWah
         define_method(attr) do
           tag = instance_variable_get(accessor)
 
-          return super() if tag.nil? || !tag.respond_to?(attr)
+          return super() if tag.nil?
           tag.send(attr)
         end
       end
