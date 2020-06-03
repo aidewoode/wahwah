@@ -27,19 +27,21 @@ module WahWah
         COMPOSER: :composer
       }
 
-      def parse_vorbis_comment(comment_packet)
-        comment_packet = StringIO.new(comment_packet)
+      def parse_vorbis_comment(comment_content)
+        comment_content = StringIO.new(comment_content)
 
-        vendor_length = comment_packet.read(4).unpack('V').first
-        comment_packet.seek(vendor_length, IO::SEEK_CUR) # Skip vendor_string
+        vendor_length = comment_content.read(4).unpack('V').first
+        comment_content.seek(vendor_length, IO::SEEK_CUR) # Skip vendor_string
 
-        comment_list_length = comment_packet.read(4).unpack('V').first
+        comment_list_length = comment_content.read(4).unpack('V').first
 
         comment_list_length.times do
-          comment_length = comment_packet.read(4).unpack('V').first
-          comment = Helper.encode_to_utf8(comment_packet.read(comment_length))
+          comment_length = comment_content.read(4).unpack('V').first
+          comment = Helper.encode_to_utf8(comment_content.read(comment_length))
           field_name, field_value = comment.split('=', 2)
           attr_name = COMMET_FIELD_MAPPING[field_name.to_sym]
+
+          field_value = field_value.to_i if %i(track disc).include? attr_name
 
           instance_variable_set("@#{attr_name}", field_value) unless attr_name.nil?
         end

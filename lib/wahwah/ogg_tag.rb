@@ -15,14 +15,6 @@ module WahWah
       :disc,
       :composer
 
-    def packets
-      @packets ||= Ogg::Packets.new(@file_io)
-    end
-
-    def pages
-      @pages ||= Ogg::Pages.new(@file_io)
-    end
-
     def duration
       @duration ||= parse_duration
     end
@@ -32,6 +24,14 @@ module WahWah
     end
 
     private
+      def packets
+        @packets ||= Ogg::Packets.new(@file_io)
+      end
+
+      def pages
+        @pages ||= Ogg::Pages.new(@file_io)
+      end
+
       def parse
         identification_packet, comment_packet = packets.first(2)
 

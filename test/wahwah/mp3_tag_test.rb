@@ -8,7 +8,6 @@ class WahWah::Mp3TagTest < Minitest::Test
 
     assert !tag.id3v2?
     assert tag.is_vbr?
-    assert_equal File.size('test/files/id3v1.mp3'), tag.file_size
     assert_equal 'v1', tag.id3_version
     assert_equal 'China Girl', tag.title
     assert_equal 'Iggy Pop', tag.artist
@@ -31,7 +30,6 @@ class WahWah::Mp3TagTest < Minitest::Test
 
     assert tag.id3v2?
     assert !tag.is_vbr?
-    assert_equal File.size('test/files/id3v22.mp3'), tag.file_size
     assert_equal 'v2.2', tag.id3_version
     assert_equal 'You Are The One', tag.title
     assert_equal 'Shiny Toy Guns', tag.artist
@@ -62,7 +60,6 @@ class WahWah::Mp3TagTest < Minitest::Test
 
     assert tag.id3v2?
     assert tag.is_vbr?
-    assert_equal File.size('test/files/id3v23.mp3'), tag.file_size
     assert_equal 'v2.3', tag.id3_version
     assert_equal 'China Girl', tag.title
     assert_equal 'Iggy Pop', tag.artist
@@ -93,7 +90,6 @@ class WahWah::Mp3TagTest < Minitest::Test
 
     assert tag.id3v2?
     assert tag.is_vbr?
-    assert_equal File.size('test/files/id3v24.mp3'), tag.file_size
     assert_equal 'v2.4', tag.id3_version
     assert_equal 'China Girl', tag.title
     assert_equal 'Iggy Pop', tag.artist
@@ -123,7 +119,6 @@ class WahWah::Mp3TagTest < Minitest::Test
 
     assert tag.id3v2?
     assert !tag.is_vbr?
-    assert_equal File.size('test/files/id3v2_extended_header.mp3'), tag.file_size
     assert_equal 'v2.4', tag.id3_version
     assert_equal 'title', tag.title
     assert_equal 0, tag.duration
@@ -139,7 +134,6 @@ class WahWah::Mp3TagTest < Minitest::Test
 
     assert tag.id3v2?
     assert tag.is_vbr?
-    assert_equal File.size('test/files/vbri_header.mp3'), tag.file_size
     assert_equal 'v2.3', tag.id3_version
     assert_equal 'China Girl', tag.title
     assert_equal 'Iggy Pop', tag.artist
@@ -167,7 +161,6 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert tag.invalid_id3?
     assert !tag.id3v2?
     assert !tag.is_vbr?
-    assert_equal File.size('test/files/invalid_id3.mp3'), tag.file_size
     assert_nil tag.id3_version
     assert_nil tag.title
     assert_nil tag.artist
