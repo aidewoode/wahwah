@@ -3,17 +3,35 @@
 require 'wahwah/version'
 require 'wahwah/errors'
 require 'wahwah/helper'
+require 'wahwah/tag_delegate'
 require 'wahwah/tag'
 
 require 'wahwah/id3/v1'
 require 'wahwah/id3/v2'
+require 'wahwah/id3/v2_header'
 require 'wahwah/id3/frame'
 require 'wahwah/id3/frame_body'
 require 'wahwah/id3/text_frame_body'
 require 'wahwah/id3/genre_frame_body'
 require 'wahwah/id3/comment_frame_body'
 require 'wahwah/id3/image_frame_body'
-require 'wahwah/id3/delegate'
+
+require 'wahwah/mp3/mpeg_frame_header'
+require 'wahwah/mp3/xing_header'
+require 'wahwah/mp3/vbri_header'
+
+require 'wahwah/riff/chunk'
+
+require 'wahwah/flac/block'
+require 'wahwah/flac/streaminfo_block'
+
+require 'wahwah/ogg/page'
+require 'wahwah/ogg/pages'
+require 'wahwah/ogg/packets'
+require 'wahwah/ogg/vorbis_comment'
+require 'wahwah/ogg/vorbis_tag'
+require 'wahwah/ogg/opus_tag'
+require 'wahwah/ogg/flac_tag'
 
 require 'wahwah/mp3_tag'
 require 'wahwah/mp4_tag'
@@ -21,13 +39,6 @@ require 'wahwah/ogg_tag'
 require 'wahwah/riff_tag'
 require 'wahwah/asf_tag'
 require 'wahwah/flac_tag'
-
-
-require 'wahwah/mp3/mpeg_frame_header'
-require 'wahwah/mp3/xing_header'
-require 'wahwah/mp3/vbri_header'
-
-require 'wahwah/riff/chunk'
 
 module WahWah
   FORMATE_MAPPING = {
@@ -43,7 +54,7 @@ module WahWah
     file_path = file_path.to_path if file_path.respond_to? :to_path
     file_path = file_path.to_str
 
-    file_format = format(file_path)
+    file_format = Helper.file_format(file_path)
 
     raise WahWahArgumentError, 'File is not exists' unless File.exist? file_path
     raise WahWahArgumentError, 'File is unreadable' unless File.readable? file_path
@@ -57,9 +68,4 @@ module WahWah
   def self.support_formats
     FORMATE_MAPPING.values.flatten
   end
-
-  private
-    def self.format(file_path)
-      File.extname(file_path).downcase.delete('.')
-    end
 end

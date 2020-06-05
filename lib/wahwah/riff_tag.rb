@@ -1,12 +1,8 @@
 # frozen_string_literal: true
 
 module WahWah
-  # http://soundfile.sapp.org/doc/WaveFormat/
-  # https://en.wikipedia.org/wiki/Resource_Interchange_File_Format
-  # https://docs.microsoft.com/en-us/windows/win32/multimedia/resource-interchange-file-format-services
-  # http://soundfile.sapp.org/doc/WaveFormat/
   class RiffTag < Tag
-    extend ID3::Delegate
+    extend TagDelegate
 
     # see https://exiftool.org/TagNames/RIFF.html#Info for more info
     INFO_ID_MAPPING = {
@@ -24,6 +20,21 @@ module WahWah
     CHANNEL_MODE_INDEX = %w(Mono Stereo)
 
     attr_reader :sample_rate
+
+    tag_delegate :@id3_tag,
+      :title,
+      :artist,
+      :album,
+      :albumartist,
+      :composer,
+      :comments,
+      :track,
+      :track_total,
+      :genre,
+      :year,
+      :disc,
+      :disc_total,
+      :images
 
     def channel_mode
       CHANNEL_MODE_INDEX[@channel - 1]
@@ -57,6 +68,8 @@ module WahWah
             parse_list_chunk(sub_chunk)
           when 'id3', 'ID3'
             parse_id3_chunk(sub_chunk)
+          else
+            @file_io.seek(sub_chunk.size, IO::SEEK_CUR)
           end
         end
       end

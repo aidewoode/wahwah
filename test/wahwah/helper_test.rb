@@ -27,4 +27,9 @@ class WahWah::HelperTest < Minitest::Test
     test_string = "hi\x00there\x00!".b
     assert_equal ['hi', "there\x00!"], WahWah::Helper.split_with_terminator(test_string, 1)
   end
+
+  def test_file_format
+    assert_equal 'mp3', WahWah::Helper.file_format('test_file.mp3')
+    assert_equal 'mp3', WahWah::Helper.file_format('test/test_file.mp3')
+  end
 end

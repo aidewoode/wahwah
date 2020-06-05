@@ -21,5 +21,9 @@ module WahWah
     def self.split_with_terminator(string, terminator_size)
       string.split(Regexp.new(('\x00' * terminator_size).b), 2)
     end
+
+    def self.file_format(file_path)
+      File.extname(file_path).downcase.delete('.')
+    end
   end
 end

@@ -1,67 +1,31 @@
 # frozen_string_literal: true
 
+require 'forwardable'
+
 module WahWah
   module ID3
     class V2 < Tag
-      TAG_ID = 'ID3'
-      HEADER_SIZE = 10
-      HEADER_FORMAT = 'A3CCB8B*'
+      extend Forwardable
 
       attr_reader :major_version, :size
 
-
-      # The second bit in flags byte indicates whether or not the header
-      # is followed by an extended header.
-      def has_extended_header?
-        @flags[1] == '1'
-      end
+      def_delegators :@header, :major_version, :size, :has_extended_header?, :valid?
 
       def version
         "v2.#{major_version}"
       end
 
-      def valid?
-        @id == TAG_ID
-      end
-
       private
-        # The ID3v2 tag header, which should be the first information in the file,
-        # is 10 bytes as follows:
-
-        # ID3v2/file identifier   "ID3"
-        # ID3v2 version           $03 00
-        # ID3v2 flags             %abc00000
-        # ID3v2 size              4 * %0xxxxxxx
         def parse
           @file_io.rewind
-
-          # The first byte of ID3v2 version is it's major version,
-          # while the second byte is its revision number, we don't need
-          # revision number here, so ignore it.
-          @id, @major_version, _revision, @flags, size_bits = @file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
+          @header = V2Header.new(@file_io)
 
           return unless valid?
-
-          # Tag size is the size excluding the header size,
-          # so add header size back to get total size.
-          @size = Helper.id3_size_caculate(size_bits) + HEADER_SIZE
 
           parse_body
         end
 
         def parse_body
-          if has_extended_header?
-            # Extended header structure:
-            #
-            # Extended header size   $xx xx xx xx
-            # Extended Flags         $xx xx
-            # Size of padding        $xx xx xx xx
-
-            # Skip extended_header
-            extended_header_size = Helper.id3_size_caculate(@file_io.read(4).unpack('B32').first)
-            @file_io.seek(extended_header_size - 4, IO::SEEK_CUR)
-          end
-
           loop do
             break if end_of_tag?
 
@@ -89,7 +53,7 @@ module WahWah
           when :track, :disc
             # Track and disc value may be extended with a "/" character
             # and a numeric string containing the total numer.
-            count, total_count = value.split('/')
+            count, total_count = value.split('/', 2)
             instance_variable_set("@#{name}", count.to_i)
             instance_variable_set("@#{name}_total", total_count.to_i) unless total_count.nil?
           else
