@@ -13,7 +13,8 @@ module WahWah
       :year,
       :genre,
       :disc,
-      :composer
+      :composer,
+      :sample_rate
 
     def duration
       @duration ||= parse_duration

@@ -35,12 +35,12 @@ module WahWah
       def parse_streaminfo_block(block_data)
         info_bits = block_data.unpack('x10B64').first
 
-        sample_rate = info_bits[0..19].to_i(2)
+        @sample_rate = info_bits[0..19].to_i(2)
         bits_per_sample = info_bits[23..27].to_i(2) + 1
         total_samples = info_bits[28..-1].to_i(2)
 
-        @duration = (total_samples.to_f / sample_rate).round if sample_rate > 0
-        @bitrate =  sample_rate * bits_per_sample / 1000
+        @duration = (total_samples.to_f / @sample_rate).round if @sample_rate > 0
+        @bitrate =  @sample_rate * bits_per_sample / 1000
       end
     end
   end

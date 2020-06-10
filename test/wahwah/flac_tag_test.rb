@@ -18,6 +18,7 @@ class WahWah::FlacTagTest < Minitest::Test
     assert_equal 1, tag.disc
     assert_equal 8, tag.duration
     assert_equal 705, tag.bitrate
+    assert_equal 44100, tag.sample_rate
     assert_equal 'image/jpeg', image[:mime_type]
     assert_equal :cover_front, image[:type]
     assert_equal binary_data('test/files/cover.jpeg'), image[:data].strip
@@ -38,5 +39,6 @@ class WahWah::FlacTagTest < Minitest::Test
     assert_equal 1, tag.disc
     assert_equal 0, tag.duration
     assert_equal 705, tag.bitrate
+    assert_equal 44100, tag.sample_rate
   end
 end

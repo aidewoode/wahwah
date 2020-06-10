@@ -25,5 +25,10 @@ module WahWah
     def self.file_format(file_path)
       File.extname(file_path).downcase.delete('.')
     end
+
+    def self.byte_string_to_guid(byte_string)
+      guid = byte_string.unpack('NnnA*').pack('VvvA*').unpack('H*').first
+      [guid[0..7], guid[8..11], guid[12..15], guid[16..19], guid[20..-1]].join('-').upcase
+    end
   end
 end

@@ -20,6 +20,7 @@ class WahWah::Ogg::FlacTagTest < Minitest::Test
     assert_equal 1, tag.disc
     assert_equal 8, tag.duration
     assert_equal 705, tag.bitrate
+    assert_equal 44100, tag.sample_rate
   end
 
   def test_invalid_identification_packet
@@ -39,5 +40,6 @@ class WahWah::Ogg::FlacTagTest < Minitest::Test
     assert_nil tag.disc
     assert_nil tag.duration
     assert_nil tag.bitrate
+    assert_nil tag.sample_rate
   end
 end

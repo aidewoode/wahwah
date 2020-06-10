@@ -22,20 +22,13 @@ module WahWah
 
           return unless valid?
 
-          parse_body
-        end
-
-        def parse_body
-          loop do
-            break if end_of_tag?
-
+          until end_of_tag? do
             frame = ID3::Frame.new(@file_io, major_version)
             next unless frame.valid?
 
             update_attribute(frame)
           end
         end
-
 
         def update_attribute(frame)
           name = frame.name
@@ -54,8 +47,8 @@ module WahWah
             # Track and disc value may be extended with a "/" character
             # and a numeric string containing the total numer.
             count, total_count = value.split('/', 2)
-            instance_variable_set("@#{name}", count.to_i)
-            instance_variable_set("@#{name}_total", total_count.to_i) unless total_count.nil?
+            instance_variable_set("@#{name}", count)
+            instance_variable_set("@#{name}_total", total_count) unless total_count.nil?
           else
             instance_variable_set("@#{name}", value)
           end

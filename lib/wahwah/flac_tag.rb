@@ -21,25 +21,24 @@ module WahWah
 
         return if @file_io.read(4) != TAG_ID
 
-        parse_blocks
-      end
-
-      def parse_blocks
         loop do
           block = Flac::Block.new(@file_io)
-
-          case block.type
-          when 'STREAMINFO'
-            parse_streaminfo_block(block.data)
-          when 'VORBIS_COMMENT'
-            parse_vorbis_comment(block.data)
-          when 'PICTURE'
-            parse_picture_block(block.data)
-          else
-            @file_io.seek(block.size, IO::SEEK_CUR)
-          end
+          parse_block(block)
 
           break if block.is_last?
+        end
+      end
+
+      def parse_block(block)
+        case block.type
+        when 'STREAMINFO'
+          parse_streaminfo_block(block.data)
+        when 'VORBIS_COMMENT'
+          parse_vorbis_comment(block.data)
+        when 'PICTURE'
+          parse_picture_block(block.data)
+        else
+          @file_io.seek(block.size, IO::SEEK_CUR)
         end
       end
 

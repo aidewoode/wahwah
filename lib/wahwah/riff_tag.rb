@@ -19,8 +19,6 @@ module WahWah
 
     CHANNEL_MODE_INDEX = %w(Mono Stereo)
 
-    attr_reader :sample_rate
-
     tag_delegate :@id3_tag,
       :title,
       :artist,
@@ -43,34 +41,31 @@ module WahWah
     private
       def parse
         top_chunk = Riff::Chunk.new(@file_io)
-        @top_chunk_size = top_chunk.size
+        total_chunk_size = top_chunk.size + Riff::Chunk::HEADER_SIZE
 
         # The top "RIFF" chunks include an additional field in the first four bytes of the data field.
         # This additional field provides the form type of the field.
         # For wav file, the value of the type field is 'WAVE'
         return unless top_chunk.id == 'RIFF' && top_chunk.type == 'WAVE'
 
-        parse_sub_chunk
+        until total_chunk_size <= @file_io.pos do
+          sub_chunk = Riff::Chunk.new(@file_io)
+          parse_sub_chunk(sub_chunk)
+        end
       end
 
-      def parse_sub_chunk
-        loop do
-          break if end_of_top_chunk?
-
-          sub_chunk = Riff::Chunk.new(@file_io)
-
-          case sub_chunk.id
-          when 'fmt'
-            parse_fmt_chunk(sub_chunk)
-          when 'data'
-            parse_data_chunk(sub_chunk)
-          when 'LIST'
-            parse_list_chunk(sub_chunk)
-          when 'id3', 'ID3'
-            parse_id3_chunk(sub_chunk)
-          else
-            @file_io.seek(sub_chunk.size, IO::SEEK_CUR)
-          end
+      def parse_sub_chunk(sub_chunk)
+        case sub_chunk.id
+        when 'fmt'
+          parse_fmt_chunk(sub_chunk)
+        when 'data'
+          parse_data_chunk(sub_chunk)
+        when 'LIST'
+          parse_list_chunk(sub_chunk)
+        when 'id3', 'ID3'
+          parse_id3_chunk(sub_chunk)
+        else
+          @file_io.seek(sub_chunk.size, IO::SEEK_CUR)
         end
       end
 
@@ -110,9 +105,7 @@ module WahWah
         if chunk.type != 'INFO'
           @file_io.seek(chunk.size, IO::SEEK_CUR)
         else
-          loop do
-            break if list_chunk_end_position <= @file_io.pos
-
+          until list_chunk_end_position <= @file_io.pos do
             info_chunk = Riff::Chunk.new(@file_io)
 
             unless INFO_ID_MAPPING.keys.include? info_chunk.id.to_sym
@@ -126,10 +119,6 @@ module WahWah
 
       def parse_id3_chunk(chunk)
         @id3_tag = ID3::V2.new(StringIO.new(chunk.data))
-      end
-
-      def end_of_top_chunk?
-        @top_chunk_size + Riff::Chunk::HEADER_SIZE <= @file_io.pos
       end
 
       def update_attribute(chunk)
