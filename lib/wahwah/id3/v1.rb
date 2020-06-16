@@ -82,7 +82,7 @@ module WahWah
           comment = @file_io.read(30)
 
           if comment.getbyte(-2) == 0
-            @track = comment.getbyte(-1).to_i
+            @track = comment.getbyte(-1)
             comment = comment.byteslice(0..-3)
           end
 

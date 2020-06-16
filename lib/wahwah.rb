@@ -33,6 +33,8 @@ require 'wahwah/ogg/vorbis_tag'
 require 'wahwah/ogg/opus_tag'
 require 'wahwah/ogg/flac_tag'
 
+require 'wahwah/asf/object'
+
 require 'wahwah/mp3_tag'
 require 'wahwah/mp4_tag'
 require 'wahwah/ogg_tag'

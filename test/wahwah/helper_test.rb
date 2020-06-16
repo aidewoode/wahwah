@@ -32,4 +32,8 @@ class WahWah::HelperTest < Minitest::Test
     assert_equal 'mp3', WahWah::Helper.file_format('test_file.mp3')
     assert_equal 'mp3', WahWah::Helper.file_format('test/test_file.mp3')
   end
+
+  def test_byte_string_to_guid
+    assert_equal '8CABDCA1-A947-11CF-8EE4-00C00C205365', WahWah::Helper.byte_string_to_guid("\xA1\xDC\xAB\x8CG\xA9\xCF\x11\x8E\xE4\x00\xC0\f Se".b)
+  end
 end

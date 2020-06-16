@@ -6,7 +6,7 @@ module WahWah
       include VorbisComment
       include Flac::StreaminfoBlock
 
-      attr_reader :bitrate, :duration, *COMMET_FIELD_MAPPING.values
+      attr_reader :bitrate, :duration, :sample_rate, *COMMET_FIELD_MAPPING.values
 
       def initialize(identification_packet, comment_packet)
         # Identification packet structure:

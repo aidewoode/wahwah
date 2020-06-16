@@ -2,6 +2,8 @@
 
 module WahWah
   class Tag
+    INTEGER_ATTRIBUTES = %i(disc disc_total track track_total)
+
     attr_reader(
       :title,
       :artist,
@@ -18,6 +20,7 @@ module WahWah
       :images,
       :duration,
       :bitrate,
+      :sample_rate,
       :file_size
     )
 
@@ -34,6 +37,11 @@ module WahWah
       @images = []
 
       parse if @file_size > 0
+
+      INTEGER_ATTRIBUTES.each do |attr_name|
+        value = instance_variable_get("@#{attr_name}")&.to_i
+        instance_variable_set("@#{attr_name}", value)
+      end
     end
 
     def parse
