@@ -35,6 +35,8 @@ require 'wahwah/ogg/flac_tag'
 
 require 'wahwah/asf/object'
 
+require 'wahwah/mp4/atom'
+
 require 'wahwah/mp3_tag'
 require 'wahwah/mp4_tag'
 require 'wahwah/ogg_tag'

@@ -47,5 +47,10 @@ module WahWah
     def parse
       raise WahWahNotImplementedError, 'The parse method is not implemented'
     end
+
+    def inspect
+      inspect_id = ::Kernel.format '%x', (object_id * 2)
+      "<#{self.class.name}:0x#{inspect_id} sample_rate=#{sample_rate}, bitrate=#{bitrate}>"
+    end
   end
 end
