@@ -41,6 +41,8 @@ module WahWah
     private
       def parse
         top_chunk = Riff::Chunk.new(@file_io)
+        return unless top_chunk.valid?
+
         total_chunk_size = top_chunk.size + Riff::Chunk::HEADER_SIZE
 
         # The top "RIFF" chunks include an additional field in the first four bytes of the data field.
@@ -48,13 +50,15 @@ module WahWah
         # For wav file, the value of the type field is 'WAVE'
         return unless top_chunk.id == 'RIFF' && top_chunk.type == 'WAVE'
 
-        until total_chunk_size <= @file_io.pos do
+        until total_chunk_size <= @file_io.pos || @file_io.eof? do
           sub_chunk = Riff::Chunk.new(@file_io)
           parse_sub_chunk(sub_chunk)
         end
       end
 
       def parse_sub_chunk(sub_chunk)
+        return unless sub_chunk.valid?
+
         case sub_chunk.id
         when 'fmt'
           parse_fmt_chunk(sub_chunk)

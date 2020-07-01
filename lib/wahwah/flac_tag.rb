@@ -25,11 +25,13 @@ module WahWah
           block = Flac::Block.new(@file_io)
           parse_block(block)
 
-          break if block.is_last?
+          break if block.is_last? || @file_io.eof?
         end
       end
 
       def parse_block(block)
+        return unless block.valid?
+
         case block.type
         when 'STREAMINFO'
           parse_streaminfo_block(block.data)

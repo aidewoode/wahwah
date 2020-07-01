@@ -16,15 +16,15 @@ module WahWah
     # 9) done.
     module VorbisComment
       COMMET_FIELD_MAPPING = {
-        TITLE: :title,
-        ALBUM: :album,
-        ALBUMARTIST: :albumartist,
-        TRACKNUMBER: :track,
-        ARTIST: :artist,
-        DATE: :year,
-        GENRE: :genre,
-        DISCNUMBER: :disc,
-        COMPOSER: :composer
+        'TITLE' => :title,
+        'ALBUM' => :album,
+        'ALBUMARTIST' => :albumartist,
+        'TRACKNUMBER' => :track,
+        'ARTIST' => :artist,
+        'DATE' => :year,
+        'GENRE' => :genre,
+        'DISCNUMBER' => :disc,
+        'COMPOSER' => :composer
       }
 
       def parse_vorbis_comment(comment_content)
@@ -39,7 +39,7 @@ module WahWah
           comment_length = comment_content.read(4).unpack('V').first
           comment = Helper.encode_to_utf8(comment_content.read(comment_length))
           field_name, field_value = comment.split('=', 2)
-          attr_name = COMMET_FIELD_MAPPING[field_name.to_sym]
+          attr_name = COMMET_FIELD_MAPPING[field_name]
 
           field_value = field_value.to_i if %i(track disc).include? attr_name
 

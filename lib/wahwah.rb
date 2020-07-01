@@ -62,6 +62,7 @@ module WahWah
 
     raise WahWahArgumentError, 'File is not exists' unless File.exist? file_path
     raise WahWahArgumentError, 'File is unreadable' unless File.readable? file_path
+    raise WahWahArgumentError, 'File is empty' unless File.size(file_path) > 0
     raise WahWahArgumentError, 'No supported format found' unless support_formats.include? file_format
 
     FORMATE_MAPPING.each do |tag, formats|

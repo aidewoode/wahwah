@@ -19,11 +19,15 @@ module WahWah
         until file_io.eof?
           atom = new(file_io)
 
+          next unless atom.valid?
           file_io.seek(atom.size, IO::SEEK_CUR); next unless atom.type == atom_type
 
           return atom if atom_path.empty?
           return atom.find(*atom_path)
         end
+
+        # Return empty atom if can not found
+        new(StringIO.new(''))
       end
 
       # An atom header consists of the following fields:
@@ -36,7 +40,8 @@ module WahWah
       # A 32-bit integer that contains the type of the atom.
       # This can often be usefully treated as a four-character field with a mnemonic value .
       def initialize(file_io)
-        @size, @type = file_io.read(HEADER_SIZE).unpack('Na4')
+        @size, @type = file_io.read(HEADER_SIZE)&.unpack('Na4')
+        return unless valid?
 
         # If the size field of an atom is set to 1, the type field is followed by a 64-bit extended size field,
         # which contains the actual size of the atom as a 64-bit unsigned integer.
@@ -55,10 +60,16 @@ module WahWah
         @file_io.read(size)
       end
 
+      def valid?
+        !@size.nil? && @size >= HEADER_SIZE
+      end
+
       def find(*atom_path)
         child_atom_index = data.index(atom_path.first)
 
-        return if child_atom_index.nil?
+        # Return empty atom if can not found
+        return self.class.new(StringIO.new('')) if child_atom_index.nil?
+
         # Because before atom type field there are 4 bytes of size field,
         # So the child_atom_index should reduce 4.
         self.class.find(StringIO.new(data[child_atom_index - HEADER_SIZE_FIELD_SIZE..-1]), *atom_path)

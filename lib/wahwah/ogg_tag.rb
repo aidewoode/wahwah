@@ -35,6 +35,7 @@ module WahWah
 
       def parse
         identification_packet, comment_packet = packets.first(2)
+        return if identification_packet.nil? || comment_packet.nil?
 
         @overhead_packets_size = identification_packet.size + comment_packet.size
 

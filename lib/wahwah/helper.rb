@@ -3,8 +3,11 @@
 module WahWah
   module Helper
     def self.encode_to_utf8(string, source_encoding: '')
-      return string.force_encoding('utf-8').strip if source_encoding.empty?
-      string.encode('utf-8', source_encoding).strip
+      encoded_string = source_encoding.empty? ?
+        string.force_encoding('utf-8') :
+        string.encode('utf-8', source_encoding, invalid: :replace, undef: :replace, replace: '')
+
+      encoded_string.valid_encoding? ? encoded_string.strip : ''
     end
 
     # ID3 size is encoded with four bytes where may the most significant

@@ -40,6 +40,10 @@ module WahWah
         @position = file_io.pos
       end
 
+      def valid?
+        @size > 0
+      end
+
       def is_last?
         @last_flag.to_i == 1
       end

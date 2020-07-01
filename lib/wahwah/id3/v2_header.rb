@@ -17,7 +17,8 @@ module WahWah
       attr_reader :major_version, :size
 
       def initialize(file_io)
-        @id, @major_version, @flags, size_bits = file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
+        header_content = file_io.read(HEADER_SIZE)
+        @id, @major_version, @flags, size_bits = header_content.unpack(HEADER_FORMAT) if header_content.size >= HEADER_SIZE
 
         return unless valid?
 

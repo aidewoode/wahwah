@@ -43,17 +43,16 @@ module WahWah
 
     private
       def parse
+        movie_atom = Mp4::Atom.find(@file_io, 'moov')
+        return unless movie_atom.valid?
+
         parse_meta_list_atom movie_atom.find('udta', 'meta', 'ilst')
         parse_mvhd_atom movie_atom.find('mvhd')
         parse_stsd_atom movie_atom.find('trak', 'mdia', 'minf', 'stbl', 'stsd')
       end
 
-      def movie_atom
-        @movie_atom ||= Mp4::Atom.find(@file_io, 'moov')
-      end
-
       def parse_meta_list_atom(atom)
-        return if atom.nil?
+        return unless atom.valid?
 
         # The metadata item list atom holds a list of actual metadata values that are present in the metadata atom.
         # The metadata items are formatted as a list of items.
@@ -67,6 +66,8 @@ module WahWah
           # Both the type and locale indicators are four bytes long.
           # There may be multiple ‘value’ entries, using different type
           data_atom = child_atom.find('data')
+          return unless data_atom.valid?
+
           data_type, data_value = data_atom.data.unpack('Nx4a*')
           encoded_data_value = META_ATOM_DECODE_BY_TYPE[data_type]&.call(data_value)
 
@@ -89,7 +90,7 @@ module WahWah
       end
 
       def parse_mvhd_atom(atom)
-        return if atom.nil?
+        return unless atom.valid?
 
         atom_data = StringIO.new(atom.data)
         version = atom_data.read(1).unpack('c').first
@@ -113,13 +114,13 @@ module WahWah
       end
 
       def parse_stsd_atom(atom)
-        return if atom.nil?
+        return unless atom.valid?
 
         mp4a_atom = atom.find('mp4a')
         esds_atom = atom.find('esds')
 
-        @sample_rate = mp4a_atom.data.unpack('x22I>').first unless mp4a_atom.nil?
-        @bitrate = esds_atom.data.unpack('x26I>').first / 1000 unless esds_atom.nil?
+        @sample_rate = mp4a_atom.data.unpack('x22I>').first if mp4a_atom.valid?
+        @bitrate = esds_atom.data.unpack('x26I>').first / 1000 if esds_atom.valid?
       end
   end
 end

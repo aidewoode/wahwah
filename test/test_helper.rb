@@ -2,11 +2,11 @@
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
-require 'wahwah'
-require 'minitest/autorun'
 require 'simplecov'
 
-SimpleCov.start
+SimpleCov.start do
+  add_filter '/test/'
+end
 
 if ENV['CI'] == 'true'
   require 'codecov'
@@ -18,5 +18,8 @@ module TestHelpers
     File.read(file_path).force_encoding('BINARY').strip
   end
 end
+
+require 'wahwah'
+require 'minitest/autorun'
 
 Minitest::Test.send(:include, TestHelpers)

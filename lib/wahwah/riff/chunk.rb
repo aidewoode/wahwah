@@ -23,7 +23,9 @@ module WahWah
       attr_reader :id, :type
 
       def initialize(file_io)
-        @id, @size = file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
+        @id, @size = file_io.read(HEADER_SIZE)&.unpack(HEADER_FORMAT)
+        return unless valid?
+
         @type = file_io.read(HEADER_TYPE_SIZE).unpack('A4').first if have_type?
         @file_io = file_io
         @position = file_io.pos
@@ -37,6 +39,10 @@ module WahWah
       def data
         @file_io.seek(@position)
         @file_io.read(size)
+      end
+
+      def valid?
+        !@id.empty? && !@size.nil? && @size > 0
       end
 
       private

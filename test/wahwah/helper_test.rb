@@ -14,6 +14,7 @@ class WahWah::HelperTest < Minitest::Test
     assert_equal test_string, WahWah::Helper.encode_to_utf8(utf_16_string, source_encoding: 'UTF-16')
     assert_equal test_string, WahWah::Helper.encode_to_utf8(utf_16_be_string, source_encoding: 'UTF-16BE')
     assert_equal test_string, WahWah::Helper.encode_to_utf8(utf_8_string)
+    assert_equal '', WahWah::Helper.encode_to_utf8(utf_16_string)
   end
 
   def test_id3_size_caculate

@@ -24,4 +24,18 @@ class WahWah::Ogg::VorbisCommentTest < Minitest::Test
     assert_equal 5, tag.instance_variable_get(:@track)
     assert_equal 1, tag.instance_variable_get(:@disc)
   end
+
+  def test_invalid_encoding_comment
+    tag = Tag.new("\x1D\x00\x00\x00Xiph.Org libVorbis I 20050304\x01\x00\x00\x00\x18\x00\x00\x00\x03\x00\x00\x00\x00\x00 @\x00\x00\x96B\x00\x00\x80?\x00@\x00 \x00\x00\x00@\x01".b)
+
+    assert_nil tag.instance_variable_get(:@title)
+    assert_nil tag.instance_variable_get(:@artist)
+    assert_nil tag.instance_variable_get(:@albumartist)
+    assert_nil tag.instance_variable_get(:@composer)
+    assert_nil tag.instance_variable_get(:@album)
+    assert_nil tag.instance_variable_get(:@year)
+    assert_nil tag.instance_variable_get(:@genre)
+    assert_nil tag.instance_variable_get(:@track)
+    assert_nil tag.instance_variable_get(:@disc)
+  end
 end

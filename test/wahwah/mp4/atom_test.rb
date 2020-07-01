@@ -11,6 +11,14 @@ class WahWah::Mp4::AtomTest < Minitest::Test
     assert_equal 5174, atom.size
   end
 
+  def test_return_invalid_atom_when_not_found
+    io = File.open('test/files/test.m4a')
+    atom = WahWah::Mp4::Atom.find(io, 'moov', 'uuuu')
+
+    assert_instance_of WahWah::Mp4::Atom, atom
+    assert !atom.valid?
+  end
+
   def test_parse
     content = StringIO.new("\x00\x00\x00gstsd\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00Wmp4a\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x10\x00\x00\x00\x00\xACD\x00\x00\x00\x00\x003esds\x00\x00\x00\x00\x03\x80\x80\x80\"\x00\x00\x00\x04\x80\x80\x80\x14@\x14\x00\x18\x00\x00\x00\b\x10\x00\x01\xF4\x00\x05\x80\x80\x80\x02\x12\x10\x06\x80\x80\x80\x01\x02".b)
 
@@ -20,13 +28,29 @@ class WahWah::Mp4::AtomTest < Minitest::Test
     assert_equal "\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00Wmp4a\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x10\x00\x00\x00\x00\xACD\x00\x00\x00\x00\x003esds\x00\x00\x00\x00\x03\x80\x80\x80\"\x00\x00\x00\x04\x80\x80\x80\x14@\x14\x00\x18\x00\x00\x00\b\x10\x00\x01\xF4\x00\x05\x80\x80\x80\x02\x12\x10\x06\x80\x80\x80\x01\x02".b, atom.data
   end
 
-  def test_find_child_atom_form_atom
+  def test_invalid_atom
+    content = StringIO.new("\x00\x00\x00\x00invalid".b)
+    atom = WahWah::Mp4::Atom.new(content)
+
+    assert !atom.valid?
+  end
+
+  def test_find_child_atom_from_atom
     io = File.open('test/files/test.m4a')
     atom = WahWah::Mp4::Atom.find(io, 'moov', 'trak', 'mdia')
     child_atom = atom.find('minf', 'stbl', 'stsd')
 
     assert_equal 'stsd', child_atom.type
     assert_equal 95, child_atom.size
+  end
+
+  def test_return_invalid_atom_when_not_found_from_atom
+    io = File.open('test/files/test.m4a')
+    atom = WahWah::Mp4::Atom.find(io, 'moov', 'trak', 'mdia')
+    child_atom = atom.find('minf', 'stbl', 'uuuu')
+
+    assert_instance_of WahWah::Mp4::Atom, child_atom
+    assert !child_atom.valid?
   end
 
   def test_get_atom_children_atoms

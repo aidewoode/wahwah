@@ -11,13 +11,15 @@ class WahWahTest < Minitest::Test
   end
 
   def test_not_supported_formate
-    FileUtils.touch('file.fake')
-
     assert_raises(WahWah::WahWahArgumentError) do
-      WahWah.open('file.fake')
+      WahWah.open('test/files/cover.jpeg')
     end
-  ensure
-    FileUtils.remove_file('file.fake')
+  end
+
+  def test_empty_file
+    assert_raises(WahWah::WahWahArgumentError) do
+      WahWah.open('test/files/empty.mp3')
+    end
   end
 
   def test_path_name_as_argument
@@ -30,20 +32,21 @@ class WahWahTest < Minitest::Test
 
   def test_return_correct_instance
     WahWah::FORMATE_MAPPING.values.flatten.each do |format|
-      FileUtils.touch("empty.#{format}")
+      FileUtils.touch("invalid.#{format}")
+      `echo 'te' > invalid.#{format}`
     end
 
-    assert_instance_of WahWah::Mp3Tag, WahWah.open('empty.mp3')
-    assert_instance_of WahWah::OggTag, WahWah.open('empty.ogg')
-    assert_instance_of WahWah::OggTag, WahWah.open('empty.oga')
-    assert_instance_of WahWah::OggTag, WahWah.open('empty.opus')
-    assert_instance_of WahWah::RiffTag, WahWah.open('empty.wav')
-    assert_instance_of WahWah::FlacTag, WahWah.open('empty.flac')
-    assert_instance_of WahWah::AsfTag, WahWah.open('empty.wma')
-    assert_instance_of WahWah::Mp4Tag, WahWah.open('empty.m4a')
+    assert_instance_of WahWah::Mp3Tag, WahWah.open('invalid.mp3')
+    assert_instance_of WahWah::OggTag, WahWah.open('invalid.ogg')
+    assert_instance_of WahWah::OggTag, WahWah.open('invalid.oga')
+    assert_instance_of WahWah::OggTag, WahWah.open('invalid.opus')
+    assert_instance_of WahWah::RiffTag, WahWah.open('invalid.wav')
+    assert_instance_of WahWah::FlacTag, WahWah.open('invalid.flac')
+    assert_instance_of WahWah::AsfTag, WahWah.open('invalid.wma')
+    assert_instance_of WahWah::Mp4Tag, WahWah.open('invalid.m4a')
   ensure
     WahWah::FORMATE_MAPPING.values.flatten.each do |format|
-      FileUtils.remove_file("empty.#{format}")
+      FileUtils.remove_file("invalid.#{format}")
     end
   end
 end
