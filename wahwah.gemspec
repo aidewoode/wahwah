@@ -11,13 +11,13 @@ Gem::Specification.new do |spec|
   spec.authors       = ['aidewoode']
   spec.email         = ['aidewoode@gmail.com']
 
-  spec.summary       = 'A library for reading meta data from audio'
-  spec.description   = 'A library written in pure ruby for reading meta data from audio, and support several common audio formats.'
+  spec.summary       = 'Audio metadata reader ruby gem'
+  spec.description   = 'WahWah is an audio metadata reader ruby gem, it supports many popular formats including mp3(ID3 v1, v2.2, v2.3, v2.4), m4a, ogg, oga, opus, wav, flac and wma.'
   spec.homepage      = 'https://github.com/aidewoode'
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
+  spec.files         = `git ls-files -z`.split("\x0").select do |f|
+    f.start_with?('lib', 'pagy.gemspec', 'LICENSE')
   end
 
   spec.required_ruby_version = '>= 2.5.0'
