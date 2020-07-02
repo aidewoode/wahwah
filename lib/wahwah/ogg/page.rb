@@ -104,7 +104,9 @@ module WahWah
       attr_reader :segments, :granule_position
 
       def initialize(file_io)
-        @capture_pattern, @version, @granule_position, page_segments = file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
+        header_content = file_io.read(HEADER_SIZE)
+        @capture_pattern, @version, @granule_position, page_segments = header_content.unpack(HEADER_FORMAT) if header_content.size >= HEADER_SIZE
+
         return unless valid?
 
         segment_table = file_io.read(page_segments).unpack('C' * page_segments)

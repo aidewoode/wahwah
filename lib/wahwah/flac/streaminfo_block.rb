@@ -3,6 +3,8 @@
 module WahWah
   module Flac
     module StreaminfoBlock
+      STREAMINFO_BLOCK_SIZE = 34
+
       # STREAMINFO block data structure:
       #
       # Length(bit)  Meaning
@@ -33,6 +35,8 @@ module WahWah
       #
       # 128          MD5 signature of the unencoded audio data.
       def parse_streaminfo_block(block_data)
+        return unless block_data.size == STREAMINFO_BLOCK_SIZE
+
         info_bits = block_data.unpack('x10B64').first
 
         @sample_rate = info_bits[0..19].to_i(2)

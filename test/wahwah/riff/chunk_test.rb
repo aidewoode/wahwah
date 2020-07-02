@@ -44,4 +44,11 @@ class WahWah::Riff::ChunkTest < Minitest::Test
     # so the real size should be even.
     assert_equal 10, chunk.size
   end
+
+  def test_invalid_chunk
+    content = StringIO.new("\x00\x00\x00\x00\x00\x00invalid".b)
+    chunk = WahWah::Riff::Chunk.new(content)
+
+    assert !chunk.valid?
+  end
 end

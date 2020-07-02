@@ -41,4 +41,21 @@ class WahWah::FlacTagTest < Minitest::Test
     assert_equal 705, tag.bitrate
     assert_equal 44100, tag.sample_rate
   end
+
+  def test_invalid_tag_file
+    tag = WahWah::FlacTag.new('test/files/invalid_tag.flac')
+
+    assert_nil tag.title
+    assert_nil tag.artist
+    assert_nil tag.albumartist
+    assert_nil tag.composer
+    assert_nil tag.album
+    assert_nil tag.year
+    assert_nil tag.genre
+    assert_nil tag.track
+    assert_nil tag.disc
+    assert_equal 4, tag.duration
+    assert_equal 705, tag.bitrate
+    assert_equal 44100, tag.sample_rate
+  end
 end

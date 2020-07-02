@@ -28,6 +28,8 @@ module WahWah
       # All Unicode strings in ASF uses UTF-16, little endian, and the Byte-Order Marker (BOM) character is not present.
       def parse
         header_object = Asf::Object.new(@file_io)
+        return unless header_object.valid?
+
         total_header_object_size = header_object.size + Asf::Object::HEADER_SIZE
 
         return unless header_object.guid == HEADER_OBJECT_GUID

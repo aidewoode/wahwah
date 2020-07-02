@@ -188,4 +188,85 @@ class WahWah::Mp3TagTest < Minitest::Test
 
     assert_equal binary_data('test/files/compressed_cover.bmp'), image[:data].strip
   end
+
+  def test_incomplete_file
+    tag = WahWah.open('test/files/incomplete.mp3')
+
+    assert tag.invalid_id3?
+    assert !tag.id3v2?
+    assert !tag.is_vbr?
+    assert_nil tag.id3_version
+    assert_nil tag.title
+    assert_nil tag.artist
+    assert_nil tag.albumartist
+    assert_nil tag.composer
+    assert_nil tag.album
+    assert_nil tag.year
+    assert_nil tag.genre
+    assert_nil tag.track
+    assert_nil tag.track_total
+    assert_nil tag.disc
+    assert_nil tag.disc_total
+    assert_equal [], tag.comments
+    assert_nil tag.duration
+    assert_nil tag.bitrate
+    assert_nil tag.mpeg_version
+    assert_nil tag.mpeg_layer
+    assert_nil tag.channel_mode
+    assert_nil tag.sample_rate
+  end
+
+  def test_invalid_encoding_string_file
+    tag = WahWah.open('test/files/invalid_encoding_string.mp3')
+
+    assert !tag.invalid_id3?
+    assert tag.id3v2?
+    assert !tag.is_vbr?
+    assert_equal 'v2.4', tag.id3_version
+    assert_nil tag.title
+    assert_equal 'Paso a paso', tag.artist
+    assert_equal 'S/T', tag.album
+    assert_nil tag.albumartist
+    assert_nil tag.composer
+    assert_equal '2003', tag.year
+    assert_equal 'Acustico', tag.genre
+    assert_equal 1, tag.track
+    assert_equal 21, tag.track_total
+    assert_equal 0, tag.disc
+    assert_equal 0, tag.disc_total
+    assert_equal [], tag.comments
+    assert_nil tag.duration
+    assert_nil tag.bitrate
+    assert_nil tag.mpeg_version
+    assert_nil tag.mpeg_layer
+    assert_nil tag.channel_mode
+    assert_nil tag.sample_rate
+  end
+
+  def test_utf16_string_file
+    tag = WahWah.open('test/files/utf16.mp3')
+
+    assert !tag.invalid_id3?
+    assert tag.id3v2?
+    assert !tag.is_vbr?
+    assert_equal 'v2.3', tag.id3_version
+    assert_equal 'Lemonworld',  tag.title
+    assert_equal 'The National', tag.artist
+    assert_equal 'High Violet', tag.album
+    assert_nil tag.albumartist
+    assert_nil tag.composer
+    assert_equal '2010', tag.year
+    assert_equal 'Indie', tag.genre
+    assert_equal 7, tag.track
+    assert_equal 11, tag.track_total
+    assert_nil tag.disc
+    assert_nil tag.disc_total
+    assert_equal ['Track 7'], tag.comments
+    assert_nil tag.duration
+    assert_nil tag.bitrate
+    assert_nil tag.mpeg_version
+    assert_nil tag.mpeg_layer
+    assert_nil tag.channel_mode
+    assert_nil tag.sample_rate
+  end
 end

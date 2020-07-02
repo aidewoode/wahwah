@@ -7,8 +7,6 @@ module WahWah
     class V2 < Tag
       extend Forwardable
 
-      attr_reader :major_version, :size
-
       def_delegators :@header, :major_version, :size, :has_extended_header?, :valid?
 
       def version

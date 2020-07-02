@@ -36,7 +36,7 @@ module WahWah
 
       def initialize(file_io, offset = 0)
         file_io.seek(offset)
-        @id, @bytes_count, @frames_count = file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT)
+        @id, @bytes_count, @frames_count = file_io.read(HEADER_SIZE)&.unpack(HEADER_FORMAT)
       end
 
       def valid?

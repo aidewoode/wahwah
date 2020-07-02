@@ -1,8 +1,19 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'wahwah'
+require 'simplecov'
 
+if ENV['CI'] == 'true'
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
+SimpleCov.start do
+  add_filter '/test/'
+end
+
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require 'wahwah'
 require 'minitest/autorun'
 
 module TestHelpers

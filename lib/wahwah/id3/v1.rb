@@ -69,6 +69,8 @@ module WahWah
         # track     1         The number of the track on the album, or 0. Invalid, if previous byte is not a binary 0.
         # genre     1         Index in a list of genres, or 255
         def parse
+          return unless @file_io.size >= TAG_SIZE
+
           @file_io.seek(-TAG_SIZE, IO::SEEK_END)
           @id = Helper.encode_to_utf8(@file_io.read(3), source_encoding: DEFAULT_ENCODING)
 

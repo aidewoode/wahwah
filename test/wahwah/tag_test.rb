@@ -43,4 +43,11 @@ class WahWah::TagTest < Minitest::Test
     assert_equal [], tag.comments
     assert_equal [], tag.images
   end
+
+  def test_inspect
+    tag_inspect = SubTagWithParse.new('test/files/id3v1.mp3').inspect
+
+    assert_includes tag_inspect, 'sample_rate='
+    assert_includes tag_inspect, 'bitrate='
+  end
 end
