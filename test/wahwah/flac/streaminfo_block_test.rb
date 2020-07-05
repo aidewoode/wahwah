@@ -17,5 +17,6 @@ class WahWah::Flac::StreaminfoBlockTest < Minitest::Test
     assert_equal 8, block.instance_variable_get(:@duration)
     assert_equal 705, block.instance_variable_get(:@bitrate)
     assert_equal 44100, block.instance_variable_get(:@sample_rate)
+    assert_equal 16, block.instance_variable_get(:@bit_depth)
   end
 end

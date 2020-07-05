@@ -26,6 +26,7 @@ class WahWah::RiffTagTest < Minitest::Test
     assert_equal 1411, tag.bitrate
     assert_equal 'Stereo', tag.channel_mode
     assert_equal 44100, tag.sample_rate
+    assert_equal 16, tag.bit_depth
   end
 
   def test_riff_info_tag_file
@@ -41,5 +42,6 @@ class WahWah::RiffTagTest < Minitest::Test
     assert_equal 1411, tag.bitrate
     assert_equal 'Stereo', tag.channel_mode
     assert_equal 44100, tag.sample_rate
+    assert_equal 16, tag.bit_depth
   end
 end
