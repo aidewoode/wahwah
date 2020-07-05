@@ -24,6 +24,10 @@ module WahWah
       @bitrate ||= parse_bitrate
     end
 
+    def bit_depth
+      @bit_depth ||= parse_bit_depth
+    end
+
     private
       def packets
         @packets ||= Ogg::Packets.new(@file_io)
@@ -61,6 +65,10 @@ module WahWah
       def parse_bitrate
         return @tag.bitrate if @tag.respond_to? :bitrate
         ((file_size - @overhead_packets_size) * 8.0 / duration / 1000).round
+      end
+
+      def parse_bit_depth
+        return @tag.bit_depth if @tag.respond_to? :bit_depth
       end
   end
 end
