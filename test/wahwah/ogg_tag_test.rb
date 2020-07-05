@@ -19,6 +19,7 @@ class WahWah::OggTagTest < Minitest::Test
     assert_equal 8, tag.duration
     assert_equal 192, tag.bitrate
     assert_equal 44100, tag.sample_rate
+    assert_nil tag.bit_depth
   end
 
   def test_opus_tag_file
@@ -37,6 +38,7 @@ class WahWah::OggTagTest < Minitest::Test
     assert_equal 8, tag.duration
     assert_equal 2, tag.bitrate
     assert_equal 48000, tag.sample_rate
+    assert_nil tag.bit_depth
   end
 
   def test_flac_tag_file
