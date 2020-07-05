@@ -92,8 +92,8 @@ module WahWah
       #
       # 2(little endian)   BitsPerSample 8 bits = 8, 16 bits = 16, etc.
       def parse_fmt_chunk(chunk)
-        _, @channel, @sample_rate, _, _, @bits_per_sample = chunk.data.unpack('vvVVvv')
-        @bitrate = @sample_rate * @channel * @bits_per_sample / 1000
+        _, @channel, @sample_rate, _, _, @bit_depth = chunk.data.unpack('vvVVvv')
+        @bitrate = @sample_rate * @channel * @bit_depth / 1000
       end
 
       def parse_data_chunk(chunk)

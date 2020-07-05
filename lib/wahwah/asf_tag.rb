@@ -187,7 +187,7 @@ module WahWah
 
         return unless stream_type_guid == AUDIO_MEDIA_OBJECT_GUID
 
-        @sample_rate, bytes_per_second = object_data.read(type_specific_data_length).unpack('x4VV')
+        @sample_rate, bytes_per_second, @bit_depth = object_data.read(type_specific_data_length).unpack('x4VVx2v')
         @bitrate = (bytes_per_second * 8.0 / 1000).round
       end
 
