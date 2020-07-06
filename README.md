@@ -52,6 +52,7 @@ tag.disc_total  # => 2
 tag.duration    # => 256 (in seconds) 
 tag.bitrate     # => 192 (in kbps) 
 tag.sample_rate # => 44100 (in Hz)
+tag.bit_depth   # => 16 (only for lossless encodings)
 tag.file_size   # => 976700 (in bytes)
 tag.images      # => [{ :type => :cover_front, :mime_type => 'image/jpeg', :data => 'image data binary string' }]
 

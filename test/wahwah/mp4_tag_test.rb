@@ -25,5 +25,6 @@ class WahWah::Mp4TagTest < Minitest::Test
     assert_equal 8, tag.duration
     assert_equal 128, tag.bitrate
     assert_equal 44100, tag.sample_rate
+    assert_nil tag.bit_depth
   end
 end

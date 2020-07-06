@@ -3,7 +3,7 @@
 module WahWah
   class Tag
     INTEGER_ATTRIBUTES = %i(disc disc_total track track_total)
-    INSPECT_ATTRIBUTES = %i(title artist album albumartist composer track track_total genre year disc disc_total duration bitrate sample_rate)
+    INSPECT_ATTRIBUTES = %i(title artist album albumartist composer track track_total genre year disc disc_total duration bitrate sample_rate bit_depth)
 
     attr_reader(
       :title,
@@ -22,6 +22,7 @@ module WahWah
       :duration,
       :bitrate,
       :sample_rate,
+      :bit_depth,
       :file_size
     )
 

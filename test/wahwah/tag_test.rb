@@ -34,6 +34,7 @@ class WahWah::TagTest < Minitest::Test
     assert_respond_to tag, :disc_total
     assert_respond_to tag, :images
     assert_respond_to tag, :sample_rate
+    assert_respond_to tag, :bit_depth
   end
 
   def test_initialized_attributes
