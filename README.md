@@ -33,6 +33,9 @@ WahWah support ruby 2.5+
 WahWah is so easy to use.
 
 ```ruby
+require 'wahwah'
+require 'stringio'
+
 # Get metadata from an audio file
 
 tag = WahWah.open('/files/example.wav')
