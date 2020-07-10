@@ -3,13 +3,15 @@
 module WahWah
   module Flac
     class Block
+      prepend LazyRead
+
       HEADER_SIZE = 4
       HEADER_FORMAT = 'B*'
       BLOCK_TYPE_INDEX = %w(STREAMINFO PADDING APPLICATION SEEKTABLE VORBIS_COMMENT CUESHEET PICTURE)
 
-      attr_reader :size, :type
+      attr_reader :type
 
-      def initialize(file_io)
+      def initialize
         # Block header structure:
         #
         # Length(bit)  Meaning
@@ -30,14 +32,11 @@ module WahWah
         #
         # 24           Length (in bytes) of metadata to follow
         #              (does not include the size of the METADATA_BLOCK_HEADER)
-        header_bits = file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT).first
+        header_bits = @file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT).first
 
         @last_flag = header_bits[0]
         @type = BLOCK_TYPE_INDEX[header_bits[1..7].to_i(2)]
         @size = header_bits[8..-1].to_i(2)
-
-        @file_io = file_io
-        @position = file_io.pos
       end
 
       def valid?
@@ -46,11 +45,6 @@ module WahWah
 
       def is_last?
         @last_flag.to_i == 1
-      end
-
-      def data
-        @file_io.seek(@position)
-        @file_io.read(size)
       end
     end
   end

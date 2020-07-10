@@ -38,9 +38,9 @@ module WahWah
         when 'VORBIS_COMMENT'
           parse_vorbis_comment(block.data)
         when 'PICTURE'
-          parse_picture_block(block.data)
+          @images_data.push(block); block.skip
         else
-          @file_io.seek(block.size, IO::SEEK_CUR)
+          block.skip
         end
       end
 
@@ -69,8 +69,8 @@ module WahWah
       # 32           The length of the picture data in bytes.
       #
       # n*8          The binary picture data.
-      def parse_picture_block(block_data)
-        block_content = StringIO.new(block_data)
+      def parse_image_data(picture_block)
+        block_content = StringIO.new(picture_block.data)
 
         type_index, mime_type_length = block_content.read(8).unpack('NN')
         mime_type = Helper.encode_to_utf8(block_content.read(mime_type_length))
@@ -78,7 +78,7 @@ module WahWah
         data_length = block_content.read(description_length + 20).unpack("#{'x' * (description_length + 16)}N").first
         data = block_content.read(data_length)
 
-        @images.push({ data: data, mime_type: mime_type, type: ID3::ImageFrameBody::TYPES[type_index] })
+        { data: data, mime_type: mime_type, type: ID3::ImageFrameBody::TYPES[type_index] }
       end
   end
 end

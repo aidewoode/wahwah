@@ -68,7 +68,7 @@ module WahWah
       end
 
       def parse_bit_depth
-        return @tag.bit_depth if @tag.respond_to? :bit_depth
+        @tag.bit_depth if @tag.respond_to? :bit_depth
       end
   end
 end

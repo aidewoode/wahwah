@@ -18,7 +18,6 @@ module WahWah
       :year,
       :disc,
       :disc_total,
-      :images,
       :duration,
       :bitrate,
       :sample_rate,
@@ -36,7 +35,7 @@ module WahWah
       end
 
       @comments = []
-      @images = []
+      @images_data = []
 
       parse if @file_size > 0
 
@@ -46,15 +45,24 @@ module WahWah
       end
     end
 
-    def parse
-      raise WahWahNotImplementedError, 'The parse method is not implemented'
-    end
-
     def inspect
       inspect_id = ::Kernel.format '%x', (object_id * 2)
       inspect_attributes_values = INSPECT_ATTRIBUTES.map { |attr_name| "#{attr_name}=#{self.send(attr_name)}" }.join(' ')
 
       "<#{self.class.name}:0x#{inspect_id} #{inspect_attributes_values}>"
     end
+
+    def images
+      return @images_data if @images_data.empty?
+
+      @images_data.map do |data|
+        parse_image_data(data)
+      end
+    end
+
+    private
+      def parse
+        raise WahWahNotImplementedError, 'The parse method is not implemented'
+      end
   end
 end

@@ -10,7 +10,6 @@ class WahWah::Riff::ChunkTest < Minitest::Test
     assert_equal 'fmt', chunk.id
     assert_equal 16, chunk.size
     assert_nil chunk.type
-    assert_equal "\x01\x00\x02\x00D\xAC\x00\x00\x10\xB1\x02\x00\x04\x00\x10\x00".b, chunk.data
   end
 
   def test_riff_and_list_chunk

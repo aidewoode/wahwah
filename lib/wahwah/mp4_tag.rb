@@ -59,7 +59,7 @@ module WahWah
         # The metadata item list atom is of type ‘ilst’ and contains a number of metadata items, each of which is an atom.
         # each metadata item atom contains a Value Atom, to hold the value of the metadata item
         atom.children.each do |child_atom|
-          attribute_name = META_ATOM_MAPPING[child_atom.type]
+          attr_name = META_ATOM_MAPPING[child_atom.type]
 
           # The value of the metadata item is expressed as immediate data in a value atom.
           # The value atom starts with two fields: a type indicator, and a locale indicator.
@@ -68,25 +68,28 @@ module WahWah
           data_atom = child_atom.find('data')
           return unless data_atom.valid?
 
-          data_type, data_value = data_atom.data.unpack('Nx4a*')
-          encoded_data_value = META_ATOM_DECODE_BY_TYPE[data_type]&.call(data_value)
+          (@images_data.push(data_atom); next) if attr_name == :image
 
-          next if attribute_name.nil? || encoded_data_value.nil?
+          encoded_data_value = parse_meta_data_atom(data_atom)
+          next if attr_name.nil? || encoded_data_value.nil?
 
-          case attribute_name
-          when :image
-            @images.push(encoded_data_value)
+          case attr_name
           when :comment
             @comments.push(encoded_data_value)
           when :track, :disc
             count, total_count = encoded_data_value.unpack('x2nn')
 
-            instance_variable_set("@#{attribute_name}", count) unless count.zero?
-            instance_variable_set("@#{attribute_name}_total", total_count) unless total_count.zero?
+            instance_variable_set("@#{attr_name}", count) unless count.zero?
+            instance_variable_set("@#{attr_name}_total", total_count) unless total_count.zero?
           else
-            instance_variable_set("@#{attribute_name}", encoded_data_value)
+            instance_variable_set("@#{attr_name}", encoded_data_value)
           end
         end
+      end
+
+      def parse_meta_data_atom(atom)
+        data_type, data_value = atom.data.unpack('Nx4a*')
+        META_ATOM_DECODE_BY_TYPE[data_type]&.call(data_value)
       end
 
       def parse_mvhd_atom(atom)
@@ -121,6 +124,10 @@ module WahWah
 
         @sample_rate = mp4a_atom.data.unpack('x22I>').first if mp4a_atom.valid?
         @bitrate = esds_atom.data.unpack('x26I>').first / 1000 if esds_atom.valid?
+      end
+
+      def parse_image_data(image_data_atom)
+        parse_meta_data_atom(image_data_atom)
       end
   end
 end

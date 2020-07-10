@@ -4,6 +4,7 @@ require 'wahwah/version'
 require 'wahwah/errors'
 require 'wahwah/helper'
 require 'wahwah/tag_delegate'
+require 'wahwah/lazy_read'
 require 'wahwah/tag'
 
 require 'wahwah/id3/v1'

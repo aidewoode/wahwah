@@ -3,13 +3,15 @@
 module WahWah
   module Mp4
     class Atom
+      prepend LazyRead
+
       VERSIONED_ATOMS = %w(meta stsd)
       FLAGGED_ATOMS = %w(stsd)
       HEADER_SIZE = 8
       HEADER_SIZE_FIELD_SIZE = 4
       EXTENDED_HEADER_SIZE = 8
 
-      attr_reader :size, :type
+      attr_reader :type
 
       def self.find(file_io, *atom_path)
         file_io.rewind
@@ -39,25 +41,18 @@ module WahWah
       # Type:
       # A 32-bit integer that contains the type of the atom.
       # This can often be usefully treated as a four-character field with a mnemonic value .
-      def initialize(file_io)
-        @size, @type = file_io.read(HEADER_SIZE)&.unpack('Na4')
+      def initialize
+        @size, @type = @file_io.read(HEADER_SIZE)&.unpack('Na4')
         return unless valid?
 
         # If the size field of an atom is set to 1, the type field is followed by a 64-bit extended size field,
         # which contains the actual size of the atom as a 64-bit unsigned integer.
-        @size = file_io.read(EXTENDED_HEADER_SIZE).unpack('Q>').first - EXTENDED_HEADER_SIZE if @size == 1
+        @size = @file_io.read(EXTENDED_HEADER_SIZE).unpack('Q>').first - EXTENDED_HEADER_SIZE if @size == 1
 
         # If the size field of an atom is set to 0, which is allowed only for a top-level atom,
         # designates the last atom in the file and indicates that the atom extends to the end of the file.
-        @size = file_io.size if @size == 0
+        @size = @file_io.size if @size == 0
         @size = @size - HEADER_SIZE
-        @file_io = file_io
-        @position = file_io.pos
-      end
-
-      def data
-        @file_io.seek(@position)
-        @file_io.read(size)
       end
 
       def valid?

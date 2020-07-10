@@ -69,7 +69,7 @@ module WahWah
         when 'id3', 'ID3'
           parse_id3_chunk(sub_chunk)
         else
-          @file_io.seek(sub_chunk.size, IO::SEEK_CUR)
+          sub_chunk.skip
         end
       end
 
@@ -98,7 +98,7 @@ module WahWah
 
       def parse_data_chunk(chunk)
         @duration = chunk.size * 8 / (@bitrate * 1000)
-        @file_io.seek(chunk.size, IO::SEEK_CUR)
+        chunk.skip
       end
 
       def parse_list_chunk(chunk)
@@ -107,13 +107,13 @@ module WahWah
         # RIFF can be tagged with metadata in the INFO chunk.
         # And INFO chunk as a subchunk for LIST chunk.
         if chunk.type != 'INFO'
-          @file_io.seek(chunk.size, IO::SEEK_CUR)
+          chunk.skip
         else
           until list_chunk_end_position <= @file_io.pos do
             info_chunk = Riff::Chunk.new(@file_io)
 
             unless INFO_ID_MAPPING.keys.include? info_chunk.id.to_sym
-              @file_io.seek(info_chunk.size, IO::SEEK_CUR); next
+              info_chunk.skip; next
             end
 
             update_attribute(info_chunk)
@@ -126,14 +126,14 @@ module WahWah
       end
 
       def update_attribute(chunk)
-        attribute_name = INFO_ID_MAPPING[chunk.id.to_sym]
+        attr_name = INFO_ID_MAPPING[chunk.id.to_sym]
         chunk_data = Helper.encode_to_utf8(chunk.data)
 
-        case attribute_name
+        case attr_name
         when :comment
           @comments.push(chunk_data)
         else
-          instance_variable_set("@#{attribute_name}", chunk_data)
+          instance_variable_set("@#{attr_name}", chunk_data)
         end
       end
   end

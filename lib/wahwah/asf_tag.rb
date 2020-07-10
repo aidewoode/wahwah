@@ -54,7 +54,7 @@ module WahWah
         when CONTENT_DESCRIPTION_OBJECT_GUID
           parse_content_description_object(sub_object)
         else
-          @file_io.seek(sub_object.size, IO::SEEK_CUR)
+          sub_object.skip
         end
       end
 
