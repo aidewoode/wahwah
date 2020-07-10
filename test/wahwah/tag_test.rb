@@ -48,7 +48,8 @@ class WahWah::TagTest < Minitest::Test
   def test_inspect
     tag_inspect = SubTagWithParse.new('test/files/id3v1.mp3').inspect
 
-    assert_includes tag_inspect, 'sample_rate='
-    assert_includes tag_inspect, 'bitrate='
+    WahWah::Tag::INTEGER_ATTRIBUTES.each do |attr_name|
+      assert_includes tag_inspect, "#{attr_name}="
+    end
   end
 end

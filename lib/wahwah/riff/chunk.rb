@@ -16,29 +16,24 @@ module WahWah
     # 4 bytes: an ASCII identifier for this particular RIFF or LIST chunk (for RIFF in the typical case, these 4 bytes describe the content of the entire file, such as "AVI " or "WAVE").
     # rest of data: subchunks.
     class Chunk
+      prepend LazyRead
+
       HEADER_SIZE = 8
       HEADER_FORMAT = 'A4V'
       HEADER_TYPE_SIZE = 4
 
       attr_reader :id, :type
 
-      def initialize(file_io)
-        @id, @size = file_io.read(HEADER_SIZE)&.unpack(HEADER_FORMAT)
+      def initialize
+        @id, @size = @file_io.read(HEADER_SIZE)&.unpack(HEADER_FORMAT)
         return unless valid?
 
-        @type = file_io.read(HEADER_TYPE_SIZE).unpack('A4').first if have_type?
-        @file_io = file_io
-        @position = file_io.pos
+        @type = @file_io.read(HEADER_TYPE_SIZE).unpack('A4').first if have_type?
       end
 
       def size
         @size = @size + 1 if @size.odd?
         have_type? ? @size - HEADER_TYPE_SIZE : @size
-      end
-
-      def data
-        @file_io.seek(@position)
-        @file_io.read(size)
       end
 
       def valid?

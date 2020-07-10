@@ -5,6 +5,8 @@ require 'zlib'
 module WahWah
   module ID3
     class Frame
+      prepend LazyRead
+
       ID_MAPPING = {
         # ID3v2.2 frame id
         COM: :comment,
@@ -78,10 +80,9 @@ module WahWah
         array[15] = :data_length_indicator
       end
 
-      attr_reader :name, :value
+      attr_reader :name
 
-      def initialize(file_io, version)
-        @file_io = file_io
+      def initialize(version)
         @version = version
 
         parse_frame_header
@@ -98,8 +99,6 @@ module WahWah
           @file_io.seek(4, IO::SEEK_CUR)
           @size = @size - 4
         end
-
-        parse_body
       end
 
       def valid?
@@ -114,6 +113,13 @@ module WahWah
         @flags.include? :data_length_indicator
       end
 
+      def value
+        return unless @size > 0
+
+        content = compressed? ? Zlib.inflate(data) : data
+        frame_body = frame_body_class.new(content, @version)
+        frame_body.value
+      end
 
       private
         # ID3v2.2 frame header structure:
@@ -152,15 +158,6 @@ module WahWah
           flags_bits.split('').map.with_index do |flag_bit, index|
             frame_flags_indications[index] if flag_bit == '1'
           end.compact
-        end
-
-        def parse_body
-          return unless @size > 0
-          (@file_io.seek(@size, IO::SEEK_CUR); return) if @name.nil?
-
-          content = compressed? ? Zlib.inflate(@file_io.read(@size)) : @file_io.read(@size)
-          frame_body = frame_body_class.new(content, @version)
-          @value = frame_body.value
         end
 
         def frame_body_class
