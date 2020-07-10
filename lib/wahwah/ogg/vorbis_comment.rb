@@ -39,7 +39,7 @@ module WahWah
           comment_length = comment_content.read(4).unpack('V').first
           comment = Helper.encode_to_utf8(comment_content.read(comment_length))
           field_name, field_value = comment.split('=', 2)
-          attr_name = COMMET_FIELD_MAPPING[field_name]
+          attr_name = COMMET_FIELD_MAPPING[field_name&.upcase]
 
           field_value = field_value.to_i if %i(track disc).include? attr_name
 
