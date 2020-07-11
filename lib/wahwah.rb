@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'stringio'
+
 require 'wahwah/version'
 require 'wahwah/errors'
 require 'wahwah/helper'
