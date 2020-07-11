@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'forwardable'
-
 module WahWah
   class Mp3Tag < Tag
     extend TagDelegate

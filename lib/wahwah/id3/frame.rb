@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'zlib'
-
 module WahWah
   module ID3
     class Frame
