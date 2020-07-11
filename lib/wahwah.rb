@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'stringio'
+require 'forwardable'
+require 'zlib'
 
 require 'wahwah/version'
 require 'wahwah/errors'
