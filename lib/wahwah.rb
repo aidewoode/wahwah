@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'stringio'
+
 require 'wahwah/version'
 require 'wahwah/errors'
 require 'wahwah/helper'
@@ -44,8 +46,6 @@ require 'wahwah/ogg_tag'
 require 'wahwah/riff_tag'
 require 'wahwah/asf_tag'
 require 'wahwah/flac_tag'
-
-require 'stringio'
 
 module WahWah
   FORMATE_MAPPING = {

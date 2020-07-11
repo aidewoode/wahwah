@@ -34,7 +34,6 @@ WahWah is so easy to use.
 
 ```ruby
 require 'wahwah'
-require 'stringio'
 
 # Get metadata from an audio file
 
