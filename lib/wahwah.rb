@@ -45,6 +45,8 @@ require 'wahwah/riff_tag'
 require 'wahwah/asf_tag'
 require 'wahwah/flac_tag'
 
+require 'stringio'
+
 module WahWah
   FORMATE_MAPPING = {
     Mp3Tag: ['mp3'],
