@@ -45,6 +45,14 @@ module WahWah
       end
     end
 
+    def close
+      @file_io.close
+    end
+
+    def closed?
+      @file_io.closed?
+    end
+
     def inspect
       inspect_id = ::Kernel.format '%x', (object_id * 2)
       inspect_attributes_values = INSPECT_ATTRIBUTES.map { |attr_name| "#{attr_name}=#{self.send(attr_name)}" }.join(' ')

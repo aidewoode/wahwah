@@ -52,4 +52,20 @@ class WahWah::TagTest < Minitest::Test
       assert_includes tag_inspect, "#{attr_name}="
     end
   end
+
+  def test_closed
+    io = StringIO.new()
+    io.close
+    tag = SubTag.new(io)
+
+    assert tag.closed?
+  end
+
+  def test_close
+    io = StringIO.new()
+    tag = SubTag.new(io)
+    tag.close
+
+    assert io.closed?
+  end
 end
