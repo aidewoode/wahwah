@@ -23,6 +23,7 @@ class WahWah::FlacTagTest < Minitest::Test
     assert_equal 'image/jpeg', image[:mime_type]
     assert_equal :cover_front, image[:type]
     assert_equal binary_data('test/files/cover.jpeg'), image[:data].strip
+    assert file_io_closed?(tag)
   end
 
   def test_id3_header_tag_file
@@ -42,6 +43,7 @@ class WahWah::FlacTagTest < Minitest::Test
     assert_equal 705, tag.bitrate
     assert_equal 16, tag.bit_depth
     assert_equal 44100, tag.sample_rate
+    assert file_io_closed?(tag)
   end
 
   def test_invalid_tag_file
@@ -60,5 +62,6 @@ class WahWah::FlacTagTest < Minitest::Test
     assert_equal 705, tag.bitrate
     assert_equal 16, tag.bit_depth
     assert_equal 44100, tag.sample_rate
+    assert file_io_closed?(tag)
   end
 end

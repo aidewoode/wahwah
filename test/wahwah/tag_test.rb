@@ -54,18 +54,7 @@ class WahWah::TagTest < Minitest::Test
   end
 
   def test_closed
-    io = StringIO.new()
-    io.close
-    tag = SubTag.new(io)
-
-    assert tag.closed?
-  end
-
-  def test_close
-    io = StringIO.new()
-    tag = SubTag.new(io)
-    tag.close
-
-    assert io.closed?
+    tag = SubTagWithParse.new('test/files/id3v1.mp3')
+    assert file_io_closed?(tag)
   end
 end

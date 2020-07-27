@@ -37,10 +37,6 @@ class WahWah::Riff::ChunkTest < Minitest::Test
     content = StringIO.new("IART\t\x00\x00\x00Iggy".b)
     chunk = WahWah::Riff::Chunk.new(content)
 
-    assert_equal 9, chunk.instance_variable_get(:@size)
-
-    # If the chunk's length is not even, add one pad byte,
-    # so the real size should be even.
     assert_equal 10, chunk.size
   end
 

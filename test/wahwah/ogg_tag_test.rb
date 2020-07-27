@@ -20,6 +20,7 @@ class WahWah::OggTagTest < Minitest::Test
     assert_equal 192, tag.bitrate
     assert_equal 44100, tag.sample_rate
     assert_nil tag.bit_depth
+    assert file_io_closed?(tag)
   end
 
   def test_opus_tag_file
@@ -39,6 +40,7 @@ class WahWah::OggTagTest < Minitest::Test
     assert_equal 2, tag.bitrate
     assert_equal 48000, tag.sample_rate
     assert_nil tag.bit_depth
+    assert file_io_closed?(tag)
   end
 
   def test_flac_tag_file
@@ -58,5 +60,6 @@ class WahWah::OggTagTest < Minitest::Test
     assert_equal 705, tag.bitrate
     assert_equal 44100, tag.sample_rate
     assert_equal 16, tag.bit_depth
+    assert file_io_closed?(tag)
   end
 end
