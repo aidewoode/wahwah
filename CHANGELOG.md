@@ -1,3 +1,8 @@
+### 1.1.1
+
+- enhancements
+  - allow file IO to be closed automatically
+
 ### 1.1.0
 
 - new features

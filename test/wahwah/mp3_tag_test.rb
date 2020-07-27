@@ -23,6 +23,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal 'Joint Stereo', tag.channel_mode
     assert_equal 44100, tag.sample_rate
     assert_nil tag.bit_depth
+    assert file_io_closed?(tag)
   end
 
   def test_id3v22_tag_file
@@ -54,6 +55,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal 'Stereo', tag.channel_mode
     assert_equal 44100, tag.sample_rate
     assert_nil tag.bit_depth
+    assert file_io_closed?(tag)
   end
 
   def test_id3v23_tag_file
@@ -85,6 +87,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal 'Joint Stereo', tag.channel_mode
     assert_equal 44100, tag.sample_rate
     assert_nil tag.bit_depth
+    assert file_io_closed?(tag)
   end
 
   def test_id3v24_tag_file
@@ -116,6 +119,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal 'Joint Stereo', tag.channel_mode
     assert_equal 44100, tag.sample_rate
     assert_nil tag.bit_depth
+    assert file_io_closed?(tag)
   end
 
   def test_id3v2_with_extented_tag_file
@@ -132,6 +136,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal 'Single Channel', tag.channel_mode
     assert_equal 22050, tag.sample_rate
     assert_nil tag.bit_depth
+    assert file_io_closed?(tag)
   end
 
   def test_vbri_header_file
@@ -159,6 +164,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal 'Stereo', tag.channel_mode
     assert_equal 44100, tag.sample_rate
     assert_nil tag.bit_depth
+    assert file_io_closed?(tag)
   end
 
   def test_invalid_id3_file
@@ -187,6 +193,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal 'Stereo', tag.channel_mode
     assert_equal 44100, tag.sample_rate
     assert_nil tag.bit_depth
+    assert file_io_closed?(tag)
   end
 
   def test_compressed_image_file
@@ -194,6 +201,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     image = tag.images.first
 
     assert_equal binary_data('test/files/compressed_cover.bmp'), image[:data].strip
+    assert file_io_closed?(tag)
   end
 
   def test_incomplete_file
@@ -222,6 +230,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_nil tag.channel_mode
     assert_nil tag.sample_rate
     assert_nil tag.bit_depth
+    assert file_io_closed?(tag)
   end
 
   def test_invalid_encoding_string_file
@@ -250,6 +259,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_nil tag.channel_mode
     assert_nil tag.sample_rate
     assert_nil tag.bit_depth
+    assert file_io_closed?(tag)
   end
 
   def test_utf16_string_file
@@ -278,5 +288,6 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_nil tag.channel_mode
     assert_nil tag.sample_rate
     assert_nil tag.bit_depth
+    assert file_io_closed?(tag)
   end
 end

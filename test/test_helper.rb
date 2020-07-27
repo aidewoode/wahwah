@@ -20,6 +20,10 @@ module TestHelpers
   def binary_data(file_path)
     File.read(file_path).force_encoding('BINARY').strip
   end
+
+  def file_io_closed?(tag)
+    tag.instance_variable_get(:@file_io).closed?
+  end
 end
 
 Minitest::Test.send(:include, TestHelpers)

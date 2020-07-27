@@ -90,7 +90,7 @@ module WahWah
             atom = self.class.new(atoms_data_io)
             children_atoms.push(atom)
 
-            atoms_data_io.seek(atom.size, IO::SEEK_CUR)
+            atom.skip
           end
 
           children_atoms

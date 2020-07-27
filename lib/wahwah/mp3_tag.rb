@@ -38,7 +38,7 @@ module WahWah
     end
 
     def is_vbr?
-      xing_header.valid? || vbri_header.valid?
+      mpeg_frame_header.valid? && (xing_header.valid? || vbri_header.valid?)
     end
 
     private
@@ -48,8 +48,8 @@ module WahWah
       end
 
       def parse_id3_tag
-        id3_v1_tag = ID3::V1.new(@file_io)
-        id3_v2_tag = ID3::V2.new(@file_io)
+        id3_v1_tag = ID3::V1.new(@file_io.dup)
+        id3_v2_tag = ID3::V2.new(@file_io.dup)
 
         return id3_v2_tag if id3_v2_tag.valid?
         id3_v1_tag if id3_v1_tag.valid?

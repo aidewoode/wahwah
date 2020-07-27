@@ -16,18 +16,6 @@ module WahWah
       :composer,
       :sample_rate
 
-    def duration
-      @duration ||= parse_duration
-    end
-
-    def bitrate
-      @bitrate ||= parse_bitrate
-    end
-
-    def bit_depth
-      @bit_depth ||= parse_bit_depth
-    end
-
     private
       def packets
         @packets ||= Ogg::Packets.new(@file_io)
@@ -51,6 +39,10 @@ module WahWah
                when identification_packet.start_with?("\x7FFLAC")
                  Ogg::FlacTag.new(identification_packet, comment_packet)
         end
+
+        @duration = parse_duration
+        @bitrate = parse_bitrate
+        @bit_depth = parse_bit_depth
       end
 
       def parse_duration
