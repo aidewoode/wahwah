@@ -9,3 +9,6 @@
 Gemfile.lock
 .DS_Store
 *.swp
+.envrc
+/.direnv
+/.gems
