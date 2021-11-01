@@ -15,8 +15,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
       - name: Test and Lint
-        run: |
+        run:
           bundle exec rake
       - name: Push coverage data to Coveralls
         uses: coverallsapp/github-action@master
