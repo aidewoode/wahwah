@@ -8,7 +8,7 @@ module WahWah
       # Text encoding  $xx
       # Information    <text string according to encoding>
       def parse
-        encoding_id, text = @content.unpack('Ca*')
+        encoding_id, text = @content.unpack("Ca*")
         @value = Helper.encode_to_utf8(text, source_encoding: ENCODING_MAPPING[encoding_id])
       end
     end

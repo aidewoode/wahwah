@@ -19,7 +19,7 @@ module WahWah
       prepend LazyRead
 
       HEADER_SIZE = 8
-      HEADER_FORMAT = 'A4V'
+      HEADER_FORMAT = "A4V"
       HEADER_TYPE_SIZE = 4
 
       attr_reader :id, :type
@@ -28,11 +28,11 @@ module WahWah
         @id, @size = @file_io.read(HEADER_SIZE)&.unpack(HEADER_FORMAT)
         return unless valid?
 
-        @type = @file_io.read(HEADER_TYPE_SIZE).unpack('A4').first if have_type?
+        @type = @file_io.read(HEADER_TYPE_SIZE).unpack1("A4") if have_type?
       end
 
       def size
-        @size = @size + 1 if @size.odd?
+        @size += 1 if @size.odd?
         have_type? ? @size - HEADER_TYPE_SIZE : @size
       end
 
@@ -41,9 +41,10 @@ module WahWah
       end
 
       private
-        def have_type?
-          %w(RIFF LIST).include? @id
-        end
+
+      def have_type?
+        %w[RIFF LIST].include? @id
+      end
     end
   end
 end

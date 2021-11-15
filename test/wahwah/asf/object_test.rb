@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class WahWah::Asf::ObjectTest < Minitest::Test
   def test_parse
@@ -8,7 +8,7 @@ class WahWah::Asf::ObjectTest < Minitest::Test
     object = WahWah::Asf::Object.new(content)
 
     assert_equal 80, object.size
-    assert_equal '8CABDCA1-A947-11CF-8EE4-00C00C205365', object.guid
+    assert_equal "8CABDCA1-A947-11CF-8EE4-00C00C205365", object.guid
   end
 
   def test_invalid_object

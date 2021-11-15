@@ -2,5 +2,6 @@
 
 module WahWah
   class WahWahArgumentError < ArgumentError; end
-  class WahWahNotImplementedError < NotImplementedError; end
+
+  class WahWahNotImplementedError < RuntimeError; end
 end

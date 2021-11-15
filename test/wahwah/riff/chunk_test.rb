@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class WahWah::Riff::ChunkTest < Minitest::Test
   def test_normal_chunk
     content = StringIO.new("fmt \x10\x00\x00\x00\x01\x00\x02\x00D\xAC\x00\x00\x10\xB1\x02\x00\x04\x00\x10\x00".b)
     chunk = WahWah::Riff::Chunk.new(content)
 
-    assert_equal 'fmt', chunk.id
+    assert_equal "fmt", chunk.id
     assert_equal 16, chunk.size
     assert_nil chunk.type
   end
@@ -19,11 +19,11 @@ class WahWah::Riff::ChunkTest < Minitest::Test
     riff_chunk = WahWah::Riff::Chunk.new(riff_chunk_content)
     list_chunk = WahWah::Riff::Chunk.new(list_chunk_content)
 
-    assert_equal 'RIFF', riff_chunk.id
-    assert_equal 'LIST', list_chunk.id
+    assert_equal "RIFF", riff_chunk.id
+    assert_equal "LIST", list_chunk.id
 
-    assert_equal 'WAVE', riff_chunk.type
-    assert_equal 'INFO', list_chunk.type
+    assert_equal "WAVE", riff_chunk.type
+    assert_equal "INFO", list_chunk.type
 
     assert_equal 1411416, riff_chunk.instance_variable_get(:@size)
     assert_equal 172, list_chunk.instance_variable_get(:@size)

@@ -20,7 +20,7 @@ module WahWah
       def each
         @file_io.rewind
 
-        packet = +''
+        packet = +""
         pages = Ogg::Pages.new(@file_io)
 
         pages.each do |page|
@@ -31,7 +31,7 @@ module WahWah
             # So when segment length is less than 255 byte, it's the final segment.
             if segment.length < 255
               yield packet
-              packet = +''
+              packet = +""
             end
           end
         end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class WahWah::ID3::V2HeaderTest < Minitest::Test
   def test_header

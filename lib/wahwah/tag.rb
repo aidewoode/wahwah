@@ -2,8 +2,8 @@
 
 module WahWah
   class Tag
-    INTEGER_ATTRIBUTES = %i(disc disc_total track track_total)
-    INSPECT_ATTRIBUTES = %i(title artist album albumartist composer track track_total genre year disc disc_total duration bitrate sample_rate bit_depth)
+    INTEGER_ATTRIBUTES = %i[disc disc_total track track_total]
+    INSPECT_ATTRIBUTES = %i[title artist album albumartist composer track track_total genre year disc disc_total duration bitrate sample_rate bit_depth]
 
     attr_reader(
       :title,
@@ -48,8 +48,8 @@ module WahWah
     end
 
     def inspect
-      inspect_id = ::Kernel.format '%x', (object_id * 2)
-      inspect_attributes_values = INSPECT_ATTRIBUTES.map { |attr_name| "#{attr_name}=#{self.send(attr_name)}" }.join(' ')
+      inspect_id = ::Kernel.format "%x", (object_id * 2)
+      inspect_attributes_values = INSPECT_ATTRIBUTES.map { |attr_name| "#{attr_name}=#{send(attr_name)}" }.join(" ")
 
       "<#{self.class.name}:0x#{inspect_id} #{inspect_attributes_values}>"
     end
@@ -63,8 +63,9 @@ module WahWah
     end
 
     private
-      def parse
-        raise WahWahNotImplementedError, 'The parse method is not implemented'
-      end
+
+    def parse
+      raise WahWahNotImplementedError, "The parse method is not implemented"
+    end
   end
 end

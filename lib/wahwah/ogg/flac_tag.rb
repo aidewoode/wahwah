@@ -23,9 +23,9 @@ module WahWah
         # Each such packet will contain a single native FLAC metadata block.
         # The first of these must be a VORBIS_COMMENT block.
 
-        id, streaminfo_block_data = identification_packet.unpack('x9A4A*')
+        id, streaminfo_block_data = identification_packet.unpack("x9A4A*")
 
-        return unless id == 'fLaC'
+        return unless id == "fLaC"
         streaminfo_block = Flac::Block.new(StringIO.new(streaminfo_block_data))
         vorbis_comment_block = Flac::Block.new(StringIO.new(comment_packet))
 

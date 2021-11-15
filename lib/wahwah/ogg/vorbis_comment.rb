@@ -16,32 +16,32 @@ module WahWah
     # 9) done.
     module VorbisComment
       COMMET_FIELD_MAPPING = {
-        'TITLE' => :title,
-        'ALBUM' => :album,
-        'ALBUMARTIST' => :albumartist,
-        'TRACKNUMBER' => :track,
-        'ARTIST' => :artist,
-        'DATE' => :year,
-        'GENRE' => :genre,
-        'DISCNUMBER' => :disc,
-        'COMPOSER' => :composer
+        "TITLE" => :title,
+        "ALBUM" => :album,
+        "ALBUMARTIST" => :albumartist,
+        "TRACKNUMBER" => :track,
+        "ARTIST" => :artist,
+        "DATE" => :year,
+        "GENRE" => :genre,
+        "DISCNUMBER" => :disc,
+        "COMPOSER" => :composer
       }
 
       def parse_vorbis_comment(comment_content)
         comment_content = StringIO.new(comment_content)
 
-        vendor_length = comment_content.read(4).unpack('V').first
+        vendor_length = comment_content.read(4).unpack1("V")
         comment_content.seek(vendor_length, IO::SEEK_CUR) # Skip vendor_string
 
-        comment_list_length = comment_content.read(4).unpack('V').first
+        comment_list_length = comment_content.read(4).unpack1("V")
 
         comment_list_length.times do
-          comment_length = comment_content.read(4).unpack('V').first
+          comment_length = comment_content.read(4).unpack1("V")
           comment = Helper.encode_to_utf8(comment_content.read(comment_length))
-          field_name, field_value = comment.split('=', 2)
+          field_name, field_value = comment.split("=", 2)
           attr_name = COMMET_FIELD_MAPPING[field_name&.upcase]
 
-          field_value = field_value.to_i if %i(track disc).include? attr_name
+          field_value = field_value.to_i if %i[track disc].include? attr_name
 
           instance_variable_set("@#{attr_name}", field_value) unless attr_name.nil?
         end

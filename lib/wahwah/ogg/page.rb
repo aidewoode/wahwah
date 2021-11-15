@@ -99,7 +99,7 @@ module WahWah
     #    lacing value.
     class Page
       HEADER_SIZE = 27
-      HEADER_FORMAT = 'A4CxQx12C'
+      HEADER_FORMAT = "A4CxQx12C"
 
       attr_reader :segments, :granule_position
 
@@ -109,12 +109,12 @@ module WahWah
 
         return unless valid?
 
-        segment_table = file_io.read(page_segments).unpack('C' * page_segments)
+        segment_table = file_io.read(page_segments).unpack("C" * page_segments)
         @segments = segment_table.map { |segment_length| file_io.read(segment_length) }
       end
 
       def valid?
-        @capture_pattern == 'OggS' && @version == 0
+        @capture_pattern == "OggS" && @version == 0
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class WahWah::ID3::FrameTest < Minitest::Test
   def test_v2_2_frame
@@ -11,7 +11,7 @@ class WahWah::ID3::FrameTest < Minitest::Test
     assert !frame.compressed?
     assert !frame.data_length_indicator?
     assert_equal :title, frame.name
-    assert_equal 'China Girl', frame.value
+    assert_equal "China Girl", frame.value
   end
 
   def test_v2_3_frame
@@ -22,7 +22,7 @@ class WahWah::ID3::FrameTest < Minitest::Test
     assert !frame.compressed?
     assert !frame.data_length_indicator?
     assert_equal :title, frame.name
-    assert_equal 'China Girl', frame.value
+    assert_equal "China Girl", frame.value
   end
 
   def test_v2_4_frame
@@ -33,7 +33,7 @@ class WahWah::ID3::FrameTest < Minitest::Test
     assert !frame.compressed?
     assert !frame.data_length_indicator?
     assert_equal :title, frame.name
-    assert_equal 'China Girl', frame.value
+    assert_equal "China Girl", frame.value
   end
 
   def test_invalid_frame
@@ -51,7 +51,7 @@ class WahWah::ID3::FrameTest < Minitest::Test
     assert !frame.compressed?
     assert frame.data_length_indicator?
     assert_equal :title, frame.name
-    assert_equal 'title', frame.value
+    assert_equal "title", frame.value
   end
 
   def test_compressed_frame
@@ -62,6 +62,6 @@ class WahWah::ID3::FrameTest < Minitest::Test
     assert frame.compressed?
     assert !frame.data_length_indicator?
     assert_equal :title, frame.name
-    assert_equal 'China Girl', frame.value
+    assert_equal "China Girl", frame.value
   end
 end

@@ -6,8 +6,8 @@ module WahWah
       prepend LazyRead
 
       HEADER_SIZE = 4
-      HEADER_FORMAT = 'B*'
-      BLOCK_TYPE_INDEX = %w(STREAMINFO PADDING APPLICATION SEEKTABLE VORBIS_COMMENT CUESHEET PICTURE)
+      HEADER_FORMAT = "B*"
+      BLOCK_TYPE_INDEX = %w[STREAMINFO PADDING APPLICATION SEEKTABLE VORBIS_COMMENT CUESHEET PICTURE]
 
       attr_reader :type
 
@@ -32,11 +32,11 @@ module WahWah
         #
         # 24           Length (in bytes) of metadata to follow
         #              (does not include the size of the METADATA_BLOCK_HEADER)
-        header_bits = @file_io.read(HEADER_SIZE).unpack(HEADER_FORMAT).first
+        header_bits = @file_io.read(HEADER_SIZE).unpack1(HEADER_FORMAT)
 
         @last_flag = header_bits[0]
         @type = BLOCK_TYPE_INDEX[header_bits[1..7].to_i(2)]
-        @size = header_bits[8..-1].to_i(2)
+        @size = header_bits[8..].to_i(2)
       end
 
       def valid?

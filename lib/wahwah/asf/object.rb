@@ -14,7 +14,7 @@ module WahWah
       prepend LazyRead
 
       HEADER_SIZE = 24
-      HEADER_FORMAT = 'a16Q<'
+      HEADER_FORMAT = "a16Q<"
 
       attr_reader :guid
 
@@ -22,7 +22,7 @@ module WahWah
         guid_bytes, @size = @file_io.read(HEADER_SIZE)&.unpack(HEADER_FORMAT)
         return unless valid?
 
-        @size = @size - HEADER_SIZE
+        @size -= HEADER_SIZE
         @guid = Helper.byte_string_to_guid(guid_bytes)
       end
 

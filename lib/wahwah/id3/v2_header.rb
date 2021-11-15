@@ -10,9 +10,9 @@ module WahWah
     # ID3v2 flags             %abc00000
     # ID3v2 size              4 * %0xxxxxxx
     class V2Header
-      TAG_ID = 'ID3'
+      TAG_ID = "ID3"
       HEADER_SIZE = 10
-      HEADER_FORMAT = 'A3CxB8B*'
+      HEADER_FORMAT = "A3CxB8B*"
 
       attr_reader :major_version, :size
 
@@ -34,7 +34,7 @@ module WahWah
           # Size of padding        $xx xx xx xx
 
           # Skip extended_header
-          extended_header_size = Helper.id3_size_caculate(file_io.read(4).unpack('B32').first)
+          extended_header_size = Helper.id3_size_caculate(file_io.read(4).unpack1("B32"))
           file_io.seek(extended_header_size - 4, IO::SEEK_CUR)
         end
       end
@@ -46,7 +46,7 @@ module WahWah
       # The second bit in flags byte indicates whether or not the header
       # is followed by an extended header.
       def has_extended_header?
-        @flags[1] == '1'
+        @flags[1] == "1"
       end
     end
   end
