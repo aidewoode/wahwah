@@ -1,15 +1,24 @@
+### 1.2.0
+
+- Enhancements
+  - Return the duration as a float instead of as an integer(#24).
+  - Use standard ruby style guide for code.
+
+- Breaking change
+  - Drop support for ruby 2.5.
+
 ### 1.1.1
 
-- enhancements
-  - allow file IO to be closed automatically
+- Enhancements
+  - Allow file IO to be closed automatically.
 
 ### 1.1.0
 
-- new features
-  - add bit_depth attribute for PCM formats audio
+- New features
+  - Add bit_depth attribute for PCM formats audio.
 
-- bug fixes
-  - fix can not parse lowercase field name on vorbis comment
+- Bug fixes
+  - Fix can not parse lowercase field name on vorbis comment.
 
-- enhancements
-  - lazy load images attribute to reduce memory allocate
+- Enhancements
+  - Lazy load images attribute to reduce memory allocate.

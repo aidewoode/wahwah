@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class WahWah::Mp3::XingHeaderTest < Minitest::Test
   def test_prase

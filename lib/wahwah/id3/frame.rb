@@ -95,7 +95,7 @@ module WahWah
         # So skip those 4 byte.
         if compressed? || data_length_indicator?
           @file_io.seek(4, IO::SEEK_CUR)
-          @size = @size - 4
+          @size -= 4
         end
       end
 
@@ -120,56 +120,57 @@ module WahWah
       end
 
       private
-        # ID3v2.2 frame header structure:
-        #
-        # Frame ID      $xx xx xx(tree characters)
-        # Size          3 * %xxxxxxxx
-        #
-        # ID3v2.3 frame header structure:
-        #
-        # Frame ID      $xx xx xx xx (four characters)
-        # Size          4 * %xxxxxxxx
-        # Flags         $xx xx
-        #
-        # ID3v2.4 frame header structure:
-        #
-        # Frame ID      $xx xx xx xx (four characters)
-        # Size          4 * %0xxxxxxx
-        # Flags         $xx xx
-        def parse_frame_header
-          header_size = @version == 2 ? 6 : 10
-          header_formate = @version == 2 ? 'A3B24' : 'A4B32B16'
-          id, size_bits, flags_bits = @file_io.read(header_size).unpack(header_formate)
 
-          @name = ID_MAPPING[id.to_sym]
-          @size = Helper.id3_size_caculate(size_bits, has_zero_bit: @version == 4)
-          @flags = parse_flags(flags_bits)
+      # ID3v2.2 frame header structure:
+      #
+      # Frame ID      $xx xx xx(tree characters)
+      # Size          3 * %xxxxxxxx
+      #
+      # ID3v2.3 frame header structure:
+      #
+      # Frame ID      $xx xx xx xx (four characters)
+      # Size          4 * %xxxxxxxx
+      # Flags         $xx xx
+      #
+      # ID3v2.4 frame header structure:
+      #
+      # Frame ID      $xx xx xx xx (four characters)
+      # Size          4 * %0xxxxxxx
+      # Flags         $xx xx
+      def parse_frame_header
+        header_size = @version == 2 ? 6 : 10
+        header_formate = @version == 2 ? "A3B24" : "A4B32B16"
+        id, size_bits, flags_bits = @file_io.read(header_size).unpack(header_formate)
+
+        @name = ID_MAPPING[id.to_sym]
+        @size = Helper.id3_size_caculate(size_bits, has_zero_bit: @version == 4)
+        @flags = parse_flags(flags_bits)
+      end
+
+      def parse_flags(flags_bits)
+        return [] if flags_bits.nil?
+
+        frame_flags_indications = @version == 4 ?
+          V4_HEADER_FLAGS_INDICATIONS :
+          V3_HEADER_FLAGS_INDICATIONS
+
+        flags_bits.chars.map.with_index do |flag_bit, index|
+          frame_flags_indications[index] if flag_bit == "1"
+        end.compact
+      end
+
+      def frame_body_class
+        case @name
+        when :comment
+          CommentFrameBody
+        when :genre
+          GenreFrameBody
+        when :image
+          ImageFrameBody
+        else
+          TextFrameBody
         end
-
-        def parse_flags(flags_bits)
-          return [] if flags_bits.nil?
-
-          frame_flags_indications = @version == 4 ?
-            V4_HEADER_FLAGS_INDICATIONS :
-            V3_HEADER_FLAGS_INDICATIONS
-
-          flags_bits.split('').map.with_index do |flag_bit, index|
-            frame_flags_indications[index] if flag_bit == '1'
-          end.compact
-        end
-
-        def frame_body_class
-          case @name
-          when :comment
-            CommentFrameBody
-          when :genre
-            GenreFrameBody
-          when :image
-            ImageFrameBody
-          else
-            TextFrameBody
-          end
-        end
+      end
     end
   end
 end

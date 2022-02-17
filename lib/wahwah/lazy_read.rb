@@ -31,9 +31,10 @@ module WahWah
     end
 
     private
-      def get_data
-        @file_io.seek(@position)
-        @file_io.read(size)
-      end
+
+    def get_data
+      @file_io.seek(@position)
+      @file_io.read(size)
+    end
   end
 end

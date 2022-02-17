@@ -19,12 +19,12 @@ module WahWah
         # 7) [channel_mapping_family] = read 8 bit as unsigned integer
         # 8) [channel_mapping_table]
         @sample_rate = 48000
-        @pre_skip = identification_packet[10..11].unpack('v').first
+        @pre_skip = identification_packet[10..11].unpack1("v")
 
-        comment_packet_id, comment_packet_body = [comment_packet[0..7], comment_packet[8..-1]]
+        comment_packet_id, comment_packet_body = [comment_packet[0..7], comment_packet[8..]]
 
         # Opus comment packet start with 'OpusTags'
-        return unless comment_packet_id == 'OpusTags'
+        return unless comment_packet_id == "OpusTags"
 
         parse_vorbis_comment(comment_packet_body)
       end

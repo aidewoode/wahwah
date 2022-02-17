@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class WahWah::Ogg::FlacTagTest < Minitest::Test
   def test_parse
@@ -9,16 +9,16 @@ class WahWah::Ogg::FlacTagTest < Minitest::Test
 
     tag = WahWah::Ogg::FlacTag.new(identification_packet, comment_packet)
 
-    assert_equal 'China Girl', tag.title
-    assert_equal 'Iggy Pop', tag.artist
-    assert_equal 'Iggy Pop', tag.albumartist
-    assert_equal 'Iggy Pop', tag.composer
-    assert_equal 'The Idiot', tag.album
-    assert_equal '1977', tag.year
-    assert_equal 'Rock', tag.genre
+    assert_equal "China Girl", tag.title
+    assert_equal "Iggy Pop", tag.artist
+    assert_equal "Iggy Pop", tag.albumartist
+    assert_equal "Iggy Pop", tag.composer
+    assert_equal "The Idiot", tag.album
+    assert_equal "1977", tag.year
+    assert_equal "Rock", tag.genre
     assert_equal 5, tag.track
     assert_equal 1, tag.disc
-    assert_equal 8, tag.duration
+    assert_equal 8.0, tag.duration
     assert_equal 705, tag.bitrate
     assert_equal 44100, tag.sample_rate
     assert_equal 16, tag.bit_depth

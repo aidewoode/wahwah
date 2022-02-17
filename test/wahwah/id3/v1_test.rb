@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class WahWah::ID3::V1Test < Minitest::Test
   def test_parse
@@ -8,15 +8,15 @@ class WahWah::ID3::V1Test < Minitest::Test
 
     tag = WahWah::ID3::V1.new(content)
 
-    assert_equal 'v1', tag.version
+    assert_equal "v1", tag.version
     assert_equal 128, tag.size
-    assert_equal 'China Girl', tag.title
-    assert_equal 'Iggy Pop', tag.artist
-    assert_equal 'The Idiot', tag.album
-    assert_equal '1977', tag.year
-    assert_equal 'Rock', tag.genre
+    assert_equal "China Girl", tag.title
+    assert_equal "Iggy Pop", tag.artist
+    assert_equal "The Idiot", tag.album
+    assert_equal "1977", tag.year
+    assert_equal "Rock", tag.genre
     assert_equal 5, tag.track
-    assert_equal ['Iggy Pop Rocks'], tag.comments
+    assert_equal ["Iggy Pop Rocks"], tag.comments
   end
 
   def test_no_track_number
@@ -24,15 +24,15 @@ class WahWah::ID3::V1Test < Minitest::Test
 
     tag = WahWah::ID3::V1.new(content)
 
-    assert_equal 'v1', tag.version
+    assert_equal "v1", tag.version
     assert_equal 128, tag.size
-    assert_equal 'China Girl', tag.title
-    assert_equal 'Iggy Pop', tag.artist
-    assert_equal 'The Idiot', tag.album
-    assert_equal '1977', tag.year
-    assert_equal 'Rock', tag.genre
+    assert_equal "China Girl", tag.title
+    assert_equal "Iggy Pop", tag.artist
+    assert_equal "The Idiot", tag.album
+    assert_equal "1977", tag.year
+    assert_equal "Rock", tag.genre
     assert_nil tag.track
-    assert_equal ['Iggy Pop Rockssssssssssssssss'], tag.comments
+    assert_equal ["Iggy Pop Rockssssssssssssssss"], tag.comments
   end
 
   def test_invalid_id3

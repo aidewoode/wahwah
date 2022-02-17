@@ -20,10 +20,10 @@ module WahWah
         # 8) [blocksize_0] = 2 exponent (read 4 bits as unsigned integer)
         # 9) [blocksize_1] = 2 exponent (read 4 bits as unsigned integer)
         # 10) [framing_flag] = read one bit
-        @sample_rate, bitrate = identification_packet[12, 12].unpack('Vx4V')
+        @sample_rate, bitrate = identification_packet[12, 12].unpack("Vx4V")
         @bitrate = bitrate / 1000
 
-        comment_packet_id, comment_packet_body = [comment_packet[0..6], comment_packet[7..-1]]
+        comment_packet_id, comment_packet_body = [comment_packet[0..6], comment_packet[7..]]
 
         # Vorbis comment packet start with "\x03vorbis"
         return unless comment_packet_id == "\x03vorbis"

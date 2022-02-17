@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class WahWah::ID3::V2Test < Minitest::Test
   def test_parse
@@ -8,13 +8,13 @@ class WahWah::ID3::V2Test < Minitest::Test
     tag = WahWah::ID3::V2.new(content)
 
     assert_equal content.size, tag.size
-    assert_equal 'China Girl', tag.title
+    assert_equal "China Girl", tag.title
     assert_equal 5, tag.track
     assert_equal 1, tag.disc
     assert_nil tag.track_total
     assert_nil tag.disc_total
     assert !tag.has_extended_header?
-    assert_equal 'v2.4', tag.version
+    assert_equal "v2.4", tag.version
   end
 
   def test_with_track_total_and_disc_total
@@ -22,13 +22,13 @@ class WahWah::ID3::V2Test < Minitest::Test
     tag = WahWah::ID3::V2.new(content)
 
     assert_equal content.size, tag.size
-    assert_equal 'China Girl', tag.title
+    assert_equal "China Girl", tag.title
     assert_equal 5, tag.track
     assert_equal 1, tag.disc
     assert_equal 8, tag.track_total
     assert_equal 1, tag.disc_total
     assert !tag.has_extended_header?
-    assert_equal 'v2.4', tag.version
+    assert_equal "v2.4", tag.version
   end
 
   def test_invalid_tag
@@ -44,8 +44,8 @@ class WahWah::ID3::V2Test < Minitest::Test
     tag = WahWah::ID3::V2.new(content)
 
     assert_equal content.size, tag.size
-    assert_equal 'title', tag.title
-    assert_equal 'v2.4', tag.version
+    assert_equal "title", tag.title
+    assert_equal "v2.4", tag.version
     assert tag.has_extended_header?
   end
 end

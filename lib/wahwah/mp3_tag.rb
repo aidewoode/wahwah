@@ -42,67 +42,70 @@ module WahWah
     end
 
     private
-      def parse
-        @id3_tag = parse_id3_tag
-        parse_duration if mpeg_frame_header.valid?
+
+    def parse
+      @id3_tag = parse_id3_tag
+      parse_duration if mpeg_frame_header.valid?
+    end
+
+    def parse_id3_tag
+      id3_v1_tag = ID3::V1.new(@file_io.dup)
+      id3_v2_tag = ID3::V2.new(@file_io.dup)
+
+      return id3_v2_tag if id3_v2_tag.valid?
+      id3_v1_tag if id3_v1_tag.valid?
+    end
+
+    def parse_duration
+      if is_vbr?
+        @duration = frames_count * (mpeg_frame_header.samples_per_frame / sample_rate.to_f)
+        @bitrate = (bytes_count * 8 / @duration / 1000).round unless @duration.zero?
+      else
+        @bitrate = mpeg_frame_header.frame_bitrate
+        @duration = (file_size - (@id3_tag&.size || 0)) * 8 / (@bitrate * 1000).to_f unless @bitrate.zero?
+      end
+    end
+
+    def mpeg_frame_header
+      # Because id3v2 tag on the file header so skip id3v2 tag
+      @mpeg_frame_header ||= Mp3::MpegFrameHeader.new(@file_io, id3v2? ? @id3_tag&.size : 0)
+    end
+
+    def xing_header
+      @xing_header ||= Mp3::XingHeader.new(@file_io, xing_header_offset)
+    end
+
+    def vbri_header
+      @vbri_header ||= Mp3::VbriHeader.new(@file_io, vbri_header_offset)
+    end
+
+    def xing_header_offset
+      mpeg_frame_header_position = mpeg_frame_header.position
+      mpeg_frame_header_size = Mp3::MpegFrameHeader::HEADER_SIZE
+      mpeg_frame_side_info_size = if mpeg_version == "MPEG1"
+        channel_mode == "Single Channel" ? 17 : 32
+      else
+        channel_mode == "Single Channel" ? 9 : 17
       end
 
-      def parse_id3_tag
-        id3_v1_tag = ID3::V1.new(@file_io.dup)
-        id3_v2_tag = ID3::V2.new(@file_io.dup)
+      mpeg_frame_header_position + mpeg_frame_header_size + mpeg_frame_side_info_size
+    end
 
-        return id3_v2_tag if id3_v2_tag.valid?
-        id3_v1_tag if id3_v1_tag.valid?
-      end
+    def vbri_header_offset
+      mpeg_frame_header_position = mpeg_frame_header.position
+      mpeg_frame_header_size = Mp3::MpegFrameHeader::HEADER_SIZE
 
-      def parse_duration
-        if is_vbr?
-          @duration = (frames_count * (mpeg_frame_header.samples_per_frame / sample_rate.to_f)).round
-          @bitrate = bytes_count * 8 / @duration / 1000 unless @duration.zero?
-        else
-          @bitrate = mpeg_frame_header.frame_bitrate
-          @duration = (file_size - (@id3_tag&.size || 0)) * 8 / (@bitrate * 1000) unless @bitrate.zero?
-        end
-      end
+      mpeg_frame_header_position + mpeg_frame_header_size + 32
+    end
 
-      def mpeg_frame_header
-        # Because id3v2 tag on the file header so skip id3v2 tag
-        @mpeg_frame_header ||= Mp3::MpegFrameHeader.new(@file_io, id3v2? ? @id3_tag&.size : 0)
-      end
+    def frames_count
+      return xing_header.frames_count if xing_header.valid?
+      vbri_header.frames_count if vbri_header.valid?
+    end
 
-      def xing_header
-        @xing_header ||= Mp3::XingHeader.new(@file_io, xing_header_offset)
-      end
-
-      def vbri_header
-        @vbri_header ||= Mp3::VbriHeader.new(@file_io, vbri_header_offset)
-      end
-
-      def xing_header_offset
-        mpeg_frame_header_position = mpeg_frame_header.position
-        mpeg_frame_header_size = Mp3::MpegFrameHeader::HEADER_SIZE
-        mpeg_frame_side_info_size = mpeg_version == 'MPEG1' ?
-          (channel_mode == 'Single Channel' ? 17 : 32) :
-          (channel_mode == 'Single Channel' ? 9 : 17)
-
-        mpeg_frame_header_position + mpeg_frame_header_size + mpeg_frame_side_info_size
-      end
-
-      def vbri_header_offset
-        mpeg_frame_header_position = mpeg_frame_header.position
-        mpeg_frame_header_size = Mp3::MpegFrameHeader::HEADER_SIZE
-
-        mpeg_frame_header_position + mpeg_frame_header_size + 32
-      end
-
-      def frames_count
-        return xing_header.frames_count if xing_header.valid?
-        vbri_header.frames_count if vbri_header.valid?
-      end
-
-      def bytes_count
-        return xing_header.bytes_count if xing_header.valid?
-        vbri_header.bytes_count if vbri_header.valid?
-      end
+    def bytes_count
+      return xing_header.bytes_count if xing_header.valid?
+      vbri_header.bytes_count if vbri_header.valid?
+    end
   end
 end

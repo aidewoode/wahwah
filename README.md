@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/aidewoode/wahwah/actions/workflows/ci.yml/badge.svg)](https://github.com/aidewoode/wahwah/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/aidewoode/wahwah/badge.svg?branch=master)](https://coveralls.io/github/aidewoode/wahwah?branch=master)
+[![Ruby Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/testdouble/standard)
 
 WahWah is an audio metadata reader ruby gem, it supports many popular formats including mp3(ID3 v1, v2.2, v2.3, v2.4), m4a, ogg, oga, opus, wav, flac and wma.
 
@@ -26,7 +27,7 @@ Or install it yourself as:
 
 ## Compatibility
 
-WahWah support ruby 2.5+
+WahWah support ruby 2.6+
 
 ## Usage
 

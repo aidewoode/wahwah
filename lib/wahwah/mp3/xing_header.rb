@@ -30,15 +30,15 @@ module WahWah
       def initialize(file_io, offset = 0)
         file_io.seek(offset)
 
-        @id, @flags = file_io.read(8)&.unpack('A4N')
+        @id, @flags = file_io.read(8)&.unpack("A4N")
         return unless valid?
 
-        @frames_count = @flags & 1 == 1 ? file_io.read(4).unpack('N').first : 0
-        @bytes_count = @flags & 2 == 2 ? file_io.read(4).unpack('N').first : 0
+        @frames_count = @flags & 1 == 1 ? file_io.read(4).unpack1("N") : 0
+        @bytes_count = @flags & 2 == 2 ? file_io.read(4).unpack1("N") : 0
       end
 
       def valid?
-        %w(Xing Info).include? @id
+        %w[Xing Info].include? @id
       end
     end
   end

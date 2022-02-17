@@ -37,14 +37,14 @@ module WahWah
       def parse_streaminfo_block(block_data)
         return unless block_data.size == STREAMINFO_BLOCK_SIZE
 
-        info_bits = block_data.unpack('x10B64').first
+        info_bits = block_data.unpack1("x10B64")
 
         @sample_rate = info_bits[0..19].to_i(2)
         @bit_depth = info_bits[23..27].to_i(2) + 1
-        total_samples = info_bits[28..-1].to_i(2)
+        total_samples = info_bits[28..].to_i(2)
 
-        @duration = (total_samples.to_f / @sample_rate).round if @sample_rate > 0
-        @bitrate =  @sample_rate * @bit_depth / 1000
+        @duration = total_samples.to_f / @sample_rate if @sample_rate > 0
+        @bitrate = @sample_rate * @bit_depth / 1000
       end
     end
   end

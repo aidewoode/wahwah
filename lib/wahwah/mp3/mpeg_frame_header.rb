@@ -46,41 +46,41 @@ module WahWah
       HEADER_SIZE = 4
 
       FRAME_BITRATE_INDEX = {
-        'MPEG1 layer1' => [0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0],
-        'MPEG1 layer2' => [0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 0],
-        'MPEG1 layer3' => [0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0],
+        "MPEG1 layer1" => [0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0],
+        "MPEG1 layer2" => [0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 0],
+        "MPEG1 layer3" => [0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0],
 
-        'MPEG2 layer1' => [0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, 0],
-        'MPEG2 layer2' => [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0],
-        'MPEG2 layer3' => [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0],
+        "MPEG2 layer1" => [0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, 0],
+        "MPEG2 layer2" => [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0],
+        "MPEG2 layer3" => [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0],
 
-        'MPEG2.5 layer1' => [0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, 0],
-        'MPEG2.5 layer2' => [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0],
-        'MPEG2.5 layer3' => [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0]
+        "MPEG2.5 layer1" => [0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, 0],
+        "MPEG2.5 layer2" => [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0],
+        "MPEG2.5 layer3" => [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0]
       }
 
-      VERSIONS_INDEX = ['MPEG2.5', nil, 'MPEG2', 'MPEG1']
-      LAYER_INDEX = [nil, 'layer3', 'layer2', 'layer1']
-      CHANNEL_MODE_INDEX = ['Stereo', 'Joint Stereo', 'Dual Channel', 'Single Channel']
+      VERSIONS_INDEX = ["MPEG2.5", nil, "MPEG2", "MPEG1"]
+      LAYER_INDEX = [nil, "layer3", "layer2", "layer1"]
+      CHANNEL_MODE_INDEX = ["Stereo", "Joint Stereo", "Dual Channel", "Single Channel"]
 
       SAMPLE_RATE_INDEX = {
-        'MPEG1' => [44100, 48000, 32000],
-        'MPEG2' => [22050, 24000, 16000],
-        'MPEG2.5' => [11025, 12000, 8000]
+        "MPEG1" => [44100, 48000, 32000],
+        "MPEG2" => [22050, 24000, 16000],
+        "MPEG2.5" => [11025, 12000, 8000]
       }
 
       SAMPLES_PER_FRAME_INDEX = {
-        'MPEG1 layer1' => 384,
-        'MPEG1 layer2' => 1152,
-        'MPEG1 layer3' => 1152,
+        "MPEG1 layer1" => 384,
+        "MPEG1 layer2" => 1152,
+        "MPEG1 layer3" => 1152,
 
-        'MPEG2 layer1' => 384,
-        'MPEG2 layer2' => 1152,
-        'MPEG2 layer3' => 576,
+        "MPEG2 layer1" => 384,
+        "MPEG2 layer2" => 1152,
+        "MPEG2 layer3" => 576,
 
-        'MPEG2.5 layer1' => 384,
-        'MPEG2.5 layer2' => 1152,
-        'MPEG2.5 layer3' => 576
+        "MPEG2.5 layer1" => 384,
+        "MPEG2.5 layer2" => 1152,
+        "MPEG2.5 layer3" => 576
       }
 
       attr_reader :version, :layer, :frame_bitrate, :channel_mode, :sample_rate
@@ -95,13 +95,14 @@ module WahWah
           break if file_io.eof?
 
           header = file_io.read(HEADER_SIZE)
-          sync_bits = header.unpack('B11').first
+          sync_bits = header.unpack1("B11")
 
-          if sync_bits == "#{'1' * 11}".b
-            @header = header.unpack('B*').first
+          if sync_bits == ("1" * 11).b
+            @header = header.unpack1("B*")
             @position = offset
 
-            parse; break
+            parse
+            break
           end
 
           offset += 1
@@ -127,15 +128,16 @@ module WahWah
       end
 
       private
-        def parse
-          return unless valid?
 
-          @version = VERSIONS_INDEX[@header[11..12].to_i(2)]
-          @layer = LAYER_INDEX[@header[13..14].to_i(2)]
-          @frame_bitrate = FRAME_BITRATE_INDEX[kind]&.fetch(@header[16..19].to_i(2))
-          @channel_mode = CHANNEL_MODE_INDEX[@header[24..25].to_i(2)]
-          @sample_rate = SAMPLE_RATE_INDEX[@version]&.fetch(@header[20..21].to_i(2))
-        end
+      def parse
+        return unless valid?
+
+        @version = VERSIONS_INDEX[@header[11..12].to_i(2)]
+        @layer = LAYER_INDEX[@header[13..14].to_i(2)]
+        @frame_bitrate = FRAME_BITRATE_INDEX[kind]&.fetch(@header[16..19].to_i(2))
+        @channel_mode = CHANNEL_MODE_INDEX[@header[24..25].to_i(2)]
+        @sample_rate = SAMPLE_RATE_INDEX[@version]&.fetch(@header[20..21].to_i(2))
+      end
     end
   end
 end

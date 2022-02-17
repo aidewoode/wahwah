@@ -2,7 +2,7 @@ with import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/e55f77277b59
 
 mkShell {
   buildInputs = [
-    ruby_2_7
+    ruby_2_6
   ];
 
   shellHook = ''

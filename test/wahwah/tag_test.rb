@@ -1,22 +1,23 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class WahWah::TagTest < Minitest::Test
   class SubTag < WahWah::Tag; end
 
   class SubTagWithParse < WahWah::Tag
-    def parse; end
+    def parse
+    end
   end
 
   def test_sub_class_not_implemented_parse_method
     assert_raises(WahWah::WahWahNotImplementedError) do
-      SubTag.new('test/files/id3v1.mp3')
+      SubTag.new("test/files/id3v1.mp3")
     end
   end
 
   def test_have_necessary_attributes_method
-    tag = SubTagWithParse.new('test/files/id3v1.mp3')
+    tag = SubTagWithParse.new("test/files/id3v1.mp3")
 
     assert_respond_to tag, :title
     assert_respond_to tag, :artist
@@ -38,15 +39,15 @@ class WahWah::TagTest < Minitest::Test
   end
 
   def test_initialized_attributes
-    tag = SubTagWithParse.new('test/files/id3v1.mp3')
+    tag = SubTagWithParse.new("test/files/id3v1.mp3")
 
-    assert_equal File.size('test/files/id3v1.mp3'), tag.file_size
+    assert_equal File.size("test/files/id3v1.mp3"), tag.file_size
     assert_equal [], tag.comments
     assert_equal [], tag.images
   end
 
   def test_inspect
-    tag_inspect = SubTagWithParse.new('test/files/id3v1.mp3').inspect
+    tag_inspect = SubTagWithParse.new("test/files/id3v1.mp3").inspect
 
     WahWah::Tag::INTEGER_ATTRIBUTES.each do |attr_name|
       assert_includes tag_inspect, "#{attr_name}="
@@ -54,7 +55,7 @@ class WahWah::TagTest < Minitest::Test
   end
 
   def test_closed
-    tag = SubTagWithParse.new('test/files/id3v1.mp3')
+    tag = SubTagWithParse.new("test/files/id3v1.mp3")
     assert file_io_closed?(tag)
   end
 end

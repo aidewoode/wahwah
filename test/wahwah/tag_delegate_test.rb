@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class WahWah::TagDelegateTest < Minitest::Test
   class BaseTag
     attr_reader :title
 
     def initialize
-      @title = 'title'
+      @title = "title"
     end
   end
 
@@ -18,25 +18,25 @@ class WahWah::TagDelegateTest < Minitest::Test
 
   def setup
     @tag = Object.new
-    @tag.define_singleton_method(:title) { 'tag_title' }
+    @tag.define_singleton_method(:title) { "tag_title" }
   end
 
   def test_attibute_method_delegate_to_tag
     tag = Tag.new
     tag.instance_variable_set(:@tag, @tag)
 
-    assert_equal 'tag_title', tag.title
+    assert_equal "tag_title", tag.title
   end
 
   def test_not_delegate_when_tag_is_nil
     tag = Tag.new
     tag.instance_variable_set(:@tag, nil)
 
-    assert_equal 'title', tag.title
+    assert_equal "title", tag.title
   end
 
   def test_not_delegate_when_tag_not_defined
     tag = Tag.new
-    assert_equal 'title', tag.title
+    assert_equal "title", tag.title
   end
 end

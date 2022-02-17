@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class WahWah::Flac::BlockTest < Minitest::Test
   def test_parse
@@ -8,7 +8,7 @@ class WahWah::Flac::BlockTest < Minitest::Test
     block = WahWah::Flac::Block.new(content)
 
     assert !block.is_last?
-    assert_equal 'STREAMINFO', block.type
+    assert_equal "STREAMINFO", block.type
     assert_equal 34, block.size
   end
 

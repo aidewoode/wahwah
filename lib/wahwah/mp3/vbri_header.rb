@@ -30,7 +30,7 @@ module WahWah
     #                       you can calculate the length of this field.
     class VbriHeader
       HEADER_SIZE = 32
-      HEADER_FORMAT = 'A4x6NN'
+      HEADER_FORMAT = "A4x6NN"
 
       attr_reader :frames_count, :bytes_count
 
@@ -40,7 +40,7 @@ module WahWah
       end
 
       def valid?
-        @id == 'VBRI'
+        @id == "VBRI"
       end
     end
   end
