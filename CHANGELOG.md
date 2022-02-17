@@ -1,10 +1,10 @@
 ### 1.2.0
 
 - Enhancements
-  - Return the duration as a float instead of as an integer(#24).
   - Use standard ruby style guide for code.
 
 - Breaking change
+  - Return the duration as a float instead of as an integer(#24).
   - Drop support for ruby 2.5.
 
 ### 1.1.1
