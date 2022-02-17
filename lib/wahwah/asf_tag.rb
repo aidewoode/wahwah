@@ -87,7 +87,7 @@ module WahWah
     # If this value is nonzero, the Play Duration field and all of the payload Presentation Time fields have been offset by this amount.
     def parse_file_properties_object(object)
       play_duration, preroll, flags = object.data.unpack("x40Q<x8Q<b32")
-      @duration = (play_duration / 10000000.0 - preroll / 1000.0).round if flags[0] == "0"
+      @duration = play_duration / 10000000.0 - preroll / 1000.0 if flags[0] == "0"
     end
 
     # Extended Content Description Object structure:

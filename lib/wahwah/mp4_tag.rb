@@ -117,7 +117,7 @@ module WahWah
         time_scale, duration = atom_data.read(12).unpack("l>q>")
       end
 
-      @duration = (duration / time_scale.to_f).round
+      @duration = duration / time_scale.to_f
     end
 
     def parse_stsd_atom(atom)

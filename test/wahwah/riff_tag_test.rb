@@ -22,7 +22,7 @@ class WahWah::RiffTagTest < Minitest::Test
     assert_equal "image/jpeg", image[:mime_type]
     assert_equal :cover_front, image[:type]
     assert_equal binary_data("test/files/cover.jpeg"), image[:data].strip
-    assert_equal 8, tag.duration
+    assert_equal 8.001133947554926, tag.duration
     assert_equal 1411, tag.bitrate
     assert_equal "Stereo", tag.channel_mode
     assert_equal 44100, tag.sample_rate
@@ -39,7 +39,7 @@ class WahWah::RiffTagTest < Minitest::Test
     assert_equal "1977", tag.year
     assert_equal "Rock", tag.genre
     assert_equal ["Iggy Pop Rocks"], tag.comments
-    assert_equal 8, tag.duration
+    assert_equal 8.001133947554926, tag.duration
     assert_equal 1411, tag.bitrate
     assert_equal "Stereo", tag.channel_mode
     assert_equal 44100, tag.sample_rate

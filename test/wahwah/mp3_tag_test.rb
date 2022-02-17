@@ -16,7 +16,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal "Rock", tag.genre
     assert_equal 5, tag.track
     assert_equal ["Iggy Pop Rocks"], tag.comments
-    assert_equal 8, tag.duration
+    assert_equal 8.045714285714286, tag.duration
     assert_equal 32, tag.bitrate
     assert_equal "MPEG1", tag.mpeg_version
     assert_equal "layer3", tag.mpeg_layer
@@ -48,7 +48,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal "image/jpeg", image[:mime_type]
     assert_equal :other, image[:type]
     assert_equal binary_data("test/files/id3v22_cover.jpeg"), image[:data].strip
-    assert_equal 0, tag.duration
+    assert_equal 0.36354166666666665, tag.duration
     assert_equal 192, tag.bitrate
     assert_equal "MPEG1", tag.mpeg_version
     assert_equal "layer3", tag.mpeg_layer
@@ -80,7 +80,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal "image/jpeg", image[:mime_type]
     assert_equal :cover_front, image[:type]
     assert_equal binary_data("test/files/cover.jpeg"), image[:data].strip
-    assert_equal 8, tag.duration
+    assert_equal 8.045714285714286, tag.duration
     assert_equal 32, tag.bitrate
     assert_equal "MPEG1", tag.mpeg_version
     assert_equal "layer3", tag.mpeg_layer
@@ -112,7 +112,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal "image/jpeg", image[:mime_type]
     assert_equal :cover_front, image[:type]
     assert_equal binary_data("test/files/cover.jpeg"), image[:data].strip
-    assert_equal 8, tag.duration
+    assert_equal 8.045714285714286, tag.duration
     assert_equal 32, tag.bitrate
     assert_equal "MPEG1", tag.mpeg_version
     assert_equal "layer3", tag.mpeg_layer
@@ -129,7 +129,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert !tag.is_vbr?
     assert_equal "v2.4", tag.id3_version
     assert_equal "title", tag.title
-    assert_equal 0, tag.duration
+    assert_equal 0.4963125, tag.duration
     assert_equal 128, tag.bitrate
     assert_equal "MPEG2", tag.mpeg_version
     assert_equal "layer3", tag.mpeg_layer
@@ -157,7 +157,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal 1, tag.disc
     assert_equal 1, tag.disc_total
     assert_equal ["Iggy Pop Rocks"], tag.comments
-    assert_equal 222, tag.duration
+    assert_equal 222.19755102040818, tag.duration
     assert_equal 233, tag.bitrate
     assert_equal "MPEG1", tag.mpeg_version
     assert_equal "layer3", tag.mpeg_layer

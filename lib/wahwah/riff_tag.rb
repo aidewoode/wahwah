@@ -98,7 +98,7 @@ module WahWah
     end
 
     def parse_data_chunk(chunk)
-      @duration = chunk.size * 8 / (@bitrate * 1000)
+      @duration = chunk.size * 8 / (@bitrate * 1000).to_f
       chunk.skip
     end
 

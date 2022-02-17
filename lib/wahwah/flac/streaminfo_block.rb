@@ -43,7 +43,7 @@ module WahWah
         @bit_depth = info_bits[23..27].to_i(2) + 1
         total_samples = info_bits[28..].to_i(2)
 
-        @duration = (total_samples.to_f / @sample_rate).round if @sample_rate > 0
+        @duration = total_samples.to_f / @sample_rate if @sample_rate > 0
         @bitrate = @sample_rate * @bit_depth / 1000
       end
     end

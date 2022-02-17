@@ -16,7 +16,7 @@ class WahWah::AsfTagTest < Minitest::Test
     assert_equal 5, tag.track
     assert_equal 1, tag.disc
     assert_equal ["Iggy Pop Rocks"], tag.comments
-    assert_equal 8, tag.duration
+    assert_equal 8.033, tag.duration
     assert_equal 192, tag.bitrate
     assert_equal 44100, tag.sample_rate
     assert_equal 16, tag.bit_depth

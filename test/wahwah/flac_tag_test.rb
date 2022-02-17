@@ -16,7 +16,7 @@ class WahWah::FlacTagTest < Minitest::Test
     assert_equal "Rock", tag.genre
     assert_equal 5, tag.track
     assert_equal 1, tag.disc
-    assert_equal 8, tag.duration
+    assert_equal 8.0, tag.duration
     assert_equal 705, tag.bitrate
     assert_equal 16, tag.bit_depth
     assert_equal 44100, tag.sample_rate
@@ -39,7 +39,7 @@ class WahWah::FlacTagTest < Minitest::Test
     assert_equal "Rock", tag.genre
     assert_equal 5, tag.track
     assert_equal 1, tag.disc
-    assert_equal 0, tag.duration
+    assert_equal 0.45351473922902497, tag.duration
     assert_equal 705, tag.bitrate
     assert_equal 16, tag.bit_depth
     assert_equal 44100, tag.sample_rate
@@ -58,7 +58,7 @@ class WahWah::FlacTagTest < Minitest::Test
     assert_nil tag.genre
     assert_nil tag.track
     assert_nil tag.disc
-    assert_equal 4, tag.duration
+    assert_equal 3.684716553287982, tag.duration
     assert_equal 705, tag.bitrate
     assert_equal 16, tag.bit_depth
     assert_equal 44100, tag.sample_rate

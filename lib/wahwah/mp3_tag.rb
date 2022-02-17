@@ -58,11 +58,11 @@ module WahWah
 
     def parse_duration
       if is_vbr?
-        @duration = (frames_count * (mpeg_frame_header.samples_per_frame / sample_rate.to_f)).round
-        @bitrate = bytes_count * 8 / @duration / 1000 unless @duration.zero?
+        @duration = frames_count * (mpeg_frame_header.samples_per_frame / sample_rate.to_f)
+        @bitrate = (bytes_count * 8 / @duration / 1000).round unless @duration.zero?
       else
         @bitrate = mpeg_frame_header.frame_bitrate
-        @duration = (file_size - (@id3_tag&.size || 0)) * 8 / (@bitrate * 1000) unless @bitrate.zero?
+        @duration = (file_size - (@id3_tag&.size || 0)) * 8 / (@bitrate * 1000).to_f unless @bitrate.zero?
       end
     end
 

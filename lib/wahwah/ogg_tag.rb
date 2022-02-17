@@ -51,7 +51,7 @@ module WahWah
       last_page = pages.to_a.last
       pre_skip = @tag.respond_to?(:pre_skip) ? @tag.pre_skip : 0
 
-      ((last_page.granule_position - pre_skip) / @tag.sample_rate.to_f).round
+      (last_page.granule_position - pre_skip) / @tag.sample_rate.to_f
     end
 
     def parse_bitrate

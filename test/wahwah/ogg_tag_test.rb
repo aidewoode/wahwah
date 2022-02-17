@@ -16,7 +16,7 @@ class WahWah::OggTagTest < Minitest::Test
     assert_equal "Rock", tag.genre
     assert_equal 5, tag.track
     assert_equal 1, tag.disc
-    assert_equal 8, tag.duration
+    assert_equal 8.0, tag.duration
     assert_equal 192, tag.bitrate
     assert_equal 44100, tag.sample_rate
     assert_nil tag.bit_depth
@@ -36,7 +36,7 @@ class WahWah::OggTagTest < Minitest::Test
     assert_equal "Rock", tag.genre
     assert_equal 5, tag.track
     assert_equal 1, tag.disc
-    assert_equal 8, tag.duration
+    assert_equal 8.000020833333334, tag.duration
     assert_equal 2, tag.bitrate
     assert_equal 48000, tag.sample_rate
     assert_nil tag.bit_depth
@@ -56,7 +56,7 @@ class WahWah::OggTagTest < Minitest::Test
     assert_equal "Rock", tag.genre
     assert_equal 5, tag.track
     assert_equal 1, tag.disc
-    assert_equal 8, tag.duration
+    assert_equal 8.0, tag.duration
     assert_equal 705, tag.bitrate
     assert_equal 44100, tag.sample_rate
     assert_equal 16, tag.bit_depth

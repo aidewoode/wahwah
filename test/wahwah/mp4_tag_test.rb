@@ -22,7 +22,7 @@ class WahWah::Mp4TagTest < Minitest::Test
     assert_equal "image/jpeg", image[:mime_type]
     assert_equal :cover, image[:type]
     assert_equal binary_data("test/files/cover.jpeg"), image[:data].strip
-    assert_equal 8, tag.duration
+    assert_equal 8.057324263038549, tag.duration
     assert_equal 128, tag.bitrate
     assert_equal 44100, tag.sample_rate
     assert_nil tag.bit_depth
