@@ -13,7 +13,7 @@ WahWah is written in pure ruby, and without any dependencies.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'wahwah'
+gem "wahwah"
 ```
 
 And then execute:
@@ -34,25 +34,25 @@ WahWah support ruby 2.6+
 WahWah is so easy to use.
 
 ```ruby
-require 'wahwah'
+require "wahwah"
 
 # Get metadata from an audio file
 
-tag = WahWah.open('/files/example.wav')
+tag = WahWah.open("/files/example.wav")
 
-tag.title       # => 'song title' 
-tag.artist      # => 'artist name'
-tag.album       # => 'album name'
-tag.albumartist # => 'albumartist name'
-tag.composer    # => 'composer name'
-tag.comments    # => ['comment', 'another comment']
+tag.title       # => "song title" 
+tag.artist      # => "artist name"
+tag.album       # => "album name"
+tag.albumartist # => "albumartist name"
+tag.composer    # => "composer name"
+tag.comments    # => ["comment", "another comment"]
 tag.track       # => 1
 tag.track_total # => 10
-tag.genre       # => 'Rock'
-tag.year        # => '1984'
+tag.genre       # => "Rock"
+tag.year        # => "1984"
 tag.disc        # => 1
 tag.disc_total  # => 2
-tag.duration    # => 256 (in seconds) 
+tag.duration    # => 256.1 (in seconds) 
 tag.bitrate     # => 192 (in kbps) 
 tag.sample_rate # => 44100 (in Hz)
 tag.bit_depth   # => 16 (in bits, only for PCM formats)
@@ -62,5 +62,5 @@ tag.images      # => [{ :type => :cover_front, :mime_type => 'image/jpeg', :data
 
 # Get all support formats
 
-WahWah.support_formats # => ['mp3', 'ogg', 'oga', 'opus', 'wav', 'flac', 'wma', 'm4a']
+WahWah.support_formats # => ["mp3", "ogg", "oga", "opus", "wav", "flac", "wma", "m4a"]
 ```
