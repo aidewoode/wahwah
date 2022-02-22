@@ -1,3 +1,8 @@
+### 1.3.0
+
+- Enhancements
+  - Support read meta atom from moov atom(#26).
+
 ### 1.2.0
 
 - Enhancements
