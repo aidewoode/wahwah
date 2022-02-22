@@ -47,7 +47,7 @@ module WahWah
       movie_atom = Mp4::Atom.find(@file_io, "moov")
       return unless movie_atom.valid?
 
-      parse_meta_list_atom movie_atom.find("udta", "meta", "ilst")
+      parse_meta_list_atom movie_atom.find("meta", "ilst")
       parse_mvhd_atom movie_atom.find("mvhd")
       parse_stsd_atom movie_atom.find("trak", "mdia", "minf", "stbl", "stsd")
     end
