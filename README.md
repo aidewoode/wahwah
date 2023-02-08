@@ -27,7 +27,7 @@ Or install it yourself as:
 
 ## Compatibility
 
-WahWah support ruby 2.6+
+WahWah support ruby 2.7+
 
 ## Usage
 

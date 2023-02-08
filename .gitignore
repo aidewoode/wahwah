@@ -12,3 +12,4 @@ Gemfile.lock
 .envrc
 /.direnv
 /.gems
+.ruby-version

@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
     f.start_with?("lib", "pagy.gemspec", "LICENSE")
   end
 
-  spec.required_ruby_version = ">= 2.6.0"
+  spec.required_ruby_version = ">= 2.7.0"
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler"
