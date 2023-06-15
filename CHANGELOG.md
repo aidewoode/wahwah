@@ -1,3 +1,11 @@
+### 1.4.0
+
+- Enhancements
+  - Support get bit depth for ALAC encoded format(#29)
+
+- Breaking changes
+  - Drop support for Ruby 2.6
+
 ### 1.3.0
 
 - Enhancements
