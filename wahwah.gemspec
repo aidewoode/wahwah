@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "standard", "~> 1.4.0"
-  spec.add_development_dependency "simplecov", "~> 0.21.2"
+  spec.add_development_dependency "simplecov", "~> 0.22.0"
   spec.add_development_dependency "simplecov-lcov", "~> 0.8.0"
   spec.add_development_dependency "memory_profiler", "~> 0.9.14"
 end

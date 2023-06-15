@@ -125,9 +125,22 @@ module WahWah
 
       mp4a_atom = atom.find("mp4a")
       esds_atom = atom.find("esds")
+      alac_atom = atom.find("alac")
 
       @sample_rate = mp4a_atom.data.unpack1("x22I>") if mp4a_atom.valid?
       @bitrate = esds_atom.data.unpack1("x26I>") / 1000 if esds_atom.valid?
+
+      # see https://github.com/macosforge/alac/blob/master/ALACMagicCookieDescription.txt for more info.
+      if alac_atom.valid?
+        atom_data = StringIO.new(alac_atom.data)
+
+        atom_data.seek(45, IO::SEEK_CUR)
+        @bit_depth = atom_data.read(1).unpack1("C")
+
+        atom_data.seek(10, IO::SEEK_CUR)
+        @bitrate = (atom_data.read(4).unpack1("I>") / 1000.to_f).round
+        @sample_rate = atom_data.read(4).unpack1("I>")
+      end
     end
 
     def parse_image_data(image_data_atom)
