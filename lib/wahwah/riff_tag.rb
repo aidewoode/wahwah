@@ -109,17 +109,18 @@ module WahWah
       # And INFO chunk as a subchunk for LIST chunk.
       if chunk.type != "INFO"
         chunk.skip
-      else
-        until list_chunk_end_position <= @file_io.pos
-          info_chunk = Riff::Chunk.new(@file_io)
+        return
+      end
 
-          unless INFO_ID_MAPPING.key? info_chunk.id.to_sym
-            info_chunk.skip
-            next
-          end
+      until list_chunk_end_position <= @file_io.pos
+        info_chunk = Riff::Chunk.new(@file_io)
 
-          update_attribute(info_chunk)
+        unless INFO_ID_MAPPING.key? info_chunk.id.to_sym
+          info_chunk.skip
+          next
         end
+
+        update_attribute(info_chunk)
       end
     end
 

@@ -20,14 +20,14 @@ Gem::Specification.new do |spec|
     f.start_with?("lib", "pagy.gemspec", "LICENSE")
   end
 
-  spec.required_ruby_version = ">= 2.6.0"
+  spec.required_ruby_version = ">= 2.7.0"
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "standard", "~> 1.4.0"
-  spec.add_development_dependency "simplecov", "~> 0.21.2"
+  spec.add_development_dependency "simplecov", "~> 0.22.0"
   spec.add_development_dependency "simplecov-lcov", "~> 0.8.0"
   spec.add_development_dependency "memory_profiler", "~> 0.9.14"
 end
