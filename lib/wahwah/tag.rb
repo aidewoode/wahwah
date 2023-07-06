@@ -18,6 +18,7 @@ module WahWah
       :year,
       :disc,
       :disc_total,
+      :lyrics,
       :duration,
       :bitrate,
       :sample_rate,
