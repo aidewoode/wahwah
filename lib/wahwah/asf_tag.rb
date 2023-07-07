@@ -17,7 +17,8 @@ module WahWah
       "WM/Genre" => :genre,
       "WM/PartOfSet" => :disc,
       "WM/TrackNumber" => :track,
-      "WM/Year" => :year
+      "WM/Year" => :year,
+      "WM/Lyrics" => :lyrics
     }
 
     private
