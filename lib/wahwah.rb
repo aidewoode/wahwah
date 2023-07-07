@@ -20,6 +20,7 @@ require "wahwah/id3/text_frame_body"
 require "wahwah/id3/genre_frame_body"
 require "wahwah/id3/comment_frame_body"
 require "wahwah/id3/image_frame_body"
+require "wahwah/id3/lyrics_frame_body"
 
 require "wahwah/mp3/mpeg_frame_header"
 require "wahwah/mp3/xing_header"

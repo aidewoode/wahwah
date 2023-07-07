@@ -18,6 +18,7 @@ module WahWah
         TP2: :albumartist,
         TCM: :composer,
         PIC: :image,
+        ULT: :lyrics,
 
         # ID3v2.3 and ID3v2.4 frame id
         COMM: :comment,
@@ -31,6 +32,7 @@ module WahWah
         TPE2: :albumartist,
         TCOM: :composer,
         APIC: :image,
+        USLT: :lyrics,
 
         # ID3v2.4 use TDRC replace TYER
         TDRC: :year
@@ -167,6 +169,8 @@ module WahWah
           GenreFrameBody
         when :image
           ImageFrameBody
+        when :lyrics
+          LyricsFrameBody
         else
           TextFrameBody
         end

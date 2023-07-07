@@ -10,6 +10,7 @@ module WahWah
       "\xA9day".b => :year,
       "\xA9gen".b => :genre,
       "\xA9nam".b => :title,
+      "\xA9lyr".b => :lyrics,
       "covr".b => :image,
       "disk".b => :disc,
       "trkn".b => :track,

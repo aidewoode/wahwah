@@ -28,6 +28,7 @@ class WahWah::Mp4TagTest < Minitest::Test
     assert_equal 8.057324263038549, tag.duration
     assert_equal 128, tag.bitrate
     assert_equal 44100, tag.sample_rate
+    assert_equal "I'm feeling tragic like I'm Marlon Brando", tag.lyrics
     assert_nil tag.bit_depth
     assert file_io_closed?(tag)
   end
@@ -59,6 +60,7 @@ class WahWah::Mp4TagTest < Minitest::Test
     assert_equal 285.04816326530613, tag.duration
     assert_equal 256, tag.bitrate
     assert_equal 44100, tag.sample_rate
+    assert_equal "I'm feeling tragic like I'm Marlon Brando", tag.lyrics
     assert_nil tag.bit_depth
     assert file_io_closed?(tag)
   end
@@ -80,6 +82,7 @@ class WahWah::Mp4TagTest < Minitest::Test
     assert_equal 3, tag.bitrate
     assert_equal 16, tag.bit_depth
     assert_equal 44100, tag.sample_rate
+    assert_equal "I'm feeling tragic like I'm Marlon Brando", tag.lyrics
     assert_equal "image/jpeg", image[:mime_type]
     assert_equal :cover, image[:type]
     assert_equal binary_data("test/files/cover.jpeg"), image[:data].strip

@@ -20,6 +20,7 @@ class WahWah::AsfTagTest < Minitest::Test
     assert_equal 192, tag.bitrate
     assert_equal 44100, tag.sample_rate
     assert_equal 16, tag.bit_depth
+    assert_equal "I'm feeling tragic like I'm Marlon Brando", tag.lyrics
     assert file_io_closed?(tag)
   end
 end

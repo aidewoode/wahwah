@@ -24,7 +24,8 @@ module WahWah
         "DATE" => :year,
         "GENRE" => :genre,
         "DISCNUMBER" => :disc,
-        "COMPOSER" => :composer
+        "COMPOSER" => :composer,
+        "LYRICS" => :lyrics
       }
 
       def parse_vorbis_comment(comment_content)

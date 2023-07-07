@@ -54,6 +54,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal "layer3", tag.mpeg_layer
     assert_equal "Stereo", tag.channel_mode
     assert_equal 44100, tag.sample_rate
+    assert tag.lyrics.start_with?("Black rose")
     assert_nil tag.bit_depth
     assert file_io_closed?(tag)
   end
@@ -86,6 +87,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal "layer3", tag.mpeg_layer
     assert_equal "Joint Stereo", tag.channel_mode
     assert_equal 44100, tag.sample_rate
+    assert_equal "I'm feeling tragic like I'm Marlon Brando", tag.lyrics
     assert_nil tag.bit_depth
     assert file_io_closed?(tag)
   end
@@ -118,6 +120,7 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_equal "layer3", tag.mpeg_layer
     assert_equal "Joint Stereo", tag.channel_mode
     assert_equal 44100, tag.sample_rate
+    assert_equal "I'm feeling tragic like I'm Marlon Brando", tag.lyrics
     assert_nil tag.bit_depth
     assert file_io_closed?(tag)
   end

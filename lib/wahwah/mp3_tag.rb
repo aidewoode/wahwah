@@ -23,7 +23,8 @@ module WahWah
       :year,
       :disc,
       :disc_total,
-      :images
+      :images,
+      :lyrics
 
     def id3v2?
       @id3_tag.instance_of? ID3::V2
