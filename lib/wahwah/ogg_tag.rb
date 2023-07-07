@@ -14,7 +14,8 @@ module WahWah
       :genre,
       :disc,
       :composer,
-      :sample_rate
+      :sample_rate,
+      :lyrics
 
     private
 
