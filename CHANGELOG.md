@@ -1,3 +1,8 @@
+### 1.5.0
+
+- New features
+  - Support for retrieving lyrics from metadata.
+
 ### 1.4.0
 
 - Enhancements
