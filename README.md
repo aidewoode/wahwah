@@ -52,6 +52,7 @@ tag.genre       # => "Rock"
 tag.year        # => "1984"
 tag.disc        # => 1
 tag.disc_total  # => 2
+tag.lyrics      # => "song lyrics"
 tag.duration    # => 256.1 (in seconds)
 tag.bitrate     # => 192 (in kbps)
 tag.sample_rate # => 44100 (in Hz)
