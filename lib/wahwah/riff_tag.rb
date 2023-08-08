@@ -95,6 +95,12 @@ module WahWah
     def parse_fmt_chunk(chunk)
       _, @channel, @sample_rate, _, _, @bit_depth = chunk.data.unpack("vvVVvv")
       @bitrate = @sample_rate * @channel * @bit_depth / 1000
+
+      # There is a rare situation where the data chunk is not included in the top RIFF chunk.
+      # In this case, the duration can be got from the data chunk, some player event cannot play the file.
+      # So try to estimate the duration from the bitrate.
+      # This may be inaccurate, but at least can get approximate duration.
+      @duration = (@file_size * 8) / (@bitrate * 1000).to_f if @duration.nil?
     end
 
     def parse_data_chunk(chunk)
