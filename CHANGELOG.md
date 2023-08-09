@@ -1,3 +1,9 @@
+### 1.5.1
+
+- Enhancements
+  - Support for getting duration from wav file that data chunk is not included in the top riff chunk.
+
+
 ### 1.5.0
 
 - New features
