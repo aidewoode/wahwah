@@ -25,8 +25,31 @@ module WahWah
       string.split(Regexp.new(('\x00' * terminator_size).b), 2)
     end
 
-    def self.file_format(file_path)
-      File.extname(file_path).downcase.delete(".")
+    def self.file_format(file)
+      file.seek(0)
+      signature = file.read(16)
+
+      # M4A is checked for first, since MP4 files start with a chunk size -
+      # and that chunk size may incidentally match another signature.
+      # No other formats would reasonably have "ftyp" as the next for bytes.
+      return "m4a" if signature[4...8] == "ftyp".b && signature[8...12] == "M4A ".b
+      # Handled separately simply because it requires two checks.
+      return "wav" if signature.start_with?("RIFF".b) && signature[8...12] == "WAVE".b
+
+      magic_numbers = {
+        "fLaC".b => "flac",
+        "\xFF\xFB".b => "mp3",
+        "\xFF\xF3".b => "mp3",
+        "\xFF\xF2".b => "mp3",
+        "ID3".b => "mp3",
+        "OggS".b => "ogg",
+        "\x30\x26\xB2\x75\x8E\x66\xCF\x11\xA6\xD9\x00\xAA\x00\x62\xCE\x6C".b => "wma"
+      }
+      magic_numbers.each do |expected_signature, file_format|
+        return file_format if signature.start_with? expected_signature
+      end
+
+      nil
     end
 
     def self.byte_string_to_guid(byte_string)

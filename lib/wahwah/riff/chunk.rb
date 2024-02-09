@@ -37,7 +37,7 @@ module WahWah
       end
 
       def valid?
-        !@id.empty? && !@size.nil? && @size > 0
+        @id && !@id.empty? && !@size.nil? && @size > 0
       end
 
       private

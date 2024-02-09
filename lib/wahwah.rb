@@ -60,19 +60,31 @@ module WahWah
     Mp4Tag: ["m4a"]
   }.freeze
 
-  def self.open(file_path)
-    file_path = file_path.to_path if file_path.respond_to? :to_path
-    file_path = file_path.to_str
+  def self.open(file)
+    opened = false
+    # `Pathname`s respond to :read, but we still want to open them.
+    if !file.respond_to?(:read) || file.respond_to?(:open)
+      file = file.to_path if file.respond_to? :to_path
+      file = file.to_str
+      raise WahWahArgumentError, "File is not exists" unless File.exist? file
+      raise WahWahArgumentError, "File is unreadable" unless File.readable? file
+      raise WahWahArgumentError, "File is empty" unless File.size(file) > 0
+      file = File.open file, "rb"
+      opened = true
+    end
 
-    file_format = Helper.file_format(file_path)
+    begin
+      file_format = Helper.file_format(file)
+      # Falling back on the extension only enables invalid files to be loaded
+      # (for backwards API compatibility).
+      file_format ||= file.respond_to?(:path) ? File.extname(file.path).downcase[1..] : nil
+      raise WahWahArgumentError, "No supported format found" unless support_formats.include? file_format
 
-    raise WahWahArgumentError, "File is not exists" unless File.exist? file_path
-    raise WahWahArgumentError, "File is unreadable" unless File.readable? file_path
-    raise WahWahArgumentError, "File is empty" unless File.size(file_path) > 0
-    raise WahWahArgumentError, "No supported format found" unless support_formats.include? file_format
-
-    FORMATE_MAPPING.each do |tag, formats|
-      break const_get(tag).new(file_path) if formats.include?(file_format)
+      FORMATE_MAPPING.each do |tag, formats|
+        break const_get(tag).new(file) if formats.include?(file_format)
+      end
+    ensure
+      file.close if opened
     end
   end
 

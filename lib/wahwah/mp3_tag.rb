@@ -50,11 +50,21 @@ module WahWah
     end
 
     def parse_id3_tag
-      id3_v1_tag = ID3::V1.new(@file_io.dup)
-      id3_v2_tag = ID3::V2.new(@file_io.dup)
+      @file_io.seek(0)
+      signature = @file_io.read(6)
+      @file_io.seek(0)
 
-      return id3_v2_tag if id3_v2_tag.valid?
-      id3_v1_tag if id3_v1_tag.valid?
+      if signature.start_with?("ID3".b)
+        id3_v2_tag = ID3::V2.new(@file_io)
+        id3_v2_tag if id3_v2_tag.valid?
+      elsif ["\xFF\xFB".b, "\xFF\xF3".b, "\xFF\xF2".b].include? signature[...2]
+        # It's important to only initialize an ID3v1 object as the last option,
+        # as it requires reading to the end of the file. If the file is a
+        # streaming download (using, for example, Down), that requires
+        # downloading the whole file, which is not the case with ID3v2.
+        id3_v1_tag = ID3::V1.new(@file_io.dup)
+        id3_v1_tag if id3_v1_tag.valid?
+      end
     end
 
     def parse_duration
