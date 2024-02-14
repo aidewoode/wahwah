@@ -4,7 +4,7 @@ require "test_helper"
 
 class WahWah::Ogg::PacketsTest < Minitest::Test
   def setup
-    @packets = WahWah::Ogg::Packets.new(File.open("test/files/vorbis_tag.ogg"))
+    @packets = WahWah::Ogg::Packets.new(File.open("test/files/vorbis_tag.ogg", "rb"))
   end
 
   def test_packets_enumerable

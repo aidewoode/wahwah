@@ -50,9 +50,8 @@ module WahWah
     end
 
     def parse_id3_tag
-      @file_io.seek(0)
+      @file_io.rewind
       signature = @file_io.read(6)
-      @file_io.seek(0)
 
       if signature.start_with?("ID3".b)
         id3_v2_tag = ID3::V2.new(@file_io)

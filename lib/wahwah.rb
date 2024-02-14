@@ -60,35 +60,35 @@ module WahWah
     Mp4Tag: ["m4a"]
   }.freeze
 
-  def self.open(file)
-    opened = false
-    # `Pathname`s respond to :read, but we still want to open them.
-    if !file.respond_to?(:read) || file.respond_to?(:open)
-      file = file.to_path if file.respond_to? :to_path
-      file = file.to_str
-      raise WahWahArgumentError, "File is not exists" unless File.exist? file
-      raise WahWahArgumentError, "File is unreadable" unless File.readable? file
-      raise WahWahArgumentError, "File is empty" unless File.size(file) > 0
-      file = File.open file, "rb"
-      opened = true
-    end
+  def self.open(path_or_io)
+    with_io path_or_io do |io|
+      file_format = Helper.file_format io
 
-    begin
-      file_format = Helper.file_format(file)
-      # Falling back on the extension only enables invalid files to be loaded
-      # (for backwards API compatibility).
-      file_format ||= file.respond_to?(:path) ? File.extname(file.path).downcase[1..] : nil
       raise WahWahArgumentError, "No supported format found" unless support_formats.include? file_format
 
       FORMATE_MAPPING.each do |tag, formats|
-        break const_get(tag).new(file) if formats.include?(file_format)
+        break const_get(tag).new(io) if formats.include?(file_format)
       end
-    ensure
-      file.close if opened
     end
   end
 
   def self.support_formats
     FORMATE_MAPPING.values.flatten
+  end
+
+  private_class_method
+  def self.with_io(path_or_io, &block)
+    path_or_io = Pathname.new path_or_io if path_or_io.respond_to? :to_str
+
+    if path_or_io.is_a? Pathname
+      raise WahWahArgumentError, "File does not exist" unless File.exist? path_or_io
+      raise WahWahArgumentError, "File is unreadable" unless File.readable? path_or_io
+      raise WahWahArgumentError, "File is empty" unless File.size(path_or_io) > 0
+
+      path_or_io.open(&block)
+    else
+
+      block.call path_or_io
+    end
   end
 end

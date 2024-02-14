@@ -22,13 +22,23 @@ class WahWahTest < Minitest::Test
     end
   end
 
+  def test_path_string_as_argument
+    tag = WahWah.open("test/files/id3v1.mp3")
+    assert_instance_of WahWah::Mp3Tag, tag
+    assert file_io_closed?(tag)
+  end
+
   def test_path_name_as_argument
-    assert_instance_of WahWah::Mp3Tag, WahWah.open(Pathname.new("test/files/id3v1.mp3"))
+    tag = WahWah.open(Pathname.new("test/files/id3v1.mp3"))
+    assert_instance_of WahWah::Mp3Tag, tag
+    assert file_io_closed?(tag)
   end
 
   def test_opened_file_as_argument
     File.open "test/files/id3v1.mp3", "rb" do |file|
-      assert_instance_of WahWah::Mp3Tag, WahWah.open(file)
+      tag = WahWah.open(file)
+      assert_instance_of WahWah::Mp3Tag, tag
+      assert !file.closed?
     end
   end
 

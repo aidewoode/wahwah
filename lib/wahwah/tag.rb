@@ -26,30 +26,18 @@ module WahWah
       :file_size
     )
 
-    def initialize(file)
-      # `Pathname`s respond to :read, but we still want to open them.
-      opened = if file.respond_to?(:read) && !file.respond_to?(:open)
-        @file_size = file.size
-        @file_io = file
-        false
-      else
-        @file_size = File.size(file)
-        @file_io = File.open(file, "rb")
-        true
-      end
+    def initialize(io)
+      @file_size = io.size
+      @file_io = io
 
-      begin
-        @comments = []
-        @images_data = []
+      @comments = []
+      @images_data = []
 
-        parse if @file_size > 0
+      parse if @file_size > 0
 
-        INTEGER_ATTRIBUTES.each do |attr_name|
-          value = instance_variable_get("@#{attr_name}")&.to_i
-          instance_variable_set("@#{attr_name}", value)
-        end
-      ensure
-        @file_io.close if opened
+      INTEGER_ATTRIBUTES.each do |attr_name|
+        value = instance_variable_get("@#{attr_name}")&.to_i
+        instance_variable_set("@#{attr_name}", value)
       end
     end
 

@@ -4,7 +4,7 @@ require "test_helper"
 
 class WahWah::Mp4::AtomTest < Minitest::Test
   def test_find_atom
-    io = File.open("test/files/udta_meta.m4a")
+    io = File.open("test/files/udta_meta.m4a", "rb")
     atom = WahWah::Mp4::Atom.find(io, "moov", "udta")
 
     assert_equal "udta", atom.type
@@ -12,7 +12,7 @@ class WahWah::Mp4::AtomTest < Minitest::Test
   end
 
   def test_return_invalid_atom_when_not_found
-    io = File.open("test/files/udta_meta.m4a")
+    io = File.open("test/files/udta_meta.m4a", "rb")
     atom = WahWah::Mp4::Atom.find(io, "moov", "uuuu")
 
     assert_instance_of WahWah::Mp4::Atom, atom
@@ -35,7 +35,7 @@ class WahWah::Mp4::AtomTest < Minitest::Test
   end
 
   def test_find_child_atom_from_atom
-    io = File.open("test/files/udta_meta.m4a")
+    io = File.open("test/files/udta_meta.m4a", "rb")
     atom = WahWah::Mp4::Atom.find(io, "moov", "trak", "mdia")
     child_atom = atom.find("minf", "stbl", "stsd")
 
@@ -44,7 +44,7 @@ class WahWah::Mp4::AtomTest < Minitest::Test
   end
 
   def test_return_invalid_atom_when_not_found_from_atom
-    io = File.open("test/files/udta_meta.m4a")
+    io = File.open("test/files/udta_meta.m4a", "rb")
     atom = WahWah::Mp4::Atom.find(io, "moov", "trak", "mdia")
     child_atom = atom.find("minf", "stbl", "uuuu")
 
@@ -53,7 +53,7 @@ class WahWah::Mp4::AtomTest < Minitest::Test
   end
 
   def test_get_atom_children_atoms
-    io = File.open("test/files/udta_meta.m4a")
+    io = File.open("test/files/udta_meta.m4a", "rb")
     atom = WahWah::Mp4::Atom.find(io, "moov", "udta", "meta")
     children = atom.children
 
