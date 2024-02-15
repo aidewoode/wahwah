@@ -65,3 +65,32 @@ tag.images      # => [{ :type => :cover_front, :mime_type => 'image/jpeg', :data
 
 WahWah.support_formats # => ["mp3", "ogg", "oga", "opus", "wav", "flac", "wma", "m4a"]
 ```
+
+### Streaming from an IO
+
+`WahWah.open` can also use already opened files and file-like IOs. When initialized this way, some tags will be lazily loaded, and the file will need to stay open while accessing a given tag for the first time. Calling `load_fully` will load all the tags eagerly.
+
+```ruby
+require "wahwah"
+
+File.open("/files/example.ogg") do |file|
+  tag = WahWah.open(file)
+  tag.duration # => 656.0 (in seconds)
+end
+
+
+# Or, this can be used to stream downloads! Lazy-loading is helpful here
+# because some formats require you to read to the end (and thus download the
+# whole file) to get certain data – e.g., ID3v1 has its metadata at the end,
+# and Ogg requires reading the whole file to calculate bitrate or duration.
+
+require "down"
+
+stream = Down.open("https://github.com/aidewoode/wahwah/raw/master/test/files/vorbis_tag.ogg")
+tag = WahWah.open(stream)
+tag.load_fully
+stream.close
+
+# Accessible after the stream was closed thanks to `load_fully`.
+tag.duration # => 8.0 (in seconds)
+```

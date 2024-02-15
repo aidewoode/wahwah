@@ -41,13 +41,16 @@ module WahWah
         Ogg::FlacTag.new(identification_packet, comment_packet)
       end
 
-      @duration = parse_duration
-      @bitrate = parse_bitrate
       @bit_depth = parse_bit_depth
     end
 
-    def parse_duration
-      return @tag.duration if @tag.respond_to? :duration
+    # Oggs require reading to the end of the file in order to calculate their
+    # duration (as it's not stored in any header or metadata). Thus, if the
+    # file-like object supplied to WahWah is a streaming download, getting the
+    # duration would download the entire audio file, which may not be
+    # desirable. Making it lazy in this manner allows the user to avoid that.
+    lazy :duration do
+      next @tag.duration if @tag.respond_to? :duration
 
       last_page = pages.to_a.last
       pre_skip = @tag.respond_to?(:pre_skip) ? @tag.pre_skip : 0
@@ -55,8 +58,9 @@ module WahWah
       (last_page.granule_position - pre_skip) / @tag.sample_rate.to_f
     end
 
-    def parse_bitrate
-      return @tag.bitrate if @tag.respond_to? :bitrate
+    # Requires duration to calculate, so lazy as well.
+    lazy :bitrate do
+      next @tag.bitrate if @tag.respond_to? :bitrate
       ((file_size - @overhead_packets_size) * 8.0 / duration / 1000).round
     end
 

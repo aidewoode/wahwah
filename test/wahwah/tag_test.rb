@@ -5,8 +5,22 @@ require "test_helper"
 class WahWah::TagTest < Minitest::Test
   class SubTag < WahWah::Tag; end
 
-  class SubTagWithParse < WahWah::Tag
+  class SubTagWithLazyAttribute < WahWah::Tag
+    lazy :duration do
+      @file_io.read(1)
+      0
+    end
+  end
+
+  class SubTagWithParse < SubTagWithLazyAttribute
     def parse
+      true
+    end
+  end
+
+  class SubTagWithUnsuccessfulParse < SubTagWithLazyAttribute
+    def parse
+      false
     end
   end
 
@@ -60,6 +74,56 @@ class WahWah::TagTest < Minitest::Test
       WahWah::Tag::INTEGER_ATTRIBUTES.each do |attr_name|
         assert_includes tag_inspect, "#{attr_name}="
       end
+    end
+  end
+
+  def test_lazy_attribute_successful
+    file = File.open "test/files/id3v1.mp3", "rb"
+    begin
+      tag = SubTagWithParse.new(file)
+      assert_equal tag.duration, 0
+      file.close
+    ensure
+      file.close
+    end
+  end
+
+  def test_load_fully_successful
+    file = File.open "test/files/id3v1.mp3", "rb"
+    begin
+      tag = SubTagWithParse.new(file)
+      assert_nil tag.load_fully
+      assert !file.closed?
+      file.close
+      assert_equal tag.duration, 0
+    ensure
+      file.close
+    end
+  end
+
+  def test_lazy_attribute_unsuccessful
+    file = File.open "test/files/id3v1.mp3", "rb"
+    begin
+      tag = SubTagWithParse.new(file)
+      file.close
+      assert_raises(IOError) do
+        tag.duration
+      end
+    ensure
+      file.close
+    end
+  end
+
+  def test_load_fully_unsuccessful
+    file = File.open "test/files/id3v1.mp3", "rb"
+    begin
+      tag = SubTagWithParse.new(file)
+      file.close
+      assert_raises(IOError) do
+        tag.load_fully
+      end
+    ensure
+      file.close
     end
   end
 end
