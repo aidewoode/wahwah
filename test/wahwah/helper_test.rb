@@ -30,8 +30,21 @@ class WahWah::HelperTest < Minitest::Test
   end
 
   def test_file_format
-    assert_equal "mp3", WahWah::Helper.file_format("test_file.mp3")
-    assert_equal "mp3", WahWah::Helper.file_format("test/test_file.mp3")
+    expected_formats = {
+      "alac.m4a" => "m4a",
+      "id3v1.mp3" => "mp3",
+      "id3v24.mp3" => "mp3",
+      "vorbis_comment.flac" => "flac",
+      "vorbis_tag.ogg" => "ogg",
+      "id3v2.wav" => "wav",
+      "riff_info.wav" => "wav",
+      "test.wma" => "wma"
+    }
+    expected_formats.each do |filename, file_format|
+      File.open File.join("test/files", filename), "rb" do |file|
+        assert_equal file_format, WahWah::Helper.file_format(file), "Failed to recognize \"#{filename}\""
+      end
+    end
   end
 
   def test_byte_string_to_guid

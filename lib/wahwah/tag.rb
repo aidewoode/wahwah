@@ -26,14 +26,9 @@ module WahWah
       :file_size
     )
 
-    def initialize(file)
-      if file.is_a?(IO) || file.is_a?(StringIO)
-        @file_size = file.size
-        @file_io = file
-      else
-        @file_size = File.size(file)
-        @file_io = File.open(file)
-      end
+    def initialize(io)
+      @file_size = io.size
+      @file_io = io
 
       @comments = []
       @images_data = []
@@ -44,8 +39,6 @@ module WahWah
         value = instance_variable_get("@#{attr_name}")&.to_i
         instance_variable_set("@#{attr_name}", value)
       end
-    ensure
-      @file_io.close
     end
 
     def inspect

@@ -25,8 +25,48 @@ module WahWah
       string.split(Regexp.new(('\x00' * terminator_size).b), 2)
     end
 
-    def self.file_format(file_path)
-      File.extname(file_path).downcase.delete(".")
+    def self.file_format(io)
+      if io.respond_to?(:path) && io.path && !io.path.empty?
+        file_format = file_format_from_extension io.path
+        # Using OpenURI, the file *has* a path, but it's without an extension.
+        # To support that case, we fall back on signature detection.
+        file_format = file_format_from_signature io if file_format.empty?
+      else
+        file_format = file_format_from_signature io
+      end
+      file_format
+    end
+
+    def self.file_format_from_extension(file_path)
+      File.extname(file_path).downcase[1..]
+    end
+
+    def self.file_format_from_signature(io)
+      io.rewind
+      signature = io.read(16)
+
+      # Source: https://en.wikipedia.org/wiki/List_of_file_signatures
+
+      # M4A is checked for first, since MP4 files start with a chunk size -
+      # and that chunk size may incidentally match another signature.
+      # No other formats would reasonably have "ftyp" as the next for bytes.
+      return "m4a" if signature[4...12] == "ftypM4A ".b
+      # Handled separately simply because it requires two checks.
+      return "wav" if signature.start_with?("RIFF".b) && signature[8...12] == "WAVE".b
+      magic_numbers = {
+        "fLaC".b => "flac",
+        "\xFF\xFB".b => "mp3",
+        "\xFF\xF3".b => "mp3",
+        "\xFF\xF2".b => "mp3",
+        "ID3".b => "mp3",
+        "OggS".b => "ogg",
+        "\x30\x26\xB2\x75\x8E\x66\xCF\x11\xA6\xD9\x00\xAA\x00\x62\xCE\x6C".b => "wma"
+      }
+      magic_numbers.each do |expected_signature, file_format|
+        return file_format if signature.start_with? expected_signature
+      end
+
+      nil
     end
 
     def self.byte_string_to_guid(byte_string)
