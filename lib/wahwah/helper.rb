@@ -34,7 +34,13 @@ module WahWah
       else
         file_format = file_format_from_signature io
       end
+
       file_format
+    end
+
+    def self.byte_string_to_guid(byte_string)
+      guid = byte_string.unpack("NnnA*").pack("VvvA*").unpack1("H*")
+      [guid[0..7], guid[8..11], guid[12..15], guid[16..19], guid[20..]].join("-").upcase
     end
 
     def self.file_format_from_extension(file_path)
@@ -69,9 +75,6 @@ module WahWah
       nil
     end
 
-    def self.byte_string_to_guid(byte_string)
-      guid = byte_string.unpack("NnnA*").pack("VvvA*").unpack1("H*")
-      [guid[0..7], guid[8..11], guid[12..15], guid[16..19], guid[20..]].join("-").upcase
-    end
+    private_class_method :file_format_from_extension, :file_format_from_signature
   end
 end

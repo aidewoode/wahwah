@@ -4,7 +4,7 @@ require "test_helper"
 
 class WahWah::Ogg::PagesTest < Minitest::Test
   def setup
-    @pages = WahWah::Ogg::Pages.new(File.open("test/files/vorbis_tag.ogg", "rb"))
+    @pages = WahWah::Ogg::Pages.new(File.open("test/files/vorbis_tag.ogg"))
   end
 
   def test_pages_enumerable

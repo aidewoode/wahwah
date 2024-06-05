@@ -4,7 +4,7 @@ require "test_helper"
 
 class WahWah::AsfTagTest < Minitest::Test
   def test_parse
-    File.open "test/files/test.wma", "rb" do |file|
+    File.open "test/files/test.wma" do |file|
       tag = WahWah::AsfTag.new(file)
 
       assert_equal "China Girl", tag.title

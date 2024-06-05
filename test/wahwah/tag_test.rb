@@ -12,14 +12,14 @@ class WahWah::TagTest < Minitest::Test
 
   def test_sub_class_not_implemented_parse_method
     assert_raises(WahWah::WahWahNotImplementedError) do
-      File.open "test/files/id3v1.mp3", "rb" do |file|
+      File.open "test/files/id3v1.mp3" do |file|
         SubTag.new(file)
       end
     end
   end
 
   def test_have_necessary_attributes_method
-    File.open "test/files/id3v1.mp3", "rb" do |file|
+    File.open "test/files/id3v1.mp3" do |file|
       tag = SubTagWithParse.new(file)
 
       assert_respond_to tag, :title
@@ -44,7 +44,7 @@ class WahWah::TagTest < Minitest::Test
   end
 
   def test_initialized_attributes
-    File.open "test/files/id3v1.mp3", "rb" do |file|
+    File.open "test/files/id3v1.mp3" do |file|
       tag = SubTagWithParse.new(file)
 
       assert_equal file.size, tag.file_size
@@ -54,7 +54,7 @@ class WahWah::TagTest < Minitest::Test
   end
 
   def test_inspect
-    File.open "test/files/id3v1.mp3", "rb" do |file|
+    File.open "test/files/id3v1.mp3" do |file|
       tag_inspect = SubTagWithParse.new(file).inspect
 
       WahWah::Tag::INTEGER_ATTRIBUTES.each do |attr_name|

@@ -40,7 +40,7 @@ class WahWah::LazyReadTest < Minitest::Test
   end
 
   def test_get_data_when_file_io_closed
-    file_io = File.open "test/files/id3v1.mp3", "rb"
+    file_io = File.open "test/files/id3v1.mp3"
     tag = Tag.new(file_io)
     file_io.close
 

@@ -76,7 +76,6 @@ module WahWah
     FORMATE_MAPPING.values.flatten
   end
 
-  private_class_method
   def self.with_io(path_or_io, &block)
     path_or_io = Pathname.new path_or_io if path_or_io.respond_to? :to_str
 
@@ -91,4 +90,6 @@ module WahWah
       block.call path_or_io
     end
   end
+
+  private_class_method :with_io
 end
