@@ -4,7 +4,7 @@ require "test_helper"
 
 class WahWah::OggTagTest < Minitest::Test
   def test_vorbis_tag_file
-    File.open "test/files/vorbis_tag.ogg", "rb" do |file|
+    File.open "test/files/vorbis_tag.ogg" do |file|
       tag = WahWah::OggTag.new(file)
 
       assert_instance_of WahWah::Ogg::VorbisTag, tag.instance_variable_get(:@tag)
@@ -26,7 +26,7 @@ class WahWah::OggTagTest < Minitest::Test
   end
 
   def test_opus_tag_file
-    File.open "test/files/opus_tag.opus", "rb" do |file|
+    File.open "test/files/opus_tag.opus" do |file|
       tag = WahWah::OggTag.new(file)
 
       assert_instance_of WahWah::Ogg::OpusTag, tag.instance_variable_get(:@tag)
@@ -48,7 +48,7 @@ class WahWah::OggTagTest < Minitest::Test
   end
 
   def test_flac_tag_file
-    File.open "test/files/flac_tag.oga", "rb" do |file|
+    File.open "test/files/flac_tag.oga" do |file|
       tag = WahWah::OggTag.new(file)
 
       assert_instance_of WahWah::Ogg::FlacTag, tag.instance_variable_get(:@tag)

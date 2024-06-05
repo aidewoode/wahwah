@@ -4,7 +4,7 @@ require "test_helper"
 
 class WahWah::Mp3TagTest < Minitest::Test
   def test_id3v1_tag_file
-    File.open "test/files/id3v1.mp3", "rb" do |file|
+    File.open "test/files/id3v1.mp3" do |file|
       tag = WahWah::Mp3Tag.new(file)
 
       assert !tag.id3v2?
@@ -28,7 +28,7 @@ class WahWah::Mp3TagTest < Minitest::Test
   end
 
   def test_id3v22_tag_file
-    File.open "test/files/id3v22.mp3", "rb" do |file|
+    File.open "test/files/id3v22.mp3" do |file|
       tag = WahWah::Mp3Tag.new(file)
       image = tag.images.first
 
@@ -62,7 +62,7 @@ class WahWah::Mp3TagTest < Minitest::Test
   end
 
   def test_id3v23_tag_file
-    File.open "test/files/id3v23.mp3", "rb" do |file|
+    File.open "test/files/id3v23.mp3" do |file|
       tag = WahWah::Mp3Tag.new(file)
       image = tag.images.first
 
@@ -96,7 +96,7 @@ class WahWah::Mp3TagTest < Minitest::Test
   end
 
   def test_id3v24_tag_file
-    File.open "test/files/id3v24.mp3", "rb" do |file|
+    File.open "test/files/id3v24.mp3" do |file|
       tag = WahWah::Mp3Tag.new(file)
       image = tag.images.first
 
@@ -130,7 +130,7 @@ class WahWah::Mp3TagTest < Minitest::Test
   end
 
   def test_id3v2_with_extented_tag_file
-    File.open "test/files/id3v2_extended_header.mp3", "rb" do |file|
+    File.open "test/files/id3v2_extended_header.mp3" do |file|
       tag = WahWah::Mp3Tag.new(file)
 
       assert tag.id3v2?
@@ -148,7 +148,7 @@ class WahWah::Mp3TagTest < Minitest::Test
   end
 
   def test_vbri_header_file
-    File.open "test/files/vbri_header.mp3", "rb" do |file|
+    File.open "test/files/vbri_header.mp3" do |file|
       tag = WahWah::Mp3Tag.new(file)
 
       assert tag.id3v2?

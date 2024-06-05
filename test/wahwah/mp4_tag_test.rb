@@ -4,9 +4,9 @@ require "test_helper"
 
 class WahWah::Mp4TagTest < Minitest::Test
   def test_parse_meta_on_udta_atom
-    File.open "test/files/udta_meta.m4a", "rb" do |file|
+    File.open "test/files/udta_meta.m4a" do |file|
       tag = WahWah::Mp4Tag.new(file)
-      meta_atom = WahWah::Mp4::Atom.find(File.open(file.path, "rb"), "moov", "udta", "meta")
+      meta_atom = WahWah::Mp4::Atom.find(File.open(file.path), "moov", "udta", "meta")
       image = tag.images.first
 
       assert meta_atom.valid?
@@ -34,10 +34,10 @@ class WahWah::Mp4TagTest < Minitest::Test
   end
 
   def test_parse_meta_on_moov_atom
-    File.open "test/files/moov_meta.m4a", "rb" do |file|
+    File.open "test/files/moov_meta.m4a" do |file|
       tag = WahWah::Mp4Tag.new(file)
-      meta_atom = WahWah::Mp4::Atom.find(File.open(file.path, "rb"), "moov", "meta")
-      udta_meta_atom = WahWah::Mp4::Atom.find(File.open(file.path, "rb"), "moov", "udta", "meta")
+      meta_atom = WahWah::Mp4::Atom.find(File.open(file.path), "moov", "meta")
+      udta_meta_atom = WahWah::Mp4::Atom.find(File.open(file.path), "moov", "udta", "meta")
       image = tag.images.first
 
       assert meta_atom.valid?
@@ -66,7 +66,7 @@ class WahWah::Mp4TagTest < Minitest::Test
   end
 
   def test_parse_alac_encoded
-    File.open "test/files/alac.m4a", "rb" do |file|
+    File.open "test/files/alac.m4a" do |file|
       tag = WahWah::Mp4Tag.new(file)
       image = tag.images.first
 

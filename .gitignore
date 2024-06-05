@@ -13,3 +13,4 @@ Gemfile.lock
 /.direnv
 /.gems
 .ruby-version
+/.idea

@@ -35,7 +35,7 @@ class WahWahTest < Minitest::Test
   end
 
   def test_opened_file_as_argument
-    File.open "test/files/id3v1.mp3", "rb" do |file|
+    File.open "test/files/id3v1.mp3" do |file|
       tag = WahWah.open(file)
       assert_instance_of WahWah::Mp3Tag, tag
       assert !file.closed?

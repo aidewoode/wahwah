@@ -29,7 +29,7 @@ class WahWah::HelperTest < Minitest::Test
     assert_equal ["hi", "there\x00!"], WahWah::Helper.split_with_terminator(test_string, 1)
   end
 
-  def test_file_format
+  def test_file_format_with_extension
     expected_formats = {
       "alac.m4a" => "m4a",
       "id3v1.mp3" => "mp3",
@@ -41,8 +41,29 @@ class WahWah::HelperTest < Minitest::Test
       "test.wma" => "wma"
     }
     expected_formats.each do |filename, file_format|
-      File.open File.join("test/files", filename), "rb" do |file|
+      File.open File.join("test/files", filename) do |file|
         assert_equal file_format, WahWah::Helper.file_format(file), "Failed to recognize \"#{filename}\""
+      end
+    end
+  end
+
+  def test_file_format_without_extension
+    expected_formats = {
+      "alac.m4a" => "m4a",
+      "id3v1.mp3" => "mp3",
+      "id3v24.mp3" => "mp3",
+      "vorbis_comment.flac" => "flac",
+      "vorbis_tag.ogg" => "ogg",
+      "id3v2.wav" => "wav",
+      "riff_info.wav" => "wav",
+      "test.wma" => "wma"
+    }
+
+    expected_formats.each do |filename, file_format|
+      File.open File.join("test/files", filename) do |file|
+        file.stub :path, nil do
+          assert_equal file_format, WahWah::Helper.file_format(file), "Failed to recognize \"#{filename}\""
+        end
       end
     end
   end

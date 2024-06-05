@@ -4,7 +4,7 @@ require "test_helper"
 
 class WahWah::FlacTagTest < Minitest::Test
   def test_vorbis_comment_tag_file
-    File.open "test/files/vorbis_comment.flac", "rb" do |file|
+    File.open "test/files/vorbis_comment.flac" do |file|
       tag = WahWah::FlacTag.new(file)
       image = tag.images.first
 
@@ -29,7 +29,7 @@ class WahWah::FlacTagTest < Minitest::Test
   end
 
   def test_id3_header_tag_file
-    File.open "test/files/id3_header.flac", "rb" do |file|
+    File.open "test/files/id3_header.flac" do |file|
       tag = WahWah::FlacTag.new(file)
 
       assert_equal "ID3", File.read("test/files/id3_header.flac", 3)
@@ -51,7 +51,7 @@ class WahWah::FlacTagTest < Minitest::Test
   end
 
   def test_invalid_tag_file
-    File.open "test/files/invalid_tag.flac", "rb" do |file|
+    File.open "test/files/invalid_tag.flac" do |file|
       tag = WahWah::FlacTag.new(file)
 
       assert_nil tag.title

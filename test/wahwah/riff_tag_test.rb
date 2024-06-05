@@ -4,7 +4,7 @@ require "test_helper"
 
 class WahWah::RiffTagTest < Minitest::Test
   def test_id3_tag_file
-    File.open "test/files/id3v2.wav", "rb" do |file|
+    File.open "test/files/id3v2.wav" do |file|
       tag = WahWah::RiffTag.new(file)
       image = tag.images.first
 
@@ -32,7 +32,7 @@ class WahWah::RiffTagTest < Minitest::Test
   end
 
   def test_riff_info_tag_file
-    File.open "test/files/riff_info.wav", "rb" do |file|
+    File.open "test/files/riff_info.wav" do |file|
       tag = WahWah::RiffTag.new(file)
 
       assert_equal "China Girl", tag.title
@@ -50,7 +50,7 @@ class WahWah::RiffTagTest < Minitest::Test
   end
 
   def test_tag_that_riff_chunk_without_data_chunk
-    File.open "test/files/riff_chunk_without_data_chunk.wav", "rb" do |file|
+    File.open "test/files/riff_chunk_without_data_chunk.wav" do |file|
       tag = WahWah::RiffTag.new(file)
 
       assert_equal "China Girl", tag.title
