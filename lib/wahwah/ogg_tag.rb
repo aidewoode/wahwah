@@ -17,6 +17,20 @@ module WahWah
       :sample_rate,
       :lyrics
 
+    # Oggs require reading to the end of the file in order to calculate their
+    # duration (as it's not stored in any header or metadata). Thus, if the
+    # IO like object supplied to WahWah is a streaming download, getting the
+    # duration would download the entire audio file, which may not be
+    # desirable. Making it lazy in this manner allows the user to avoid that.
+    def duration
+      @duration ||= parse_duration
+    end
+
+    # Requires duration to calculate, so lazy as well.
+    def bitrate
+      @bitrate ||= parse_bitrate
+    end
+
     private
 
     def packets
@@ -41,8 +55,6 @@ module WahWah
         Ogg::FlacTag.new(identification_packet, comment_packet)
       end
 
-      @duration = parse_duration
-      @bitrate = parse_bitrate
       @bit_depth = parse_bit_depth
     end
 
