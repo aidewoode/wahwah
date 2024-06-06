@@ -3,7 +3,7 @@
 module WahWah
   class Tag
     INTEGER_ATTRIBUTES = %i[disc disc_total track track_total]
-    INSPECT_ATTRIBUTES = %i[title artist album albumartist composer track track_total genre year disc disc_total duration bitrate sample_rate bit_depth]
+    INSPECT_ATTRIBUTES = %i[title artist album albumartist composer track track_total genre year disc disc_total]
 
     attr_reader(
       :title,
@@ -51,7 +51,7 @@ module WahWah
     def images
       return @images_data if @images_data.empty?
 
-      @images_data.map do |data|
+      @images ||= @images_data.map do |data|
         parse_image_data(data)
       end
     end

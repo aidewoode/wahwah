@@ -36,10 +36,15 @@ WahWah is so easy to use.
 ```ruby
 require "wahwah"
 
-# Get metadata from an audio file
-
+# Get metadata from an audio file path
 tag = WahWah.open("/files/example.wav")
 
+# Or from IO like object
+File.open("/files/example.wav") do |file|
+  tag = WahWah.open(file)
+end
+
+# Supported attributes
 tag.title       # => "song title"
 tag.artist      # => "artist name"
 tag.album       # => "album name"
@@ -62,6 +67,5 @@ tag.images      # => [{ :type => :cover_front, :mime_type => 'image/jpeg', :data
 
 
 # Get all support formats
-
 WahWah.support_formats # => ["mp3", "ogg", "oga", "opus", "wav", "flac", "wma", "m4a"]
 ```

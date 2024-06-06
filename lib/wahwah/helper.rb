@@ -28,14 +28,10 @@ module WahWah
     def self.file_format(io)
       if io.respond_to?(:path) && io.path && !io.path.empty?
         file_format = file_format_from_extension io.path
-        # Using OpenURI, the file *has* a path, but it's without an extension.
-        # To support that case, we fall back on signature detection.
-        file_format = file_format_from_signature io if file_format.empty?
-      else
-        file_format = file_format_from_signature io
+        return file_format unless file_format.nil? || file_format.empty?
       end
 
-      file_format
+      file_format_from_signature io
     end
 
     def self.byte_string_to_guid(byte_string)
