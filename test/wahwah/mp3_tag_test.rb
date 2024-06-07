@@ -299,4 +299,14 @@ class WahWah::Mp3TagTest < Minitest::Test
     assert_nil tag.bit_depth
     assert file_io_closed?(tag)
   end
+
+  def test_image_with_description_file
+    tag = WahWah.open("test/files/image_with_description.mp3")
+    image = tag.images.first
+
+    assert_equal "image/jpeg", image[:mime_type]
+    assert_equal :cover_front, image[:type]
+    assert_equal binary_data("test/files/cover.jpeg"), image[:data].strip
+    assert file_io_closed?(tag)
+  end
 end
