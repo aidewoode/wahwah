@@ -22,7 +22,15 @@ module WahWah
     end
 
     def self.split_with_terminator(string, terminator_size)
-      string.split(Regexp.new(('\x00' * terminator_size).b), 2)
+      terminator = ("\x00" * terminator_size).b
+
+      (0...string.size).step(terminator_size).each do |index|
+        if string[index...(index + terminator_size)] == terminator
+          return [string[0...index], string[index + terminator_size..]]
+        end
+      end
+
+      []
     end
 
     def self.file_format(io)

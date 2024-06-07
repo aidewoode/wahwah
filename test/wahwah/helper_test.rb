@@ -25,8 +25,10 @@ class WahWah::HelperTest < Minitest::Test
   end
 
   def test_split_with_terminator
-    test_string = "hi\x00there\x00!".b
-    assert_equal ["hi", "there\x00!"], WahWah::Helper.split_with_terminator(test_string, 1)
+    assert_equal [], WahWah::Helper.split_with_terminator("hi there".b, 1)
+    assert_equal ["hi", "there\x00!"], WahWah::Helper.split_with_terminator("hi\x00there\x00!".b, 1)
+    assert_equal ["hi", "there\x00\x00!"], WahWah::Helper.split_with_terminator("hi\x00\x00there\x00\x00!".b, 2)
+    assert_equal ["h\x00", "there\x00\x00!"], WahWah::Helper.split_with_terminator("h\x00\x00\x00there\x00\x00!".b, 2)
   end
 
   def test_file_format_with_extension
