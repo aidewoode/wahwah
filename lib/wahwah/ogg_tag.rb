@@ -55,6 +55,12 @@ module WahWah
         Ogg::FlacTag.new(identification_packet, comment_packet)
       end
 
+      # Eagerly calculate duration and bitrate when open from path
+      if from_path
+        @duration = parse_duration
+        @bitrate = parse_bitrate
+      end
+
       @bit_depth = parse_bit_depth
     end
 

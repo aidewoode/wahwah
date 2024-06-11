@@ -61,13 +61,13 @@ module WahWah
   }.freeze
 
   def self.open(path_or_io)
-    with_io path_or_io do |io|
+    with_io path_or_io do |io, from_path|
       file_format = Helper.file_format io
 
       raise WahWahArgumentError, "No supported format found" unless support_formats.include? file_format
 
       FORMATE_MAPPING.each do |tag, formats|
-        break const_get(tag).new(io) if formats.include?(file_format)
+        break const_get(tag).new(io, **from_path) if formats.include?(file_format)
       end
     end
   end
@@ -84,10 +84,11 @@ module WahWah
       raise WahWahArgumentError, "File is unreadable" unless File.readable? path_or_io
       raise WahWahArgumentError, "File is empty" unless File.size(path_or_io) > 0
 
-      path_or_io.open(&block)
+      path_or_io.open do |io|
+        block.call(io, from_path: true)
+      end
     else
-
-      block.call path_or_io
+      block.call(path_or_io, from_path: false)
     end
   end
 
