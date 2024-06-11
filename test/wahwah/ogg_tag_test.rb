@@ -90,4 +90,13 @@ class WahWah::OggTagTest < Minitest::Test
       assert_equal 192, tag.instance_variable_get(:@bitrate)
     end
   end
+
+  def test_eager_duration_and_bitrate
+    File.open("test/files/vorbis_tag.ogg", "rb") do |file|
+      tag = WahWah::OggTag.new(file, from_path: true)
+
+      assert_equal 8.0, tag.instance_variable_get(:@duration)
+      assert_equal 192, tag.instance_variable_get(:@bitrate)
+    end
+  end
 end

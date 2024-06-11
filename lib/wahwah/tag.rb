@@ -23,10 +23,12 @@ module WahWah
       :bitrate,
       :sample_rate,
       :bit_depth,
-      :file_size
+      :file_size,
+      :from_path
     )
 
-    def initialize(io)
+    def initialize(io, from_path: false)
+      @from_path = from_path
       @file_size = io.size
       @file_io = io
 
