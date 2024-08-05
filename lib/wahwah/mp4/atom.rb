@@ -44,7 +44,6 @@ module WahWah
       # This can often be usefully treated as a four-character field with a mnemonic value .
       def initialize
         @size, @type = @file_io.read(HEADER_SIZE)&.unpack("Na4")
-        return unless valid?
 
         # If the size field of an atom is set to 1, the type field is followed by a 64-bit extended size field,
         # which contains the actual size of the atom as a 64-bit unsigned integer.
@@ -53,6 +52,8 @@ module WahWah
         # If the size field of an atom is set to 0, which is allowed only for a top-level atom,
         # designates the last atom in the file and indicates that the atom extends to the end of the file.
         @size = @file_io.size if @size == 0
+        return unless valid?
+
         @size -= HEADER_SIZE
       end
 

@@ -3,29 +3,29 @@
 module WahWah
   class Tag
     INTEGER_ATTRIBUTES = %i[disc disc_total track track_total]
-    INSPECT_ATTRIBUTES = %i[title artist album albumartist composer track track_total genre year disc disc_total]
+    INSPECT_ATTRIBUTES = %i[
+      title
+      artist
+      album
+      albumartist
+      composer
+      comments
+      track
+      track_total
+      genre
+      year
+      disc
+      disc_total
+      lyrics
+      duration
+      bitrate
+      sample_rate
+      bit_depth
+      file_size
+      from_path
+    ]
 
-    attr_reader(
-      :title,
-      :artist,
-      :album,
-      :albumartist,
-      :composer,
-      :comments,
-      :track,
-      :track_total,
-      :genre,
-      :year,
-      :disc,
-      :disc_total,
-      :lyrics,
-      :duration,
-      :bitrate,
-      :sample_rate,
-      :bit_depth,
-      :file_size,
-      :from_path
-    )
+    attr_reader(*INSPECT_ATTRIBUTES)
 
     def initialize(io, from_path: false)
       @from_path = from_path
@@ -45,7 +45,7 @@ module WahWah
 
     def inspect
       inspect_id = ::Kernel.format "%x", (object_id * 2)
-      inspect_attributes_values = INSPECT_ATTRIBUTES.map { |attr_name| "#{attr_name}=#{send(attr_name)}" }.join(" ")
+      inspect_attributes_values = INSPECT_ATTRIBUTES.map { |attr_name| "#{attr_name}: #{send(attr_name).inspect}" }.join(", ")
 
       "<#{self.class.name}:0x#{inspect_id} #{inspect_attributes_values}>"
     end

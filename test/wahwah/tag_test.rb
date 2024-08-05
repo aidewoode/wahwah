@@ -58,7 +58,7 @@ class WahWah::TagTest < Minitest::Test
       tag_inspect = SubTagWithParse.new(file).inspect
 
       WahWah::Tag::INTEGER_ATTRIBUTES.each do |attr_name|
-        assert_includes tag_inspect, "#{attr_name}="
+        assert_includes tag_inspect, "#{attr_name}: "
       end
     end
   end

@@ -89,4 +89,33 @@ class WahWah::Mp4TagTest < Minitest::Test
       assert_equal binary_data("test/files/cover.jpeg"), image[:data].strip
     end
   end
+
+  def test_parse_on_other_m4a
+    File.open "test/files/test-recording-123.m4a" do |file|
+      tag = WahWah::Mp4Tag.new(file)
+      meta_atom = WahWah::Mp4::Atom.find(File.open(file.path), "moov", "udta", "meta")
+      image = tag.images.first
+
+      assert meta_atom.valid?
+      assert_equal "Test Recording 123", tag.title
+      assert_equal "The Exemplars", tag.artist
+      assert_equal "The Exemplars", tag.albumartist
+      assert_equal "The Exemplars", tag.albumartist
+      assert_equal "The Example Album", tag.album
+      assert_equal "2024", tag.year
+      assert_equal "Books & Spoken", tag.genre
+      assert_equal 1, tag.track
+      assert_equal 1, tag.track_total
+      assert_equal 1, tag.disc
+      assert_equal 1, tag.disc_total
+      assert_equal ["This is an example comment"], tag.comments
+      assert_equal "image/png", image[:mime_type]
+      assert_equal :cover, image[:type]
+      assert_equal 3.0399583333333333, tag.duration
+      assert_equal 64, tag.bitrate
+      assert_equal 48000, tag.sample_rate
+      assert_equal "Test 123, Test 123.", tag.lyrics
+      assert_nil tag.bit_depth
+    end
+  end
 end
