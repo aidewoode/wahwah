@@ -22,7 +22,6 @@ module WahWah
       sample_rate
       bit_depth
       file_size
-      from_path
     ]
 
     attr_reader(*INSPECT_ATTRIBUTES)
@@ -59,6 +58,8 @@ module WahWah
     end
 
     private
+
+    attr_accessor :from_path
 
     def parse
       raise WahWahNotImplementedError, "The parse method is not implemented"

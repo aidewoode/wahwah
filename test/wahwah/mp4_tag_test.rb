@@ -90,8 +90,8 @@ class WahWah::Mp4TagTest < Minitest::Test
     end
   end
 
-  def test_parse_on_other_m4a
-    File.open "test/files/test-recording-123.m4a" do |file|
+  def test_parse_extended_header_atom
+    File.open "test/files/extended_header_atom.m4a" do |file|
       tag = WahWah::Mp4Tag.new(file)
       meta_atom = WahWah::Mp4::Atom.find(File.open(file.path), "moov", "udta", "meta")
       image = tag.images.first
