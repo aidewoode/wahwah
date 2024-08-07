@@ -60,7 +60,7 @@ module WahWah
       # M4A is checked for first, since MP4 files start with a chunk size -
       # and that chunk size may incidentally match another signature.
       # No other formats would reasonably have "ftyp" as the next for bytes.
-      return "m4a" if signature[4...12] == "ftypM4A ".b
+      return "m4a" if ["ftypM4A ".b, "ftyp3gp4".b].include?(signature[4...12])
       # Handled separately simply because it requires two checks.
       return "wav" if signature.start_with?("RIFF".b) && signature[8...12] == "WAVE".b
       magic_numbers = {
