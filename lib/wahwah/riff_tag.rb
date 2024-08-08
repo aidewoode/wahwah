@@ -41,6 +41,7 @@ module WahWah
     private
 
     def parse
+      @file_io.rewind
       top_chunk = Riff::Chunk.new(@file_io)
       return unless top_chunk.valid?
 
