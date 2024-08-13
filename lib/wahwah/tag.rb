@@ -31,6 +31,9 @@ module WahWah
       @file_size = io.size
       @file_io = io
 
+      # Rewinding at the start just in case some other helper class or parser already read from the file
+      @file_io.rewind
+
       @comments = []
       @images_data = []
 
