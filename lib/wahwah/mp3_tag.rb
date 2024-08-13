@@ -52,6 +52,7 @@ module WahWah
     def parse_id3_tag
       @file_io.rewind
       signature = @file_io.read(6)
+      @file_io.rewind
 
       if signature.start_with?("ID3".b)
         id3_v2_tag = ID3::V2.new(@file_io)
@@ -72,7 +73,7 @@ module WahWah
         @bitrate = (bytes_count * 8 / @duration / 1000).round unless @duration.zero?
       else
         @bitrate = mpeg_frame_header.frame_bitrate
-        @duration = (file_size - (@id3_tag&.size || 0)) * 8 / (@bitrate * 1000).to_f unless @bitrate.zero?
+        @duration = (file_size - (@id3_tag&.size || 0)) * 8 / (@bitrate * 1000).to_f unless @bitrate.to_i.zero?
       end
     end
 
