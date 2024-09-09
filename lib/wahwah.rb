@@ -82,7 +82,7 @@ module WahWah
     if path_or_io.is_a? Pathname
       raise WahWahArgumentError, "File does not exist" unless File.exist? path_or_io
       raise WahWahArgumentError, "File is unreadable" unless File.readable? path_or_io
-      raise WahWahArgumentError, "File is empty" unless File.size(path_or_io) > 0
+      raise WahWahArgumentError, "File is empty" if File.empty?(path_or_io)
 
       path_or_io.open do |io|
         block.call(io, from_path: true)

@@ -54,6 +54,7 @@ module WahWah
     def self.file_format_from_signature(io)
       io.rewind
       signature = io.read(16)
+
       # Rewind after reading the signature to not mess with the file position
       io.rewind
 

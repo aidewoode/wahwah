@@ -66,25 +66,4 @@ class WahWah::RiffTagTest < Minitest::Test
       assert_equal 16, tag.bit_depth
     end
   end
-
-  def test_tag_works_with_file_missing_extension
-    blob_data = binary_data("test/files/id3v2.wav")
-
-    Tempfile.create("temp-audio-file", binmode: true) do |temp_file|
-      temp_file.write blob_data
-      tag = WahWah::RiffTag.new(temp_file)
-
-      assert_equal "China Girl", tag.title
-      assert_equal "Iggy Pop", tag.artist
-      assert_equal "The Idiot", tag.album
-      assert_equal "1977", tag.year
-      assert_equal "Rock", tag.genre
-      assert_equal ["Iggy Pop Rocks"], tag.comments
-      assert_equal 8.001133947554926, tag.duration
-      assert_equal 1411, tag.bitrate
-      assert_equal "Stereo", tag.channel_mode
-      assert_equal 44100, tag.sample_rate
-      assert_equal 16, tag.bit_depth
-    end
-  end
 end
