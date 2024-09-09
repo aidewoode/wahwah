@@ -62,4 +62,12 @@ class WahWah::TagTest < Minitest::Test
       end
     end
   end
+
+  def test_io_rewound_before_parse
+    File.open "test/files/id3v1.mp3" do |file|
+      file.read(10)
+      tag = SubTagWithParse.new(file)
+      assert tag.instance_variable_get(:@file_io).pos.zero?
+    end
+  end
 end

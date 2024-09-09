@@ -65,6 +65,7 @@ class WahWah::HelperTest < Minitest::Test
       File.open File.join("test/files", filename) do |file|
         file.stub :path, nil do
           assert_equal file_format, WahWah::Helper.file_format(file), "Failed to recognize \"#{filename}\""
+          assert file.pos.zero?
         end
       end
     end
