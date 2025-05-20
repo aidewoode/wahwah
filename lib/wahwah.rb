@@ -3,6 +3,7 @@
 require "stringio"
 require "forwardable"
 require "zlib"
+require "pathname"
 
 require "wahwah/version"
 require "wahwah/errors"
