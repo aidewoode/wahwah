@@ -140,8 +140,8 @@ module WahWah
       # Size          4 * %0xxxxxxx
       # Flags         $xx xx
       def parse_frame_header
-        header_size = @version == 2 ? 6 : 10
-        header_formate = @version == 2 ? "A3B24" : "A4B32B16"
+        header_size = (@version == 2) ? 6 : 10
+        header_formate = (@version == 2) ? "A3B24" : "A4B32B16"
         id, size_bits, flags_bits = @file_io.read(header_size).unpack(header_formate)
 
         @name = ID_MAPPING[id.to_sym]
@@ -152,7 +152,7 @@ module WahWah
       def parse_flags(flags_bits)
         return [] if flags_bits.nil?
 
-        frame_flags_indications = @version == 4 ?
+        frame_flags_indications = (@version == 4) ?
           V4_HEADER_FLAGS_INDICATIONS :
           V3_HEADER_FLAGS_INDICATIONS
 

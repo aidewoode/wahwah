@@ -28,8 +28,8 @@ module WahWah
       ]
 
       def mime_type
-        mime_type = @mime_type.downcase.yield_self { |type| type == "jpg" ? "jpeg" : type }
-        @version > 2 ? mime_type : "image/#{mime_type}"
+        mime_type = @mime_type.downcase.yield_self { |type| (type == "jpg") ? "jpeg" : type }
+        (@version > 2) ? mime_type : "image/#{mime_type}"
       end
 
       # ID3v2.2 image frame structure:
@@ -48,7 +48,7 @@ module WahWah
       # Description   <text string according to encoding> $00 (00)
       # Picture data  <binary data>
       def parse
-        frame_format = @version > 2 ? "CZ*Ca*" : "Ca3Ca*"
+        frame_format = (@version > 2) ? "CZ*Ca*" : "Ca3Ca*"
         encoding_id, @mime_type, type_index, rest_content = @content.unpack(frame_format)
         encoding = ENCODING_MAPPING[encoding_id]
         _description, data = Helper.split_with_terminator(rest_content, ENCODING_TERMINATOR_SIZE[encoding])

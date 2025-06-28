@@ -134,16 +134,16 @@ module WahWah
         value = object_data.read(value_length)
 
         attr_value = case value_type
-                     when 0
-                       Helper.encode_to_utf8(value, source_encoding: "UTF-16LE")
-                     when 1
-                       value
-                     when 2, 3
-                       value.unpack1("V")
-                     when 4
-                       value.unpack1("Q<")
-                     when 5
-                       value.unpack1("v")
+        when 0
+          Helper.encode_to_utf8(value, source_encoding: "UTF-16LE")
+        when 1
+          value
+        when 2, 3
+          value.unpack1("V")
+        when 4
+          value.unpack1("Q<")
+        when 5
+          value.unpack1("v")
         end
 
         attr_name = EXTENDED_CONTENT_DESCRIPTOR_NAME_MAPPING[name]

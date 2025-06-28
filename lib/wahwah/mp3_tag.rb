@@ -94,9 +94,9 @@ module WahWah
       mpeg_frame_header_position = mpeg_frame_header.position
       mpeg_frame_header_size = Mp3::MpegFrameHeader::HEADER_SIZE
       mpeg_frame_side_info_size = if mpeg_version == "MPEG1"
-        channel_mode == "Single Channel" ? 17 : 32
+        (channel_mode == "Single Channel") ? 17 : 32
       else
-        channel_mode == "Single Channel" ? 9 : 17
+        (channel_mode == "Single Channel") ? 9 : 17
       end
 
       mpeg_frame_header_position + mpeg_frame_header_size + mpeg_frame_side_info_size

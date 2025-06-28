@@ -33,8 +33,8 @@ module WahWah
         @id, @flags = file_io.read(8)&.unpack("A4N")
         return unless valid?
 
-        @frames_count = @flags & 1 == 1 ? file_io.read(4).unpack1("N") : 0
-        @bytes_count = @flags & 2 == 2 ? file_io.read(4).unpack1("N") : 0
+        @frames_count = (@flags & 1 == 1) ? file_io.read(4).unpack1("N") : 0
+        @bytes_count = (@flags & 2 == 2) ? file_io.read(4).unpack1("N") : 0
       end
 
       def valid?
